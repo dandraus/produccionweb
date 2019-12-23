@@ -84,7 +84,7 @@ class Materia_prima extends Component {
     }
     componentDidMount() {
 
-        axios.get(`http://dashroute.test/api/materia_prima`)
+        axios.get(`http://ec2-13-52-251-2.us-west-1.compute.amazonaws.com/dashroute/public/api/materia_prima`)
             .then(res => {
                 const resultado = res.data;
 
@@ -94,7 +94,7 @@ class Materia_prima extends Component {
 
             })
 
-        axios.get(`http://dashroute.test/api/tipo_unidades`)
+        axios.get(`http://ec2-13-52-251-2.us-west-1.compute.amazonaws.com/dashroute/public/api/tipo_unidades`)
             .then(res2 => {
                 const resultado2 = res2.data;
 
@@ -285,7 +285,7 @@ function handleClose() {
 
 function eliminar(nuevodato) {
 
-    axios.delete(`http://dashroute.test/api/materia_prima/${nuevodato.id}`)
+    axios.delete(`http://ec2-13-52-251-2.us-west-1.compute.amazonaws.com/dashroute/public/api/materia_prima/${nuevodato.id}`)
         .then(res => {
 
             console.log(res.data.id);
@@ -297,7 +297,7 @@ function eliminar(nuevodato) {
 
 function actualizar(nuevodato) {
 
-    axios.put(`http://dashroute.test/api/materia_prima/${nuevodato.id}`, nuevodato)
+    axios.put(`http://ec2-13-52-251-2.us-west-1.compute.amazonaws.com/dashroute/public/api/materia_prima/${nuevodato.id}`, nuevodato)
         .then(res => {
 
             console.log(res.data.id);
@@ -318,7 +318,7 @@ function guardar(event) {
     console.log(datoGuardar);
     console.log(this.state);
 
-    axios.post(`http://dashroute.test/api/materia_prima`, (datoGuardar))
+    axios.post(`http://ec2-13-52-251-2.us-west-1.compute.amazonaws.com/dashroute/public/api/materia_prima`, (datoGuardar))
         .then(res => {
 
             console.log(res);

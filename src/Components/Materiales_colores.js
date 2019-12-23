@@ -84,7 +84,7 @@ class Materiales_colores extends Component {
 
     }
     componentDidMount() {
-        axios.get(`http://dashroute.test/api/materia_prima`)
+        axios.get(`http://ec2-13-52-251-2.us-west-1.compute.amazonaws.com/dashroute/public/api/materia_prima`)
         .then(res2 => {
             const resultado2 = res2.data;
 
@@ -93,7 +93,7 @@ class Materiales_colores extends Component {
             // setPersonsState(PersonState=persona);
 
         })
-        axios.get(`http://dashroute.test/api/Materiales_colores`)
+        axios.get(`http://ec2-13-52-251-2.us-west-1.compute.amazonaws.com/dashroute/public/api/Materiales_colores`)
             .then(res => {
                 const resultado = res.data;
 
@@ -104,7 +104,7 @@ class Materiales_colores extends Component {
             })
 
    
-            axios.get(`http://dashroute.test/api/Color`)
+            axios.get(`http://ec2-13-52-251-2.us-west-1.compute.amazonaws.com/dashroute/public/api/Color`)
             .then(res3 => {
                 const resultado3 = res3.data;
 
@@ -302,7 +302,7 @@ function handleClose() {
 
 function eliminar(nuevodato) {
 
-    axios.delete(`http://dashroute.test/api/Materiales_colores/${nuevodato.id}`)
+    axios.delete(`http://ec2-13-52-251-2.us-west-1.compute.amazonaws.com/dashroute/public/api/Materiales_colores/${nuevodato.id}`)
         .then(res => {
 
             console.log(res.data.id);
@@ -314,7 +314,7 @@ function eliminar(nuevodato) {
 
 function actualizar(nuevodato) {
 
-    axios.put(`http://dashroute.test/api/Materiales_colores/${nuevodato.id}`, nuevodato)
+    axios.put(`http://ec2-13-52-251-2.us-west-1.compute.amazonaws.com/dashroute/public/api/Materiales_colores/${nuevodato.id}`, nuevodato)
         .then(res => {
 
             console.log(res.data.id);
@@ -335,7 +335,7 @@ function guardar(event) {
     console.log(datoGuardar);
     console.log(this.state);
 
-    axios.post(`http://dashroute.test/api/Materiales_colores`, (datoGuardar))
+    axios.post(`http://ec2-13-52-251-2.us-west-1.compute.amazonaws.com/dashroute/public/api/Materiales_colores`, (datoGuardar))
         .then(res => {
 
             console.log(res);

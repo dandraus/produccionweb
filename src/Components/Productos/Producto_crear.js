@@ -169,7 +169,7 @@ class Producto_crear extends Component {
   handleChangecombo = idx => evt => {
 
 
-    axios.get(`http://dashroute.test/api/Color/valor/${evt.target.value}`)
+    axios.get(`http://ec2-13-52-251-2.us-west-1.compute.amazonaws.com/dashroute/public/api/Color/valor/${evt.target.value}`)
       .then(res3 => {
 
         const resultado3 = res3.data;
@@ -315,7 +315,7 @@ class Producto_crear extends Component {
 
 
 
-    axios.get(`http://dashroute.test/api/materia_prima`)
+    axios.get(`http://ec2-13-52-251-2.us-west-1.compute.amazonaws.com/dashroute/public/api/materia_prima`)
       .then(res4 => {
         const resultado4 = res4.data;
 
@@ -325,7 +325,7 @@ class Producto_crear extends Component {
 
       })
 
-    axios.get(`http://dashroute.test/api/Color`)
+    axios.get(`http://ec2-13-52-251-2.us-west-1.compute.amazonaws.com/dashroute/public/api/Color`)
       .then(res3 => {
         const resultado3 = res3.data;
 
@@ -333,7 +333,7 @@ class Producto_crear extends Component {
 
 
       })
-    axios.get(`http://dashroute.test/api/tipo_operario`)
+    axios.get(`http://ec2-13-52-251-2.us-west-1.compute.amazonaws.com/dashroute/public/api/tipo_operario`)
       .then(res6 => {
         const resultado6 = res6.data;
 
@@ -762,7 +762,7 @@ function guardar(event) {
   const data = new FormData()
   data.append('file', this.state.selectedFile);
 
-  axios.post("http://dashroute.test/api/upload", data, { // receive two parameter endpoint url ,form data 
+  axios.post("http://ec2-13-52-251-2.us-west-1.compute.amazonaws.com/dashroute/public/api/upload", data, { // receive two parameter endpoint url ,form data 
   })
     .then(res => { // then print response status
       console.log(res)
@@ -792,7 +792,7 @@ function guardar(event) {
       console.log(datoGuardar);
       console.log(this.state);
 
-      axios.post(`http://dashroute.test/api/producto`, (datoGuardar))
+      axios.post(`http://ec2-13-52-251-2.us-west-1.compute.amazonaws.com/dashroute/public/api/producto`, (datoGuardar))
         .then(res => {
 
           console.log(res);
@@ -816,7 +816,7 @@ function guardar(event) {
 
 
 
-          axios.post(`http://dashroute.test/api/producto_colores`, (this.state.guardarcolor))
+          axios.post(`http://ec2-13-52-251-2.us-west-1.compute.amazonaws.com/dashroute/public/api/producto_colores`, (this.state.guardarcolor))
             .then(res5 => {
               console.log("Daniel 0");
 
@@ -839,7 +839,7 @@ function guardar(event) {
               console.log("Daniel 2");
               console.log(this.state.guardarmater);
 
-              axios.post(`http://dashroute.test/api/Producto_materiales`, (this.state.guardarmater))
+              axios.post(`http://ec2-13-52-251-2.us-west-1.compute.amazonaws.com/dashroute/public/api/Producto_materiales`, (this.state.guardarmater))
                 .then(res6 => {
 
                   console.log(res6);

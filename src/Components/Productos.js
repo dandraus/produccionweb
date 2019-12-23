@@ -38,7 +38,7 @@ class Productos extends Component {
   componentDidMount() {
 
 
-    axios.get(`http://dashroute.test/api/producto`)
+    axios.get(`http://ec2-13-52-251-2.us-west-1.compute.amazonaws.com/dashroute/public/api/producto`)
       .then(res => {
         const productos = res.data;
 
@@ -61,7 +61,7 @@ class Productos extends Component {
 
                 <img
                   style={{ height: 100, }}//borderRadius: '50%' }}
-                  src={'http://dashroute.test/' + rowData.foto.substring(41)}
+                  src={'http://ec2-13-52-251-2.us-west-1.compute.amazonaws.com/dashroute/public/' + rowData.foto.substring(41)}
                 />
               ),
             },

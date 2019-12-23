@@ -79,7 +79,7 @@ class Colores extends Component {
     }
     componentDidMount() {
 
-        axios.get(`http://dashroute.test/api/Color`)
+        axios.get(`http://ec2-13-52-251-2.us-west-1.compute.amazonaws.com/dashroute/public/api/Color`)
             .then(res => {
                 const resultado = res.data;
 
@@ -252,7 +252,7 @@ function handleClose() {
 
 function eliminar(nuevodato) {
 
-    axios.delete(`http://dashroute.test/api/Color/${nuevodato.id}`)
+    axios.delete(`http://ec2-13-52-251-2.us-west-1.compute.amazonaws.com/dashroute/public/api/Color/${nuevodato.id}`)
         .then(res => {
 
             console.log(res.data.id);
@@ -264,7 +264,7 @@ function eliminar(nuevodato) {
 
 function actualizar(nuevodato) {
 
-    axios.put(`http://dashroute.test/api/Color/${nuevodato.id}`, nuevodato)
+    axios.put(`http://ec2-13-52-251-2.us-west-1.compute.amazonaws.com/dashroute/public/api/Color/${nuevodato.id}`, nuevodato)
         .then(res => {
 
             console.log(res.data.id);
@@ -284,7 +284,7 @@ function guardar(event) {
     console.log(datoGuardar);
     console.log(this.state);
 
-    axios.post(`http://dashroute.test/api/Color`, (datoGuardar))
+    axios.post(`http://ec2-13-52-251-2.us-west-1.compute.amazonaws.com/dashroute/public/api/Color`, (datoGuardar))
         .then(res => {
 
             console.log(res);
