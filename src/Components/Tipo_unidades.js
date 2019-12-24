@@ -70,7 +70,7 @@ class Tipo_unidades extends Component {
     }
     componentDidMount() {
 
-        axios.get(`http://ec2-13-52-251-2.us-west-1.compute.amazonaws.com/dashroute/public/api/tipo_unidades`)
+        axios.get(process.env.REACT_APP_URL_LARAVEL+`/api/tipo_unidades`)
             .then(res => {
                 const resultado = res.data;
 
@@ -217,7 +217,7 @@ function handleClose() {
 
 function eliminar(nuevodato) {
 
-    axios.delete(`http://ec2-13-52-251-2.us-west-1.compute.amazonaws.com/dashroute/public/api/tipo_unidades/${nuevodato.id}`)
+    axios.delete(process.env.REACT_APP_URL_LARAVEL+`/api/tipo_unidades/${nuevodato.id}`)
         .then(res => {
 
             console.log(res.data.id);
@@ -229,7 +229,7 @@ function eliminar(nuevodato) {
 
 function actualizar(nuevodato) {
 
-    axios.put(`http://ec2-13-52-251-2.us-west-1.compute.amazonaws.com/dashroute/public/api/tipo_unidades/${nuevodato.id}`, nuevodato)
+    axios.put(process.env.REACT_APP_URL_LARAVEL+`/api/tipo_unidades/${nuevodato.id}`, nuevodato)
         .then(res => {
 
             console.log(res.data.id);
@@ -247,7 +247,7 @@ function guardar(event) {
     };
     console.log(datoGuardar);
    
-    axios.post(`http://ec2-13-52-251-2.us-west-1.compute.amazonaws.com/dashroute/public/api/tipo_unidades`, (  datoGuardar ))
+    axios.post(process.env.REACT_APP_URL_LARAVEL+`/api/tipo_unidades`, (  datoGuardar ))
         .then(res => {
 
             console.log(res);

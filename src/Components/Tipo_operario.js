@@ -49,7 +49,7 @@ class Tipo_operario extends Component {
     }
     componentDidMount() {
 
-        axios.get(`http://ec2-13-52-251-2.us-west-1.compute.amazonaws.com/dashroute/public/api/tipo_operario/`)
+        axios.get(process.env.REACT_APP_URL_LARAVEL+`/api/tipo_operario/`)
             .then(res => {
                 const resultado = res.data;
 
@@ -185,7 +185,7 @@ function handleClose() {
 
 function eliminar(nuevodato) {
 
-    axios.delete(`http://ec2-13-52-251-2.us-west-1.compute.amazonaws.com/dashroute/public/api/tipo_operario/${nuevodato.id}`)
+    axios.delete(process.env.REACT_APP_URL_LARAVEL+`/api/tipo_operario/${nuevodato.id}`)
         .then(res => {
 
             console.log(res.data.id);
@@ -197,7 +197,7 @@ function eliminar(nuevodato) {
 
 function actualizar(nuevodato) {
 
-    axios.put(`http://ec2-13-52-251-2.us-west-1.compute.amazonaws.com/dashroute/public/api/tipo_operario/${nuevodato.id}`, nuevodato)
+    axios.put(process.env.REACT_APP_URL_LARAVEL+`/api/tipo_operario/${nuevodato.id}`, nuevodato)
         .then(res => {
 
             console.log(res.data.id);
@@ -214,7 +214,7 @@ function guardar(event) {
 
     };
 
-    axios.post(`http://ec2-13-52-251-2.us-west-1.compute.amazonaws.com/dashroute/public/api/tipo_operario`, tipo)
+    axios.post(process.env.REACT_APP_URL_LARAVEL+`/api/tipo_operario`, tipo)
         .then(res => {
 
             console.log(res);

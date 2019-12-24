@@ -82,7 +82,7 @@ class Producto_crear extends Component {
   calcular = () => {
 
     console.log(this.state);
-    var costocolor = isNaN(Object.values(this.state.color).reduce((t, { valor }) => t + valor, 0)) ? 0 : Object.values(this.state.color).reduce((t, { valor }) => t + valor, 0);
+    var costocolor = isNaN(Object.values(this.state.Colores).reduce((t, { total }) => t + total, 0)) ? 0 : Object.values(this.state.Colores).reduce((t, { total }) => t + total, 0);
     var costomaterial = isNaN(Object.values(this.state.MaterialesAdicionales).reduce((t, { total }) => t + total, 0)) ? 0 : Object.values(this.state.MaterialesAdicionales).reduce((t, { total }) => t + total, 0);
     var costooperario = isNaN(parseFloat(this.state.valor_operario.value)) ? 0 : parseFloat(this.state.valor_operario.value);
     console.log(costooperario);
@@ -102,19 +102,51 @@ class Producto_crear extends Component {
     // this.setState({ total: total })
     // console.log(this.state);
   }
-  handleColorNameChangeMateriales = idx => evt => {
+  // handleColorNameChangeMateriales = idx => evt => {
+  //   const newMateriales = this.state.MaterialesAdicionales.map((Mate, sidx) => {
+  //     //const val = evt.target.value - 1;
+  //     var valor_metros = isNaN(parseFloat(this.state.Mater[idx].valor)) ? 0 : parseFloat(this.state.Mater[idx].valor);
+  //     //var valor_metros =this.state.Mater[idx].valor;
+  //     var cantidad = isNaN(parseFloat(evt.target.value)) ? 0 : parseFloat(evt.target.value);
+  //     var total_valor = Math.round(valor_metros * cantidad);
+
+  //     if (idx !== sidx) return Mate;
+  //     return { ...Mate, cantidad: evt.target.value, id: "", total: total_valor }
+  //   });
+
+  //   this.setState({ MaterialesAdicionales: newMateriales });
+
+  // };
+    handleColorNameChangeMateriales = idx => evt => {
+    console.log(evt.target.value);
     const newMateriales = this.state.MaterialesAdicionales.map((Mate, sidx) => {
-      //const val = evt.target.value - 1;
-      var valor_metros = isNaN(parseFloat(this.state.Mater[idx].valor)) ? 0 : parseFloat(this.state.Mater[idx].valor);
-      //var valor_metros =this.state.Mater[idx].valor;
+      var valorunitario = isNaN(parseFloat(this.state.Mater[idx].valor)) ? 0 : parseFloat(this.state.Mater[idx].valor);
       var cantidad = isNaN(parseFloat(evt.target.value)) ? 0 : parseFloat(evt.target.value);
-      var total_valor = Math.round(valor_metros * cantidad);
+      var total_valor = Math.round(valorunitario * cantidad);
 
       if (idx !== sidx) return Mate;
       return { ...Mate, cantidad: evt.target.value, id: "", total: total_valor }
     });
+    this.setState({ MaterialesAdicionales: newMateriales }, this.calcular);
 
-    this.setState({ MaterialesAdicionales: newMateriales });
+
+
+
+
+  };
+  handleColorNameChange = idx => evt => {
+    const newColores = this.state.Colores.map((Color, sidx) => {
+      if (idx !== sidx) return Color;
+      var valorunitario = isNaN(parseFloat( this.state.color[idx].valor)) ? 0 : parseFloat( this.state.color[idx].valor);
+      var cantidad = isNaN(parseFloat(evt.target.value)) ? 0 : parseFloat(evt.target.value);
+      var total_valor = Math.round(valorunitario * (cantidad/100));
+     
+      return { ...Color, porcentaje: evt.target.value, rgblist: this.state.colors[idx].rgb,total:total_valor }
+    });
+
+    this.setState({ Colores: newColores },this.calcular);
+    console.log(this.state);
+
 
   };
 
@@ -146,7 +178,48 @@ class Producto_crear extends Component {
     //console.log(this.state);
   };
 
+  handleChangecombo = idx => evt => {
 
+
+    axios.get(process.env.REACT_APP_URL_LARAVEL+`/api/Color/valor/${evt.target.value}`)
+      .then(res3 => {
+
+        const resultado3 = res3.data;
+
+        this.setState({ colorvalor: resultado3 });
+        console.log(this.state.colorvalor);
+
+        var valtotal = Object.values(resultado3).reduce((t, { valor }) => t + valor, 0) ;//* (this.state.Colores[idx].porcentaje / 100);
+       this.setState({valtotalcolor:valtotal});
+        console.log(valtotal);
+        //console.log(this.state.Colores[idx].porcentaje);
+
+        const newColores = this.state.color.map((Color, sidx) => {
+          if (idx !== sidx) return Color;
+          console.log(evt);
+          const val = evt.target.value - 1;
+          if (evt.target.value === "") return { ...Color, id: evt.target.value, rgblist: '#FFF' };
+          return { ...Color, id: this.state.colors[val].id, rgblist: this.state.colors[val].rgb, valor: valtotal, porcentaje: this.state.Colores[idx].porcentaje };
+        });
+
+        this.setState({ color: newColores },this.calcular);
+        // var costocolor = isNaN(Object.values(this.state.color).reduce((t, { valor }) => t + valor, 0)) ? 0 : Object.values(this.state.color).reduce((t, { valor }) => t + valor, 0);
+        // var costomaterial = isNaN(Object.values(this.state.Mater).reduce((t, { total }) => t + total, 0)) ? 0 : Object.values(this.state.Mater).reduce((t, { total }) => t + total, 0);
+        // var costooperario = isNaN(parseFloat(this.state.valor_operario.value)) ? 0 : parseFloat(this.state.valor_operario.value);
+        // var costo = costocolor + costomaterial;
+        // costo = costo + costooperario;
+        // this.setState({ Costo_estimado: costo });
+        // var precio = ((parseFloat(this.state.formControls.margen.value) / 100) * costo) + costo;
+        // this.setState({ precio_estimado: precio });
+        // console.log(this.state);
+      })
+    console.log(evt);
+    //  this.setState({rgblist:[...this.state.rgblist,this.state.colors[evt.target.value -1].rgb]});
+    //console.log(this.state);
+
+
+  };
+  
 
 
   handleChangePhoto = event => {
@@ -166,46 +239,6 @@ class Producto_crear extends Component {
 
 
 
-  handleChangecombo = idx => evt => {
-
-
-    axios.get(`http://ec2-13-52-251-2.us-west-1.compute.amazonaws.com/dashroute/public/api/Color/valor/${evt.target.value}`)
-      .then(res3 => {
-
-        const resultado3 = res3.data;
-
-        this.setState({ colorvalor: resultado3 });
-        console.log(this.state.colorvalor);
-
-        var valtotal = Object.values(resultado3).reduce((t, { valor }) => t + valor, 0) * (this.state.Colores[idx].porcentaje / 100);
-        console.log(valtotal);
-        //console.log(this.state.Colores[idx].porcentaje);
-
-        const newColores = this.state.color.map((Color, sidx) => {
-          if (idx !== sidx) return Color;
-          console.log(evt);
-          const val = evt.target.value - 1;
-          if (evt.target.value === "") return { ...Color, id: evt.target.value, rgblist: '#FFF' };
-          return { ...Color, id: this.state.colors[val].id, rgblist: this.state.colors[val].rgb, valor: valtotal, porcentaje: this.state.Colores[idx].porcentaje };
-        });
-
-        this.setState({ color: newColores });
-        var costocolor = isNaN(Object.values(this.state.color).reduce((t, { valor }) => t + valor, 0)) ? 0 : Object.values(this.state.color).reduce((t, { valor }) => t + valor, 0);
-        var costomaterial = isNaN(Object.values(this.state.Mater).reduce((t, { total }) => t + total, 0)) ? 0 : Object.values(this.state.Mater).reduce((t, { total }) => t + total, 0);
-        var costooperario = isNaN(parseFloat(this.state.valor_operario.value)) ? 0 : parseFloat(this.state.valor_operario.value);
-        var costo = costocolor + costomaterial;
-        costo = costo + costooperario;
-        this.setState({ Costo_estimado: costo });
-        var precio = ((parseFloat(this.state.formControls.margen.value) / 100) * costo) + costo;
-        this.setState({ precio_estimado: precio });
-        console.log(this.state);
-      })
-    console.log(evt);
-    //  this.setState({rgblist:[...this.state.rgblist,this.state.colors[evt.target.value -1].rgb]});
-    //console.log(this.state);
-
-
-  };
   handleAddMat = () => {
     this.setState({
       Mater: this.state.Mater.concat([{ nombre: "", id: "", valor: "", cantidad: "", total: "" }]),
@@ -232,34 +265,8 @@ class Producto_crear extends Component {
       MaterialesAdicionales: this.state.MaterialesAdicionales.filter((s, sidx) => idx !== sidx)
     });
   };
-  handleColorNameChange = idx => evt => {
-    const newColores = this.state.Colores.map((Color, sidx) => {
-      if (idx !== sidx) return Color;
-      return { ...Color, porcentaje: evt.target.value, rgblist: this.state.colors[idx].rgb }
-    });
+ 
 
-    this.setState({ Colores: newColores });
-    console.log(this.state);
-
-
-  };
-  handleColorNameChangeMateriales = idx => evt => {
-    console.log(evt.target.value);
-    const newMateriales = this.state.MaterialesAdicionales.map((Mate, sidx) => {
-      var valorunitario = isNaN(parseFloat(this.state.Mater[idx].valor)) ? 0 : parseFloat(this.state.Mater[idx].valor);
-      var cantidad = isNaN(parseFloat(evt.target.value)) ? 0 : parseFloat(evt.target.value);
-      var total_valor = Math.round(valorunitario * cantidad);
-
-      if (idx !== sidx) return Mate;
-      return { ...Mate, cantidad: evt.target.value, id: "", total: total_valor }
-    });
-    this.setState({ MaterialesAdicionales: newMateriales }, this.calcular);
-
-
-
-
-
-  };
 
   handleSalario(event) {
 
@@ -315,7 +322,7 @@ class Producto_crear extends Component {
 
 
 
-    axios.get(`http://ec2-13-52-251-2.us-west-1.compute.amazonaws.com/dashroute/public/api/materia_prima`)
+    axios.get(process.env.REACT_APP_URL_LARAVEL+`/api/materia_prima`)
       .then(res4 => {
         const resultado4 = res4.data;
 
@@ -325,7 +332,7 @@ class Producto_crear extends Component {
 
       })
 
-    axios.get(`http://ec2-13-52-251-2.us-west-1.compute.amazonaws.com/dashroute/public/api/Color`)
+    axios.get(process.env.REACT_APP_URL_LARAVEL+`/api/Color`)
       .then(res3 => {
         const resultado3 = res3.data;
 
@@ -333,7 +340,7 @@ class Producto_crear extends Component {
 
 
       })
-    axios.get(`http://ec2-13-52-251-2.us-west-1.compute.amazonaws.com/dashroute/public/api/tipo_operario`)
+    axios.get(process.env.REACT_APP_URL_LARAVEL+`/api/tipo_operario`)
       .then(res6 => {
         const resultado6 = res6.data;
 
@@ -630,7 +637,7 @@ class Producto_crear extends Component {
               label="Valor total color"
               defaultValue="Valor total color"
 
-              value={this.state.color[idx].valor}
+              value={this.state.Colores[idx].total}
              
 
             />
@@ -762,7 +769,7 @@ function guardar(event) {
   const data = new FormData()
   data.append('file', this.state.selectedFile);
 
-  axios.post("http://ec2-13-52-251-2.us-west-1.compute.amazonaws.com/dashroute/public/api/upload", data, { // receive two parameter endpoint url ,form data 
+  axios.post("http://dashroute.test/api/upload", data, { // receive two parameter endpoint url ,form data 
   })
     .then(res => { // then print response status
       console.log(res)
@@ -792,7 +799,7 @@ function guardar(event) {
       console.log(datoGuardar);
       console.log(this.state);
 
-      axios.post(`http://ec2-13-52-251-2.us-west-1.compute.amazonaws.com/dashroute/public/api/producto`, (datoGuardar))
+      axios.post(process.env.REACT_APP_URL_LARAVEL+`/api/producto`, (datoGuardar))
         .then(res => {
 
           console.log(res);
@@ -803,10 +810,10 @@ function guardar(event) {
           this.setState({ guardarmater: [] });
           var newcolo = this.state.color.map((value, index) => {
 
-            var newColores = this.state.guardarcolor.concat({ productos_id: idprod, colores_id: value.id, porcentaje: value.porcentaje })
+            var newColores = this.state.guardarcolor.concat({ productos_id: idprod, colores_id: value.id, porcentaje: this.state.Colores[index].porcentaje })
 
             this.setState({
-              guardarcolor: [...this.state.guardarcolor, { productos_id: idprod, colores_id: value.id, porcentaje: value.porcentaje }],
+              guardarcolor: [...this.state.guardarcolor, { productos_id: idprod, colores_id: value.id, porcentaje: this.state.Colores[index].porcentaje  }],
             })
 
 
@@ -816,7 +823,7 @@ function guardar(event) {
 
 
 
-          axios.post(`http://ec2-13-52-251-2.us-west-1.compute.amazonaws.com/dashroute/public/api/producto_colores`, (this.state.guardarcolor))
+          axios.post(process.env.REACT_APP_URL_LARAVEL+`/api/producto_colores`, (this.state.guardarcolor))
             .then(res5 => {
               console.log("Daniel 0");
 
@@ -826,7 +833,7 @@ function guardar(event) {
                 var newMater = "dani";//this.state.guardarmater.concat({ productos_id: idprod, materiales_id: value2.id, porcentaje: value2.porcentaje })
                 console.log("Daniel 1");
                 this.setState({
-                  guardarmater: [...this.state.guardarmater, { productos_id: idprod, materiales_id: value2.id, cantidad: value2.cantidad }],
+                  guardarmater: [...this.state.guardarmater, { productos_id: idprod, materiales_id: value2.id, cantidad: this.state.MaterialesAdicionales[index2].cantidad }],
                 });
                 //return newMater;
               });
@@ -839,7 +846,7 @@ function guardar(event) {
               console.log("Daniel 2");
               console.log(this.state.guardarmater);
 
-              axios.post(`http://ec2-13-52-251-2.us-west-1.compute.amazonaws.com/dashroute/public/api/Producto_materiales`, (this.state.guardarmater))
+              axios.post(process.env.REACT_APP_URL_LARAVEL+`/api/Producto_materiales`, (this.state.guardarmater))
                 .then(res6 => {
 
                   console.log(res6);

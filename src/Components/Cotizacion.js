@@ -208,7 +208,7 @@ class Producto_crear extends Component {
     componentDidMount() {
      
 
-        axios.get(`http://ec2-13-52-251-2.us-west-1.compute.amazonaws.com/dashroute/public/api/producto`)
+        axios.get(process.env.REACT_APP_URL_LARAVEL+`/api/producto`)
             .then(res4 => {
                 const resultado4 = res4.data;
 
@@ -353,7 +353,7 @@ class Producto_crear extends Component {
 
                                     <MenuItem
 
-                                        key={id.id} value={id.id}>  <div><img src={'http://ec2-13-52-251-2.us-west-1.compute.amazonaws.com/dashroute/public/' + id.foto.substring(41)} height="30px" width="30px"/> {id.nombre} </div> </MenuItem>
+                                        key={id.id} value={id.id}>  <div><img src={'http://dashroute.test/' + id.foto.substring(41)} height="30px" width="30px"/> {id.nombre} </div> </MenuItem>
                                 )}
 
 
@@ -528,7 +528,7 @@ function guardar(event) {
             console.log(this.state);
           
 
-            axios.post(`http://ec2-13-52-251-2.us-west-1.compute.amazonaws.com/dashroute/public/api/Cotizacion`, datoGuardar)
+            axios.post(process.env.REACT_APP_URL_LARAVEL+`/api/Cotizacion`, datoGuardar)
         .then(res => {
             this.setState({ guardarprod: [] });
             idprod = res.data.id;
@@ -543,7 +543,7 @@ function guardar(event) {
         
                 //return newColores;
               });
-              axios.post(`http://ec2-13-52-251-2.us-west-1.compute.amazonaws.com/dashroute/public/api/Cotizacion_items`, (this.state.guardarprod))
+              axios.post(process.env.REACT_APP_URL_LARAVEL+`/api/Cotizacion_items`, (this.state.guardarprod))
               .then(res6 => {
     
                 console.log(res6);

@@ -78,8 +78,9 @@ class Colores extends Component {
 
     }
     componentDidMount() {
-
-        axios.get(`http://ec2-13-52-251-2.us-west-1.compute.amazonaws.com/dashroute/public/api/Color`)
+        // const baseurl = process.env.REACT_APP_URL_LARAVEL;
+    
+        axios.get(process.env.REACT_APP_URL_LARAVEL+`/api/Color`)
             .then(res => {
                 const resultado = res.data;
 
@@ -252,7 +253,7 @@ function handleClose() {
 
 function eliminar(nuevodato) {
 
-    axios.delete(`http://ec2-13-52-251-2.us-west-1.compute.amazonaws.com/dashroute/public/api/Color/${nuevodato.id}`)
+    axios.delete(process.env.REACT_APP_URL_LARAVEL+`/api/Color/${nuevodato.id}`)
         .then(res => {
 
             console.log(res.data.id);
@@ -264,7 +265,7 @@ function eliminar(nuevodato) {
 
 function actualizar(nuevodato) {
 
-    axios.put(`http://ec2-13-52-251-2.us-west-1.compute.amazonaws.com/dashroute/public/api/Color/${nuevodato.id}`, nuevodato)
+    axios.put(process.env.REACT_APP_URL_LARAVEL+`/api/Color/${nuevodato.id}`, nuevodato)
         .then(res => {
 
             console.log(res.data.id);
@@ -284,7 +285,7 @@ function guardar(event) {
     console.log(datoGuardar);
     console.log(this.state);
 
-    axios.post(`http://ec2-13-52-251-2.us-west-1.compute.amazonaws.com/dashroute/public/api/Color`, (datoGuardar))
+    axios.post(process.env.REACT_APP_URL_LARAVEL+`/api/Color`, (datoGuardar))
         .then(res => {
 
             console.log(res);

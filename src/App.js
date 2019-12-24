@@ -313,7 +313,7 @@ class App extends Component {
           }
 
  componentDidMount() {
-          axios.get(`http://ec2-13-52-251-2.us-west-1.compute.amazonaws.com/dashroute/public/api/products/1`)
+          axios.get(process.env.REACT_APP_URL_LARAVEL+`/api/products/1`)
             .then(res => {
               const persons = res.data;
               console.log(persons);
