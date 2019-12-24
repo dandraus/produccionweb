@@ -774,7 +774,7 @@ function guardar(event) {
     .then(res => { // then print response status
       console.log(res)
       this.setState({
-        imagen: res.data.fullpath
+        imagen: this.state.selectedFile.name
       });
 
 
@@ -789,7 +789,7 @@ function guardar(event) {
         costo_estimado: this.state.Costo_estimado,
         margen_estimado: this.state.formControls.margen.value,
         precio_estimado: this.state.precio_estimado,
-        foto: this.state.imagen,
+        foto: this.state.selectedFile.name,
         unidades_por_caja: this.state.formControls.unidades_por_caja.value,
         unidades_por_mts: this.state.formControls.unidades_por_mts2.value,
 
