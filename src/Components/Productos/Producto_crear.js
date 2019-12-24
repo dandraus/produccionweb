@@ -769,7 +769,7 @@ function guardar(event) {
   const data = new FormData()
   data.append('file', this.state.selectedFile);
 
-  axios.post("http://dashroute.test/api/upload", data, { // receive two parameter endpoint url ,form data 
+  axios.post(process.env.REACT_APP_URL_LARAVEL+"/api/upload", data, { // receive two parameter endpoint url ,form data 
   })
     .then(res => { // then print response status
       console.log(res)

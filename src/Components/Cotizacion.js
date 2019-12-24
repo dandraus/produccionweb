@@ -353,7 +353,7 @@ class Producto_crear extends Component {
 
                                     <MenuItem
 
-                                        key={id.id} value={id.id}>  <div><img src={'http://dashroute.test/' + id.foto.substring(41)} height="30px" width="30px"/> {id.nombre} </div> </MenuItem>
+                                        key={id.id} value={id.id}>  <div><img src={process.env.REACT_APP_URL_LARAVEL + id.foto.substring(41)} height="30px" width="30px"/> {id.nombre} </div> </MenuItem>
                                 )}
 
 

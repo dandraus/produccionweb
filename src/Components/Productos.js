@@ -61,7 +61,7 @@ class Productos extends Component {
 
                 <img
                   style={{ height: 100, }}//borderRadius: '50%' }}
-                  src={'http://dashroute.test/' + rowData.foto.substring(41)}
+                  src={process.env.REACT_APP_URL_LARAVEL + rowData.foto.substring(41)}
                 />
               ),
             },
