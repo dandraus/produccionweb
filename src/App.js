@@ -33,6 +33,7 @@ import Colores from './Components/Colores';
 import Materiales_colores from './Components/Materiales_colores'
 import Producto_crear from './Components/Productos/Producto_crear'
 import Cotizacion from './Components/Cotizacion'
+import CotizacionListado from './Components/CotizacionListado';
 
 const drawerWidth = 240;
 
@@ -101,6 +102,7 @@ export default function PersistentDrawerLeft() {
   const [open, setOpen] = React.useState(false);
   const [openP, setOpenP] = React.useState(false);
   const [openP2, setOpenP2] = React.useState(false);
+  const [openP3, setOpenP3] = React.useState(false);
   //const [otherState,setOtherState]=useState('some other value');
   const [lateral, setLateral] = useState([]);
 
@@ -115,6 +117,10 @@ export default function PersistentDrawerLeft() {
   const handleClick2 = () => {
     setOpenP2(!openP2);
     console.log(openP2);
+  };
+  const handleClick3 = () => {
+    setOpenP3(!openP3);
+    console.log(openP3);
   };
 
   function handleDrawerOpen() {
@@ -175,7 +181,38 @@ export default function PersistentDrawerLeft() {
           </IconButton>
         </div>
         <Divider />
+       
         <List>
+        <ListItem button onClick={handleClick3}>
+                <ListItemIcon>
+                  <InboxIcon />
+                </ListItemIcon>
+                <ListItemText primary="Cotizaciones" />
+                {openP3 ? <ExpandLess /> : <ExpandMore />}
+              </ListItem>
+              <Collapse in={openP3} timeout="auto" unmountOnExit>
+                <List component="div" disablePadding>
+                  <ListItem button className={classes.nested}>
+                    <ListItemIcon>
+                      <StarBorder />
+                    </ListItemIcon>
+                    <ListItemText primary="Crear" onClick={() => menu("Crear cotizacion", 1)} />
+                  </ListItem>
+                  <ListItem button className={classes.nested}>
+                    <ListItemIcon>
+                      <StarBorder />
+                    </ListItemIcon>
+                    <ListItemText primary="Listado" onClick={() => menu("Listado cotizacion", 1)} />
+                  </ListItem>
+                  
+                  </List>
+
+            
+
+                  </Collapse>
+
+
+
         <ListItem button onClick={handleClick2}>
                 <ListItemIcon>
                   <InboxIcon />
@@ -197,16 +234,18 @@ export default function PersistentDrawerLeft() {
                     </ListItemIcon>
                     <ListItemText primary="Listado" onClick={() => menu("Listado producto", 1)} />
                   </ListItem>
-                  <ListItem button className={classes.nested}>
-                    <ListItemIcon>
-                      <StarBorder />
-                    </ListItemIcon>
-                    <ListItemText primary="Editar" onClick={() => menu("Editar producto", 1)} />
-                  </ListItem>
+                  
                   </List>
+
+            
+
                   </Collapse>
 
-              {[ 'Inventario', 'Cotización', 'Pedidos'].map((text, index) => (
+
+
+                 
+
+              {[ 'Inventario',  'Pedidos'].map((text, index) => (
                 <ListItem button key={text} >
                   <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
                   <ListItemText primary={text} onClick={() => menu(text, index)} />
@@ -285,7 +324,8 @@ export default function PersistentDrawerLeft() {
                   case "Materiales colores": return <Materiales_colores />;
                   case "Colores": return <Colores />;
                   case "Crear producto": return <Producto_crear />;
-                  case "Cotización": return <Cotizacion />;
+                  case "Crear cotizacion": return <Cotizacion />;
+                  case "Listado cotizacion": return <CotizacionListado />;
                   default: return 'Bienvenidos al software';
                 }
               })()}

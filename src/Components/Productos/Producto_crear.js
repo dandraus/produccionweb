@@ -11,7 +11,11 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import SaveIcon from '@material-ui/icons/Save';
-
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 
 
 const useStyles = makeStyles(theme => ({
@@ -26,7 +30,7 @@ const useStyles = makeStyles(theme => ({
 
 class Producto_crear extends Component {
   state = {
-
+    openDialog:false,
     materia_primas: [],
     colors: [],
     operarios: [],
@@ -79,12 +83,73 @@ class Producto_crear extends Component {
     }
   };
 
+
+  reset(){
+    document.getElementById("form-inside-input").reset();
+    this.setState({
+      producto_por_dia:"",
+      openDialog:false,
+      materia_primas: [],
+      colors: [],
+      operarios: [],
+      open: false,
+      Sopen: false,
+      colorvalor: [{ valor: "", porcentaje: "" }],
+      color: [{ nombre: "" }],
+      Mater: [{ nombre: "", id: "", valor: "", cantidad: "", total: "" }],
+      //guardarcolor: [{ productos_id: "", colores_id: "", porcentaje: ""}],
+      Colores: [{ porcentaje: "", rgblist: "#FFFF" }],
+      MaterialesAdicionales: [{ cantidad: "", id: "" }],
+      Costo_estimado: "",
+      precio_estimado: "",
+      salario_operario: "",
+      valor_operario: "",
+      tiempo_operario: "",
+      tipo_operario_id: "",
+      formControls: {
+        nombre: {
+          value: ''
+        },
+        referencia: {
+          value: ''
+        },
+  
+        unidades_por_caja: {
+          value: ''
+        },
+  
+        precio_estimado: {
+          value: ''
+        },
+        margen_estimado: {
+          value: ''
+        },
+        margen: {
+          value: 0
+        },
+  
+        producto_por_dia: {
+          value: ''
+        },
+        unidades_por_mts2: {
+          value: ''
+        },
+        imagen: {
+          value: ''
+        },
+  
+      }
+    }
+    )
+  } 
+
+
   calcular = () => {
 
     console.log(this.state);
     var costocolor = isNaN(Object.values(this.state.Colores).reduce((t, { total }) => t + total, 0)) ? 0 : Object.values(this.state.Colores).reduce((t, { total }) => t + total, 0);
     var costomaterial = isNaN(Object.values(this.state.MaterialesAdicionales).reduce((t, { total }) => t + total, 0)) ? 0 : Object.values(this.state.MaterialesAdicionales).reduce((t, { total }) => t + total, 0);
-    var costooperario = isNaN(parseFloat(this.state.valor_operario.value)) ? 0 : parseFloat(this.state.valor_operario.value);
+    var costooperario = isNaN(parseFloat(this.state.valor_operario)) ? 0 : parseFloat(this.state.valor_operario);
     console.log(costooperario);
     var costo = costocolor + costomaterial;
     costo = costo + costooperario;
@@ -117,7 +182,7 @@ class Producto_crear extends Component {
   //   this.setState({ MaterialesAdicionales: newMateriales });
 
   // };
-    handleColorNameChangeMateriales = idx => evt => {
+  handleColorNameChangeMateriales = idx => evt => {
     console.log(evt.target.value);
     const newMateriales = this.state.MaterialesAdicionales.map((Mate, sidx) => {
       var valorunitario = isNaN(parseFloat(this.state.Mater[idx].valor)) ? 0 : parseFloat(this.state.Mater[idx].valor);
@@ -137,14 +202,14 @@ class Producto_crear extends Component {
   handleColorNameChange = idx => evt => {
     const newColores = this.state.Colores.map((Color, sidx) => {
       if (idx !== sidx) return Color;
-      var valorunitario = isNaN(parseFloat( this.state.color[idx].valor)) ? 0 : parseFloat( this.state.color[idx].valor);
+      var valorunitario = isNaN(parseFloat(this.state.color[idx].valor)) ? 0 : parseFloat(this.state.color[idx].valor);
       var cantidad = isNaN(parseFloat(evt.target.value)) ? 0 : parseFloat(evt.target.value);
-      var total_valor = Math.round(valorunitario * (cantidad/100));
-     
-      return { ...Color, porcentaje: evt.target.value, rgblist: this.state.colors[idx].rgb,total:total_valor }
+      var total_valor = Math.round(valorunitario * (cantidad / 100));
+
+      return { ...Color, porcentaje: evt.target.value, rgblist: this.state.colors[idx].rgb, total: total_valor }
     });
 
-    this.setState({ Colores: newColores },this.calcular);
+    this.setState({ Colores: newColores }, this.calcular);
     console.log(this.state);
 
 
@@ -156,6 +221,7 @@ class Producto_crear extends Component {
     const newMateriales = this.state.Mater.map((Mate, sidx) => {
       if (idx !== sidx) return Mate;
       console.log(evt);
+      console.log()
       const val = evt.target.value - 1;
       var total_valor = this.state.materia_primas[val].valor * this.state.MaterialesAdicionales[sidx].cantidad;
       if (evt.target.value === "") return { ...Mate, id: evt.target.value, valor: "" };
@@ -163,6 +229,16 @@ class Producto_crear extends Component {
     });
 
     this.setState({ Mater: newMateriales });
+
+    const newMateriales2 = this.state.MaterialesAdicionales.map((Mate, sidx) => {
+      // var valorunitario = isNaN(parseFloat(this.state.Mater[idx].valor)) ? 0 : parseFloat(this.state.Mater[idx].valor);
+      // var cantidad = isNaN(parseFloat(evt.target.value)) ? 0 : parseFloat(evt.target.value);
+      // var total_valor = Math.round(valorunitario * cantidad);
+
+      if (idx !== sidx) return Mate;
+      return { ...Mate, cantidad: "", id: "", total: "" }
+    });
+    this.setState({ MaterialesAdicionales: newMateriales2 }, this.calcular);
     // var costocolor = isNaN(Object.values(this.state.color).reduce((t, { valor }) => t + valor, 0)) ? 0 : Object.values(this.state.color).reduce((t, { valor }) => t + valor, 0);
     // var costomaterial = isNaN(Object.values(this.state.Mater).reduce((t, { total }) => t + total, 0)) ? 0 : Object.values(this.state.Mater).reduce((t, { total }) => t + total, 0);
     // var costooperario = isNaN(parseFloat(this.state.valor_operario.value)) ? 0 : parseFloat(this.state.valor_operario.value);
@@ -181,7 +257,7 @@ class Producto_crear extends Component {
   handleChangecombo = idx => evt => {
 
 
-    axios.get(process.env.REACT_APP_URL_LARAVEL+`/api/Color/valor/${evt.target.value}`)
+    axios.get(process.env.REACT_APP_URL_LARAVEL + `/api/Color/valor/${evt.target.value}`)
       .then(res3 => {
 
         const resultado3 = res3.data;
@@ -189,11 +265,20 @@ class Producto_crear extends Component {
         this.setState({ colorvalor: resultado3 });
         console.log(this.state.colorvalor);
 
-        var valtotal = Object.values(resultado3).reduce((t, { valor }) => t + valor, 0) ;//* (this.state.Colores[idx].porcentaje / 100);
-       this.setState({valtotalcolor:valtotal});
+        var valtotal = Object.values(resultado3).reduce((t, { valor }) => t + valor, 0);//* (this.state.Colores[idx].porcentaje / 100);
+        this.setState({ valtotalcolor: valtotal });
         console.log(valtotal);
         //console.log(this.state.Colores[idx].porcentaje);
+        const newColores2 = this.state.Colores.map((Color, sidx) => {
+          if (idx !== sidx) return Color;
+          // var valorunitario = isNaN(parseFloat( this.state.color[idx].valor)) ? 0 : parseFloat( this.state.color[idx].valor);
+          // var cantidad = isNaN(parseFloat(evt.target.value)) ? 0 : parseFloat(evt.target.value);
+          // var total_valor = Math.round(valorunitario * (cantidad/100));
 
+          return { ...Color, porcentaje: "", rgblist: "", total: "" }
+        });
+
+        this.setState({ Colores: newColores2 }, this.calcular);
         const newColores = this.state.color.map((Color, sidx) => {
           if (idx !== sidx) return Color;
           console.log(evt);
@@ -202,7 +287,9 @@ class Producto_crear extends Component {
           return { ...Color, id: this.state.colors[val].id, rgblist: this.state.colors[val].rgb, valor: valtotal, porcentaje: this.state.Colores[idx].porcentaje };
         });
 
-        this.setState({ color: newColores },this.calcular);
+        this.setState({ color: newColores });
+
+
         // var costocolor = isNaN(Object.values(this.state.color).reduce((t, { valor }) => t + valor, 0)) ? 0 : Object.values(this.state.color).reduce((t, { valor }) => t + valor, 0);
         // var costomaterial = isNaN(Object.values(this.state.Mater).reduce((t, { total }) => t + total, 0)) ? 0 : Object.values(this.state.Mater).reduce((t, { total }) => t + total, 0);
         // var costooperario = isNaN(parseFloat(this.state.valor_operario.value)) ? 0 : parseFloat(this.state.valor_operario.value);
@@ -219,7 +306,7 @@ class Producto_crear extends Component {
 
 
   };
-  
+
 
 
   handleChangePhoto = event => {
@@ -257,29 +344,30 @@ class Producto_crear extends Component {
   handleRemoveColor = idx => () => {
     this.setState({
       Colores: this.state.Colores.filter((s, sidx) => idx !== sidx)
-    });
+    }, this.calcular);
   };
 
   handleRemoveMate = idx => () => {
     this.setState({
       MaterialesAdicionales: this.state.MaterialesAdicionales.filter((s, sidx) => idx !== sidx)
-    });
+    }, this.calcular);
   };
- 
+
 
 
   handleSalario(event) {
-
+    var valor_oper = 0;
     // console.log(event);
-    var tiempoop = isNaN(parseFloat(this.state.tiempo_operario.value)) ? 0 : parseFloat(this.state.tiempo_operario.value);
+    var tiempoop = isNaN(parseFloat(this.state.tiempo_operario)) ? 0 : parseFloat(this.state.tiempo_operario);
     var salario_operario = isNaN(parseFloat(event.target.value)) ? 0 : parseFloat(event.target.value);
+    console.log(tiempoop);
     if (tiempoop !== 0) {
-      var valor_oper = (salario_operario / 200) * tiempoop;
+      valor_oper = (salario_operario / 200) * tiempoop;
     } else {
-      var valor_oper = 0;
+      valor_oper = 0;
     }
     this.setState({ salario_operario: event.target.value })
-    this.setState({ valor_operario: valor_oper })
+    this.setState({ valor_operario: valor_oper }, this.calcular)
 
   };
   handleProducto(event) {
@@ -292,11 +380,28 @@ class Producto_crear extends Component {
 
     this.setState({ producto_por_dia: event.target.value });
     this.setState({ tiempo_operario: tiempoop });
-    this.setState({ valor_operario: valor_oper })
+    this.setState({ valor_operario: valor_oper }, this.calcular)
   };
 
 
-
+  handleChangeMargen(event) {
+    const name = event.target.name;
+    const value = event.target.value;
+    console.log(this.state);
+    // console.log(value);
+    this.setState({
+      formControls: {
+        ...this.state.formControls,
+        [name]: {
+          ...this.state.formControls[name],
+          value
+        }
+      }
+    }, this.calcular);
+  }
+  handleCloseDialog(event){
+    this.setState({openDialog:false});
+  }
   handleChange(event) {
     const name = event.target.name;
     const value = event.target.value;
@@ -322,7 +427,7 @@ class Producto_crear extends Component {
 
 
 
-    axios.get(process.env.REACT_APP_URL_LARAVEL+`/api/materia_prima`)
+    axios.get(process.env.REACT_APP_URL_LARAVEL + `/api/materia_prima`)
       .then(res4 => {
         const resultado4 = res4.data;
 
@@ -332,7 +437,7 @@ class Producto_crear extends Component {
 
       })
 
-    axios.get(process.env.REACT_APP_URL_LARAVEL+`/api/Color`)
+    axios.get(process.env.REACT_APP_URL_LARAVEL + `/api/Color`)
       .then(res3 => {
         const resultado3 = res3.data;
 
@@ -340,7 +445,7 @@ class Producto_crear extends Component {
 
 
       })
-    axios.get(process.env.REACT_APP_URL_LARAVEL+`/api/tipo_operario`)
+    axios.get(process.env.REACT_APP_URL_LARAVEL + `/api/tipo_operario`)
       .then(res6 => {
         const resultado6 = res6.data;
 
@@ -357,9 +462,28 @@ class Producto_crear extends Component {
 
   render() {
     return (
-
-
+   
       <div style={{ maxWidth: '100%' }}>
+   <Dialog
+        open={this.state.openDialog}
+        onClose={this.handleCloseDialog.bind(this)}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">{"Creando producto"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+          El producto ha sido creado. Ahora se puede crear un nuevo producto o ir al menu para ver e listado
+        </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={this.handleCloseDialog.bind(this)} color="primary"autoFocus>
+            OK
+        </Button>
+          
+        </DialogActions>
+      </Dialog>
+
         <Snackbar
           anchorOrigin={{
             vertical: 'bottom',
@@ -382,59 +506,67 @@ class Producto_crear extends Component {
         {/* <Fab color="primary" aria-label="add" className={'daniel'} onClick={handleClickOpen.bind(this)}>
                     <AddIcon />
                 </Fab> */}
-
-        <TextField
-          name="nombre"
-          value={this.state.nombre} onChange={this.handleChange.bind(this)}
-          label="Nombre"
-          fullWidth
-
-        />
-
-        <TextField
-          name="referencia"
-          value={this.state.referencia} onChange={this.handleChange.bind(this)}
-          label="Referencia"
-          fullWidth
-
-        /><hr></hr>
-        <h5>Imagen</h5>
-        <input label="Imagen" type="file" accept="image/gif, image/jpeg, image/png" name="imagen" onChange={this.handleChangePhoto.bind(this)} />
-
-
-        <TextField
-          name="margen"
-          type="number"
-          value={this.state.margen} onChange={this.handleChange.bind(this)}
-          label="Margen"
-          fullWidth
-        />
-
-
-        <InputLabel htmlFor="age-simple">Tipo de operario</InputLabel>
-        <Select
-          fullWidth
-          id="tipo_operario"
-          name="tipo_operario"
-          value={Number(this.state.tipo_operario)}
-          onChange={this.handleChangeOperario.bind(this)}
-          input={<Input id="age-simple" />}
+        <form
+          id="form-inside-input"
+          className="form-inside-input"
+          onSubmit={guardar.bind(this)}
         >
+          <TextField
+            required="true"
+            name="nombre"
+            value={this.state.nombre} onChange={this.handleChange.bind(this)}
+            label="Nombre"
+            fullWidth
 
-          <MenuItem value="">
+          />
 
-            <em>None</em>
-          </MenuItem>
+          <TextField
+            required="true"
+            name="referencia"
+            value={this.state.referencia} onChange={this.handleChange.bind(this)}
+            label="Referencia"
+            fullWidth
 
-          {this.state.operarios.map((id, index) =>
+          /><hr></hr>
+          <h5>Imagen</h5>
+          <input required="true" label="Imagen" type="file" accept="image/gif, image/jpeg, image/png" name="imagen" onChange={this.handleChangePhoto.bind(this)} />
 
-            <MenuItem key={id.id} value={id.id}>{id.tipo}</MenuItem>
-          )}
+
+          <TextField
+            required="true"
+            name="margen"
+            type="number"
+            value={this.state.margen} onChange={this.handleChangeMargen.bind(this)}
+            label="Margen"
+            fullWidth
+          />
 
 
-        </Select>
+          <InputLabel htmlFor="age-simple">Tipo de operario</InputLabel>
+          <Select
+            fullWidth
+            required="true"
+            id="tipo_operario"
+            name="tipo_operario"
+            value={Number(this.state.tipo_operario)}
+            onChange={this.handleChangeOperario.bind(this)}
+            input={<Input id="age-simple" />}
+          >
 
-        {/* <CurrencyTextField
+            <MenuItem value="">
+
+              <em>None</em>
+            </MenuItem>
+
+            {this.state.operarios.map((id, index) =>
+
+              <MenuItem key={id.id} value={id.id}>{id.tipo}</MenuItem>
+            )}
+
+
+          </Select>
+
+          {/* <CurrencyTextField
 		label="Salario operario mes"
 		variant="standard"
     value={this.state.salario_operario}
@@ -448,302 +580,316 @@ class Producto_crear extends Component {
     textAlign="left"
     fullWidth
     /> */}
-        <TextField
-          name="salario_operario"
-          type="number"
-          label="Salario operario mes"
-          value={this.state.salario_operario} onChange={this.handleSalario.bind(this)}
-          fullWidth
+          <TextField
+            name="salario_operario"
+            required="true"
+            type="number"
+            label="Salario operario mes"
+            value={this.state.salario_operario} onChange={this.handleSalario.bind(this)}
+            fullWidth
 
-        />
-
-
-
-        <TextField
-          name="producto_por_dia"
-          type="number"
-          label="Productos por dia"
-          value={this.state.producto_por_dia} onChange={this.handleProducto.bind(this)}
-          fullWidth
-
-        />
-        <TextField
-          name="tiempo_operario"
-          type="number"
-          label="Tiempo de operario"
-          value={this.state.tiempo_operario} onChange={this.handleChange.bind(this)}
-          fullWidth
-          InputProps={{
-            readOnly: true,
-          }}
-
-        />
-
-        <TextField
-          name="valor_operario"
-          type="number"
-          label="Valor operario"
-          value={this.state.valor_operario} onChange={this.handleChange.bind(this)}
-          fullWidth
-          InputProps={{
-            readOnly: true,
-          }}
-        />
-
-        <TextField
-          name="unidades_por_caja"
-          type="number"
-          label="Unidades por caja"
-          value={this.state.unidades_por_caja} onChange={this.handleChange.bind(this)}
-          fullWidth
+          />
 
 
-        />
-        <TextField
-          name="unidades_por_mts2"
-          type="number"
-          label="Unidades por mt2 o lineal"
-          value={this.state.unidades_por_caja} onChange={this.handleChange.bind(this)}
-          fullWidth
 
-        />
-        <hr></hr>
+          <TextField
+            name="producto_por_dia"
+            required="true"
+            type="number"
+            label="Productos por dia"
+            value={this.state.producto_por_dia} onChange={this.handleProducto.bind(this)}
+            fullWidth
 
-        {this.state.MaterialesAdicionales.map((Mater, idx) => (
-          <div className="Materiales">
+          />
+          <TextField
+            name="tiempo_operario"
+            required="true"
+            type="number"
+            label="Tiempo de operario"
+            value={this.state.tiempo_operario} onChange={this.handleChange.bind(this)}
+            fullWidth
+            InputProps={{
+              readOnly: true,
+            }}
 
-            <Select
+          />
 
-              id="materiaprima"
-              name="materiaprima"
-              //value={Mate.name}
-              style={{ width: 200 }}
-              //style={{backgroundColor:this.state.color[idx].rgblist}}
-              onChange={this.handleChangecomboMate(idx)}
-              input={<Input id="materialprima" />}
-            >
+          <TextField
+            name="valor_operario"
+            required="true"
+            type="number"
+            label="Valor operario"
+            value={this.state.valor_operario} onChange={this.handleChange.bind(this)}
+            fullWidth
+            InputProps={{
+              readOnly: true,
+            }}
+          />
 
-              <MenuItem value="">
-
-                <em>None</em>
-              </MenuItem>
-
-
-              {
-                this.state.materia_primas.map((id, index) =>
-
-                  <MenuItem
-
-                    key={id.id} value={id.id}>{id.nombre}</MenuItem>
-                )}
-
-
-            </Select>
-
-
-            <TextField
-
-              label="Material cantidad"
-              type='number'
-              defaultValue="Material cantidad"
-              onChange={this.handleColorNameChangeMateriales(idx)}
-              value={Mater.cantidad}
+          <TextField
+            name="unidades_por_caja"
+            required="true"
+            type="number"
+            label="Unidades por caja"
+            value={this.state.unidades_por_caja} onChange={this.handleChange.bind(this)}
+            fullWidth
 
 
-            />
-            <TextField
+          />
+          <TextField
+            name="unidades_por_mts2"
+            required="true"
+            type="number"
+            label="Unidades por mt2 o lineal"
+            value={this.state.unidades_por_caja} onChange={this.handleChange.bind(this)}
+            fullWidth
 
-              label="Valor total"
-              defaultValue="Valor total"
+          />
+          <hr></hr>
 
-              value={this.state.MaterialesAdicionales[idx].total}
+          {this.state.MaterialesAdicionales.map((Mater, idx) => (
+            <div className="Materiales">
 
-              InputProps={{
-                readOnly: true,
-              }}
-            />
+              <Select
 
-            <Button
-              color="primary"
-              size="large"
-              variant="contained"
-              onClick={this.handleAddMat}
-              className={useStyles}
+                id="materiaprima"
+                required="true"
+                name="materiaprima"
+                //value={Mate.name}
+                style={{ width: 200 }}
+                //style={{backgroundColor:this.state.color[idx].rgblist}}
+                onChange={this.handleChangecomboMate(idx)}
+                input={<Input id="materialprima" />}
+              >
 
-            >
-              +
+                <MenuItem value="">
+
+                  <em>None</em>
+                </MenuItem>
+
+
+                {
+                  this.state.materia_primas.map((id, index) =>
+
+                    <MenuItem
+
+                      key={id.id} value={id.id}>{id.nombre}</MenuItem>
+                  )}
+
+
+              </Select>
+
+
+              <TextField
+
+                label="Material cantidad"
+                required="true"
+                type='number'
+                defaultValue="Material cantidad"
+                onChange={this.handleColorNameChangeMateriales(idx)}
+                value={Mater.cantidad}
+
+
+              />
+              <TextField
+                required="true"
+                label="Valor total"
+                defaultValue="Valor total"
+
+                value={this.state.MaterialesAdicionales[idx].total}
+
+                InputProps={{
+                  readOnly: true,
+                }}
+              />
+
+              <Button
+                color="primary"
+                size="large"
+                variant="contained"
+                onClick={this.handleAddMat}
+                className={useStyles}
+
+              >
+                +
 </Button>
-            <Button
-              color="primary"
-              size="large"
-              variant="contained"
-              onClick={this.handleRemoveMate(idx)}
-              className={useStyles}
+              <Button
+                color="primary"
+                size="large"
+                variant="contained"
+                onClick={this.handleRemoveMate(idx)}
+                className={useStyles}
 
-            >
-              -
+              >
+                -
 </Button>
 
-          </div>
-        ))}
+            </div>
+          ))}
 
 
 
 
 
-        <hr></hr>
+          <hr></hr>
 
 
-        {this.state.Colores.map((Color, idx) => (
-          <div className="Color">
-            <Select
+          {this.state.Colores.map((Color, idx) => (
+            <div className="Color">
+              <Select
 
-              id="color"
-              name="color"
-              value={Color.name}
-              style={{ backgroundColor: this.state.color[idx].rgblist, width: 200 }}
-              onChange={this.handleChangecombo(idx)}
-              input={<Input id="age-simple" />}
-            >
+                id="color"
+                required="true"
+                name="color"
+                value={Color.name}
+                style={{ backgroundColor: this.state.color[idx].rgblist, width: 200 }}
+                onChange={this.handleChangecombo(idx)}
+                input={<Input id="age-simple" />}
+              >
 
-              <MenuItem value="">
+                <MenuItem value="">
 
-                <em>None</em>
-              </MenuItem>
-              {console.log(this.state.colors)}
+                  <em>None</em>
+                </MenuItem>
+                {console.log(this.state.colors)}
 
-              {
-                this.state.colors.map((id, index) =>
+                {
+                  this.state.colors.map((id, index) =>
 
-                  <MenuItem
-                    style={{ backgroundColor: id.rgb }}
-                    key={id.id} value={id.id}>{id.nombre}</MenuItem>
-                )}
-
-
-            </Select>
+                    <MenuItem
+                      style={{ backgroundColor: id.rgb }}
+                      key={id.id} value={id.id}>{id.nombre}</MenuItem>
+                  )}
 
 
-            <TextField
+              </Select>
 
-              label="Color Porcentaje"
-              defaultValue="Color Porcentaje"
-              type="number"
-              onChange={this.handleColorNameChange(idx)}
-              value={Color.name}
-            />
-            <TextField
 
-              label="Valor total color"
-              defaultValue="Valor total color"
+              <TextField
 
-              value={this.state.Colores[idx].total}
-             
+                label="Color Porcentaje"
+                required="true"
+                defaultValue="Color Porcentaje"
+                type="number"
+                onChange={this.handleColorNameChange(idx)}
+                value={Color.name}
+              />
+              <TextField
 
-            />
+                label="Valor total color"
+                required="true"
+                defaultValue="Valor total color"
 
-            <Button
-              color="primary"
-              size="large"
-              variant="contained"
-              onClick={this.handleAddColor}
-              className={useStyles}
+                value={this.state.Colores[idx].total}
 
-            >
-              +
+
+              />
+
+              <Button
+                color="primary"
+                size="large"
+                variant="contained"
+                onClick={this.handleAddColor}
+                className={useStyles}
+
+              >
+                +
 </Button>
-            <Button
-              color="primary"
-              size="large"
-              variant="contained"
-              onClick={this.handleRemoveColor(idx)}
-              className={useStyles}
+              <Button
+                color="primary"
+                size="large"
+                variant="contained"
+                onClick={this.handleRemoveColor(idx)}
+                className={useStyles}
 
-            >
-              -
+              >
+                -
 </Button>
-         
-
-            {/* <InputLabel htmlFor="age-simple">Color</InputLabel> */}
-
-          </div>
-        ))}
-
-       
-        <hr>
-
-        </hr>
-        <MaterialTable
-          columns={[
 
 
-            { title: 'nombre', field: 'nombre' },
-            { title: 'color', field: 'color' },
-            { title: 'cantidad', field: 'cantidad', editable: 'never' },
-            { title: 'valor', field: 'valor', type: "currency", currencySetting: { minimumFractionDigits: 0, maximumFractionDigits: 0 } },
-            { title: 'valor_total', field: 'valor_total', type: "currency", currencySetting: { minimumFractionDigits: 0, maximumFractionDigits: 0 }, editable: 'never' },
+              {/* <InputLabel htmlFor="age-simple">Color</InputLabel> */}
+
+            </div>
+          ))}
 
 
-            // { title: 'porcentaje', field:'porcentaje'},
+          <hr>
+
+          </hr>
+          <MaterialTable
+            columns={[
 
 
+              { title: 'nombre', field: 'nombre' },
+              { title: 'color', field: 'color' },
+              { title: 'cantidad', field: 'cantidad', editable: 'never' },
+              { title: 'valor', field: 'valor', type: "currency", currencySetting: { minimumFractionDigits: 0, maximumFractionDigits: 0 } },
+              { title: 'valor_total', field: 'valor_total', type: "currency", currencySetting: { minimumFractionDigits: 0, maximumFractionDigits: 0 }, editable: 'never' },
+
+
+              // { title: 'porcentaje', field:'porcentaje'},
 
 
 
 
 
 
-          ]}
-          data={this.state.colorvalor}
-          title="Materiales colores"
+
+
+            ]}
+            data={this.state.colorvalor}
+            title="Materiales colores"
 
 
 
-        />
+          />
 
 
-        <TextField
+          <TextField
 
-          label="Costo_estimado"
-          defaultValue="Costo_estimado"
-          fullWidth
-          type="currency"
-          value={
-            this.state.Costo_estimado
-          }
-          margin="normal"
-          InputProps={{
-            readOnly: true,
-          }}
-        />
+            label="Costo_estimado"
+            required="true"
+            defaultValue="Costo_estimado"
+            fullWidth
+            type="currency"
+            value={
+              this.state.Costo_estimado
+            }
+            margin="normal"
+            InputProps={{
+              readOnly: true,
+            }}
+          />
 
-        <TextField
+          <TextField
 
-          label="Precio estimado"
-          defaultValue="Precio_estimado"
-          fullWidth
-          value={
-            this.state.precio_estimado
-          }
-          margin="normal"
-          InputProps={{
-            readOnly: true,
-          }}
-        />
-        <hr>
+            label="Precio estimado"
+            required="true"
+            defaultValue="Precio_estimado"
+            fullWidth
+            value={
+              this.state.precio_estimado
+            }
+            margin="normal"
+            InputProps={{
+              readOnly: true,
+            }}
+          />
+          <hr>
 
-        </hr>
-        <Button
-          variant="contained"
-          color="primary"
-          size="large"
-          className={useStyles}
-          startIcon={<SaveIcon />}
-          onClick={guardar.bind(this)}
-        >
-          Guardar
+          </hr>
+          <Button
+            variant="contained"
+            color="primary"
+            size="large"
+            className={useStyles}
+            startIcon={<SaveIcon />}
+            type='submit'
+          //onClick={guardar.bind(this)}
+          >
+            Guardar
       </Button>
-
+        </form>
 
       </div>
 
@@ -766,10 +912,13 @@ function handleClose2() {
 
 
 function guardar(event) {
+
+  event.preventDefault();
+  this.setState({openDialog:true});
   const data = new FormData()
   data.append('file', this.state.selectedFile);
 
-  axios.post(process.env.REACT_APP_URL_LARAVEL+"/api/upload", data, { // receive two parameter endpoint url ,form data 
+  axios.post(process.env.REACT_APP_URL_LARAVEL + "/api/upload", data, { // receive two parameter endpoint url ,form data 
   })
     .then(res => { // then print response status
       console.log(res)
@@ -799,7 +948,7 @@ function guardar(event) {
       console.log(datoGuardar);
       console.log(this.state);
 
-      axios.post(process.env.REACT_APP_URL_LARAVEL+`/api/producto`, (datoGuardar))
+      axios.post(process.env.REACT_APP_URL_LARAVEL + `/api/producto`, (datoGuardar))
         .then(res => {
 
           console.log(res);
@@ -813,7 +962,7 @@ function guardar(event) {
             var newColores = this.state.guardarcolor.concat({ productos_id: idprod, colores_id: value.id, porcentaje: this.state.Colores[index].porcentaje })
 
             this.setState({
-              guardarcolor: [...this.state.guardarcolor, { productos_id: idprod, colores_id: value.id, porcentaje: this.state.Colores[index].porcentaje  }],
+              guardarcolor: [...this.state.guardarcolor, { productos_id: idprod, colores_id: value.id, porcentaje: this.state.Colores[index].porcentaje }],
             })
 
 
@@ -823,7 +972,7 @@ function guardar(event) {
 
 
 
-          axios.post(process.env.REACT_APP_URL_LARAVEL+`/api/producto_colores`, (this.state.guardarcolor))
+          axios.post(process.env.REACT_APP_URL_LARAVEL + `/api/producto_colores`, (this.state.guardarcolor))
             .then(res5 => {
               console.log("Daniel 0");
 
@@ -846,7 +995,7 @@ function guardar(event) {
               console.log("Daniel 2");
               console.log(this.state.guardarmater);
 
-              axios.post(process.env.REACT_APP_URL_LARAVEL+`/api/Producto_materiales`, (this.state.guardarmater))
+              axios.post(process.env.REACT_APP_URL_LARAVEL + `/api/Producto_materiales`, (this.state.guardarmater))
                 .then(res6 => {
 
                   console.log(res6);
@@ -855,6 +1004,9 @@ function guardar(event) {
                   //this.componentDidMount();
 
                   // console.log(this.state.datos);
+                  //this.setState({openDialog:true});
+                  this.reset();
+
                 })
                 .catch((error) => {
 
