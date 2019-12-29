@@ -36,7 +36,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-class Producto_crear extends Component {
+class Cotizacion extends Component {
     state = {
 
         productos: [],
@@ -702,5 +702,5 @@ function guardar(event) {
 
 
 
-export default Producto_crear;
+export default Cotizacion;
 
