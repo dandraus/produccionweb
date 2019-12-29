@@ -545,10 +545,10 @@ function guardar(event) {
               });
               axios.post(process.env.REACT_APP_URL_LARAVEL+`/api/Cotizacion_items`, (this.state.guardarprod))
               .then(res6 => {
-    
+                var reporteurl ="ec2-18-144-28-190.us-west-1.compute.amazonaws.com:8080/jasperserver/rest_v2/reports/reports/cotizacion2.pdf?Cotizacionid="+idprod;
                 console.log(res6);
                 console.log(res6.data.id);
-    
+                window.open(reporteurl, '_blank');  
                 //this.componentDidMount();
     
                 // console.log(this.state.datos);
