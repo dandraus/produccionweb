@@ -55,8 +55,16 @@ class CotizacionListado extends Component {
         <MaterialTable
           columns={[
             
-
-            { title: 'id', field: 'id' },
+            {
+                title: 'id',
+                field: 'id',
+                render: rowData => (
+                <h6>{rowData.id }
+                <a href={"http://ec2-18-144-28-190.us-west-1.compute.amazonaws.com:8080/jasperserver/rest_v2/reports/reports/cotizacion2.pdf?Cotizacionid="+rowData.id} target="_blank">   PDF</a>
+                </h6>
+                ),
+              },
+            // { title: 'id', field: 'id' },
             { title: 'Cliente', field: 'cliente' },
             { title: 'Nit', field: 'nit' },
             {
@@ -102,7 +110,7 @@ class CotizacionListado extends Component {
                         {"Referencia   " +items.referencia} { " Descripcion  " + items.descripcion + "   Cantidad "+ items.cantidad_m2 + "   Total " + items.total}
                         <br></br>
                         
-                        <a href={"http://ec2-18-144-28-190.us-west-1.compute.amazonaws.com:8080/jasperserver/rest_v2/reports/reports/cotizacion2.pdf?Cotizacionid="+items.id} target="_blank">Descargar PDF</a>
+                        
 
 
                       </div>
