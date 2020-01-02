@@ -45,9 +45,9 @@ class Cotizacion extends Component {
 
         fechaactual: "2019-12-24",
         Colores: [{ porcentaje: "", rgblist: "#FFFF" }],
-        MaterialesAdicionales: [{ cantidad: "", id: "", unidades: "" }],
-        Mater: [{ nombre: "", id: "", valor: "", cantidad: "", total: "", referencia: "", unidades: "" }],
-
+        MaterialesAdicionales: [{ cantidad: "", id: "", unidades: "",valoriva:"" }],
+        Mater: [{ nombre: "", id: "", valor: "", cantidad: "", total: "", referencia: "", unidades: "",valoriva:"" }],
+       
         precio_estimado: "",
         formControls: {
             cliente: {
@@ -77,6 +77,9 @@ class Cotizacion extends Component {
                 value: 19
             },
             total: {
+                value: 0
+            },
+            descuento: {
                 value: 0
             },
             fecha_vencimiento: {
@@ -95,9 +98,9 @@ class Cotizacion extends Component {
 
         fechaactual: "",
         Colores: [{ porcentaje: "", rgblist: "#FFFF" }],
-        MaterialesAdicionales: [{ cantidad: "", id: "", unidades: "" }],
-        Mater: [{ nombre: "", id: "", valor: "", cantidad: "", total: "", referencia: "", unidades: "" }],
-
+        MaterialesAdicionales: [{ cantidad: "", id: "", unidades: "",valoriva:"" }],
+        Mater: [{ nombre: "", id: "", valor: "", cantidad: "", total: "", referencia: "", unidades: "",valoriva:"" }],
+       
         precio_estimado: "",
         formControls: {
             cliente: {
@@ -129,6 +132,9 @@ class Cotizacion extends Component {
             total: {
                 value: 0
             },
+            descuento: {
+                value: 0
+            },
             fecha_vencimiento: {
                 value: ''
             },
@@ -138,16 +144,35 @@ class Cotizacion extends Component {
 
     }
     calcular = () => {
-
+        var descuento =isNaN(parseFloat(this.state.formControls.descuento.value)) ? 0 : parseFloat(this.state.formControls.descuento.value);
+       
         var subtotal = isNaN(Object.values(this.state.MaterialesAdicionales).reduce((t, { total }) => t + total, 0)) ? 0 : Object.values(this.state.MaterialesAdicionales).reduce((t, { total }) => t + total, 0);
-        this.setState({ subtotal: subtotal })
-        var iva = subtotal * 0.19;
-        this.setState({ iva: iva })
+        var totaliva = isNaN(Object.values(this.state.MaterialesAdicionales).reduce((t, { valoriva }) => t + valoriva, 0)) ? 0 : Object.values(this.state.MaterialesAdicionales).reduce((t, { valoriva }) => t + valoriva, 0);
+        var subtotaldesc = Math.round(subtotal * (1-(descuento/100)));
+        this.setState({ subtotal: subtotaldesc })
+        var iva = Math.round(totaliva* (1-(descuento/100)));//subtotaldesc * 0.19;
+        this.setState({ iva: iva });
 
-        var total = subtotal + iva;
+        var total = subtotaldesc + iva;
         this.setState({ total: total })
         console.log(this.state);
     }
+    handleDescuento(event){
+        const name = event.target.name;
+        const value = event.target.value;
+        console.log(this.state);
+        console.log(value);
+        this.setState({
+          formControls: {
+            ...this.state.formControls,
+            [name]: {
+              ...this.state.formControls[name],
+              value
+            }
+          }
+        }, this.calcular);
+    }
+
     handleColorNameChangeMateriales = idx => evt => {
         const newMateriales = this.state.MaterialesAdicionales.map((Mate, sidx) => {
             //const val = evt.target.value - 1;
@@ -157,7 +182,7 @@ class Cotizacion extends Component {
             var total_valor = Math.round(valor_metros * cantidad);
             var unidades = this.state.Mater[idx].unidades * cantidad;
             if (idx !== sidx) return Mate;
-            return { ...Mate, unidades: unidades, cantidad: evt.target.value, id: "", total: total_valor }
+            return { ...Mate, unidades: unidades, cantidad: evt.target.value, id: "", total: total_valor,valoriva: ((this.state.Mater[idx].valoriva)/100)*total_valor}
         });
 
         this.setState({ MaterialesAdicionales: newMateriales }, this.calcular);
@@ -169,13 +194,15 @@ class Cotizacion extends Component {
             if (idx !== sidx) return Mate;
             console.log(evt);
             const val = evt.target.value - 1;
-            console.log(this.state.productos[val].precio_estimado);
+            //console.log(this.state.productos[val].precio_estimado);
+            var productofind =(this.state.productos.find(valores => valores.id === evt.target.value));
+            console.log(productofind);
             console.log(this.state.MaterialesAdicionales[sidx].cantidad);
-            var valor_metros = Math.round(this.state.productos[val].precio_estimado * this.state.productos[val].unidades_por_mts);
-            var unidades = this.state.productos[val].unidades_por_mts;
+            var valor_metros = Math.round(productofind.precio_estimado * productofind.unidades_por_mts);
+            var unidades = productofind.unidades_por_mts;
             var total_valor = Math.round(valor_metros * this.state.MaterialesAdicionales[sidx].cantidad);
             if (evt.target.value === "") return { ...Mate, id: evt.target.value, valor: "" };
-            return { ...Mate, unidades: unidades, referencia: this.state.productos[val].referencia, id: evt.target.value, valor: valor_metros, cantidad: this.state.MaterialesAdicionales[sidx].cantidad, total: total_valor, nombre: this.state.productos[val].nombre };
+            return { ...Mate, unidades: unidades, referencia: productofind.referencia, id: evt.target.value, valor: valor_metros, cantidad: this.state.MaterialesAdicionales[sidx].cantidad, total: total_valor, nombre: productofind.nombre,valoriva:productofind.iva };
         });
 
         this.setState({ Mater: newMateriales });
@@ -184,7 +211,7 @@ class Cotizacion extends Component {
             //const val = evt.target.value - 1;
           
             if (idx !== sidx) return Mate;
-            return { ...Mate, unidades: "", cantidad: "", id: "", total: "" }
+            return { ...Mate, unidades: "", cantidad: "", id: "", total: "",valoriva:"" }
         });
 
         this.setState({ MaterialesAdicionales: newMateriales2 }, this.calcular);
@@ -437,6 +464,7 @@ today (){
                             <TextField
                                 defaultValue="Cantidad"
                                 required="true"
+                                type="number"
                                 label="Cantidad"
                                 value={Mater.cantidad}
                                 onChange={this.handleColorNameChangeMateriales(idx)}
@@ -448,6 +476,18 @@ today (){
                                 defaultValue="Valor mts"
 
                                 value={this.state.Mater[idx].valor}
+
+                                InputProps={{
+                                    readOnly: true,
+                                }}
+                            />
+                                    <TextField
+                                required="true"
+
+                                label="Valor iva"
+                                defaultValue="Valor iva"
+
+                                value={this.state.Mater[idx].valoriva}
 
                                 InputProps={{
                                     readOnly: true,
@@ -500,6 +540,14 @@ today (){
 
 
                     <hr></hr>
+                    <TextField  name="descuento"
+                                defaultValue="Descuento %"
+                                required="true"
+                                type="number"
+                                label="Descuento %"
+                                value={this.state.descuento}
+                                onChange={this.handleDescuento.bind(this)}
+                            />
                     <TextField
                         required="true"
                         label="Subtotal"
@@ -598,6 +646,7 @@ function guardar(event) {
         subtotal: this.state.subtotal,
         iva: this.state.iva,
         total: this.state.total,
+        descuento:this.state.formControls.descuento.value
 
 
     };

@@ -30,7 +30,7 @@ const useStyles = makeStyles(theme => ({
 
 class Producto_crear extends Component {
   state = {
-    openDialog:false,
+    openDialog: false,
     materia_primas: [],
     colors: [],
     operarios: [],
@@ -44,7 +44,8 @@ class Producto_crear extends Component {
     MaterialesAdicionales: [{ cantidad: "", id: "" }],
     Costo_estimado: "",
     precio_estimado: "",
-    salario_operario: "",
+    preciomt2:0,
+    salario_operario: 1500000,
     valor_operario: "",
     tiempo_operario: "",
     tipo_operario_id: "",
@@ -79,16 +80,19 @@ class Producto_crear extends Component {
       imagen: {
         value: ''
       },
+      iva: {
+        value: 0
+      },
 
     }
   };
 
 
-  reset(){
+  reset() {
     document.getElementById("form-inside-input").reset();
     this.setState({
-      producto_por_dia:"",
-      openDialog:false,
+      producto_por_dia: "",
+      openDialog: false,
       materia_primas: [],
       colors: [],
       operarios: [],
@@ -102,8 +106,9 @@ class Producto_crear extends Component {
       MaterialesAdicionales: [{ cantidad: "", id: "" }],
       Costo_estimado: "",
       precio_estimado: "",
-      salario_operario: "",
+      salario_operario: 1500000,
       valor_operario: "",
+      preciomt2:0,
       tiempo_operario: "",
       tipo_operario_id: "",
       formControls: {
@@ -113,11 +118,11 @@ class Producto_crear extends Component {
         referencia: {
           value: ''
         },
-  
+
         unidades_por_caja: {
           value: ''
         },
-  
+
         precio_estimado: {
           value: ''
         },
@@ -127,7 +132,11 @@ class Producto_crear extends Component {
         margen: {
           value: 0
         },
-  
+        iva: {
+          value: 0
+        },
+
+
         producto_por_dia: {
           value: ''
         },
@@ -137,27 +146,28 @@ class Producto_crear extends Component {
         imagen: {
           value: ''
         },
-  
+
       }
     }
     )
-  } 
+  }
 
 
   calcular = () => {
 
-    console.log(this.state);
+   // // console.log(this.state);
     var costocolor = isNaN(Object.values(this.state.Colores).reduce((t, { total }) => t + total, 0)) ? 0 : Object.values(this.state.Colores).reduce((t, { total }) => t + total, 0);
     var costomaterial = isNaN(Object.values(this.state.MaterialesAdicionales).reduce((t, { total }) => t + total, 0)) ? 0 : Object.values(this.state.MaterialesAdicionales).reduce((t, { total }) => t + total, 0);
     var costooperario = isNaN(parseFloat(this.state.valor_operario)) ? 0 : parseFloat(this.state.valor_operario);
-    console.log(costooperario);
+   // // console.log(costooperario);
     var costo = costocolor + costomaterial;
     costo = costo + costooperario;
     this.setState({ Costo_estimado: costo });
     var precio = ((parseFloat(this.state.formControls.margen.value) / 100) * costo) + costo;
     this.setState({ precio_estimado: precio });
-
-
+    var unidades_mts = isNaN(parseFloat(this.state.formControls.unidades_por_mts2.value)) ? 0 : parseFloat(this.state.formControls.unidades_por_mts2.value);
+    var valormts = unidades_mts * precio;
+    this.setState({preciomt2:valormts});
     // var subtotal = isNaN(Object.values(this.state.MaterialesAdicionales).reduce((t, { total }) => t + total, 0)) ? 0 : Object.values(this.state.MaterialesAdicionales).reduce((t, { total }) => t + total, 0);
     // this.setState({ subtotal: subtotal })
     // var iva = subtotal * 0.19;
@@ -165,7 +175,7 @@ class Producto_crear extends Component {
 
     // var total = subtotal + iva;
     // this.setState({ total: total })
-    // console.log(this.state);
+    // // console.log(this.state);
   }
   // handleColorNameChangeMateriales = idx => evt => {
   //   const newMateriales = this.state.MaterialesAdicionales.map((Mate, sidx) => {
@@ -183,7 +193,7 @@ class Producto_crear extends Component {
 
   // };
   handleColorNameChangeMateriales = idx => evt => {
-    console.log(evt.target.value);
+   // // console.log(evt.target.value);
     const newMateriales = this.state.MaterialesAdicionales.map((Mate, sidx) => {
       var valorunitario = isNaN(parseFloat(this.state.Mater[idx].valor)) ? 0 : parseFloat(this.state.Mater[idx].valor);
       var cantidad = isNaN(parseFloat(evt.target.value)) ? 0 : parseFloat(evt.target.value);
@@ -210,7 +220,7 @@ class Producto_crear extends Component {
     });
 
     this.setState({ Colores: newColores }, this.calcular);
-    console.log(this.state);
+    // // console.log(this.state);
 
 
   };
@@ -220,12 +230,15 @@ class Producto_crear extends Component {
 
     const newMateriales = this.state.Mater.map((Mate, sidx) => {
       if (idx !== sidx) return Mate;
-      console.log(evt);
-      console.log()
-      const val = evt.target.value - 1;
-      var total_valor = this.state.materia_primas[val].valor * this.state.MaterialesAdicionales[sidx].cantidad;
+     // // console.log(evt);
+     // // // console.log()
+      // const val = evt.target.value - 1;
+      var materiaprimaval = (this.state.materia_primas.find(valores => valores.id === evt.target.value));
+      var total_valor = materiaprimaval.valor * this.state.MaterialesAdicionales[sidx].cantidad;
+
+      // console.log(materiaprimaval);
       if (evt.target.value === "") return { ...Mate, id: evt.target.value, valor: "" };
-      return { ...Mate, id: evt.target.value, valor: this.state.materia_primas[val].valor, cantidad: this.state.MaterialesAdicionales[sidx].cantidad, total: total_valor };
+      return { ...Mate, id: evt.target.value, valor: materiaprimaval.valor, cantidad: this.state.MaterialesAdicionales[sidx].cantidad, total: total_valor };
     });
 
     this.setState({ Mater: newMateriales });
@@ -242,16 +255,16 @@ class Producto_crear extends Component {
     // var costocolor = isNaN(Object.values(this.state.color).reduce((t, { valor }) => t + valor, 0)) ? 0 : Object.values(this.state.color).reduce((t, { valor }) => t + valor, 0);
     // var costomaterial = isNaN(Object.values(this.state.Mater).reduce((t, { total }) => t + total, 0)) ? 0 : Object.values(this.state.Mater).reduce((t, { total }) => t + total, 0);
     // var costooperario = isNaN(parseFloat(this.state.valor_operario.value)) ? 0 : parseFloat(this.state.valor_operario.value);
-    // console.log(costooperario);
+    // // console.log(costooperario);
     // var costo = costocolor + costomaterial;
     // costo = costo + costooperario;
     // this.setState({ Costo_estimado: costo });
     // var precio = ((parseFloat(this.state.formControls.margen.value) / 100) * costo) + costo;
     // this.setState({ precio_estimado: precio });
-    // console.log(this.state);
-    // console.log(evt);
+    // // console.log(this.state);
+    // // console.log(evt);
     // //  this.setState({rgblist:[...this.state.rgblist,this.state.colors[evt.target.value -1].rgb]});
-    //console.log(this.state);
+    //// console.log(this.state);
   };
 
   handleChangecombo = idx => evt => {
@@ -263,12 +276,12 @@ class Producto_crear extends Component {
         const resultado3 = res3.data;
 
         this.setState({ colorvalor: resultado3 });
-        console.log(this.state.colorvalor);
+        // console.log(this.state.colorvalor);
 
         var valtotal = Object.values(resultado3).reduce((t, { valor }) => t + valor, 0);//* (this.state.Colores[idx].porcentaje / 100);
         this.setState({ valtotalcolor: valtotal });
-        console.log(valtotal);
-        //console.log(this.state.Colores[idx].porcentaje);
+        // console.log(valtotal);
+        //// console.log(this.state.Colores[idx].porcentaje);
         const newColores2 = this.state.Colores.map((Color, sidx) => {
           if (idx !== sidx) return Color;
           // var valorunitario = isNaN(parseFloat( this.state.color[idx].valor)) ? 0 : parseFloat( this.state.color[idx].valor);
@@ -281,10 +294,11 @@ class Producto_crear extends Component {
         this.setState({ Colores: newColores2 }, this.calcular);
         const newColores = this.state.color.map((Color, sidx) => {
           if (idx !== sidx) return Color;
-          console.log(evt);
+          // console.log(evt);
+          var coloresval = (this.state.colors.find(valores => valores.id === evt.target.value));
           const val = evt.target.value - 1;
           if (evt.target.value === "") return { ...Color, id: evt.target.value, rgblist: '#FFF' };
-          return { ...Color, id: this.state.colors[val].id, rgblist: this.state.colors[val].rgb, valor: valtotal, porcentaje: this.state.Colores[idx].porcentaje };
+          return { ...Color, id: evt.target.value, rgblist: coloresval.rgb, valor: valtotal, porcentaje: this.state.Colores[idx].porcentaje };
         });
 
         this.setState({ color: newColores });
@@ -298,11 +312,11 @@ class Producto_crear extends Component {
         // this.setState({ Costo_estimado: costo });
         // var precio = ((parseFloat(this.state.formControls.margen.value) / 100) * costo) + costo;
         // this.setState({ precio_estimado: precio });
-        // console.log(this.state);
+        // // console.log(this.state);
       })
-    console.log(evt);
+    // console.log(evt);
     //  this.setState({rgblist:[...this.state.rgblist,this.state.colors[evt.target.value -1].rgb]});
-    //console.log(this.state);
+    //// console.log(this.state);
 
 
   };
@@ -331,14 +345,14 @@ class Producto_crear extends Component {
       Mater: this.state.Mater.concat([{ nombre: "", id: "", valor: "", cantidad: "", total: "" }]),
       MaterialesAdicionales: this.state.MaterialesAdicionales.concat([{ cantidad: "" }])
     });
-    console.log(this.state);
+    // console.log(this.state);
   };
   handleAddColor = () => {
     this.setState({
       Colores: this.state.Colores.concat([{ porcentaje: "" }]),
       color: this.state.color.concat([{ nombre: "" }])
     });
-    console.log(this.state);
+    // console.log(this.state);
   };
 
   handleRemoveColor = idx => () => {
@@ -357,10 +371,10 @@ class Producto_crear extends Component {
 
   handleSalario(event) {
     var valor_oper = 0;
-    // console.log(event);
+    // // console.log(event);
     var tiempoop = isNaN(parseFloat(this.state.tiempo_operario)) ? 0 : parseFloat(this.state.tiempo_operario);
     var salario_operario = isNaN(parseFloat(event.target.value)) ? 0 : parseFloat(event.target.value);
-    console.log(tiempoop);
+    // console.log(tiempoop);
     if (tiempoop !== 0) {
       valor_oper = (salario_operario / 200) * tiempoop;
     } else {
@@ -372,7 +386,7 @@ class Producto_crear extends Component {
   };
   handleProducto(event) {
 
-    // console.log(event);
+    // // console.log(event);
     var prodxdia = isNaN(parseFloat(event.target.value)) ? 0 : parseFloat(event.target.value);
     var tiempoop = 8 / prodxdia;
     var salario_operario = isNaN(parseFloat(this.state.salario_operario)) ? 0 : parseFloat(this.state.salario_operario);
@@ -387,8 +401,8 @@ class Producto_crear extends Component {
   handleChangeMargen(event) {
     const name = event.target.name;
     const value = event.target.value;
-    console.log(this.state);
-    // console.log(value);
+    // console.log(this.state);
+    // // console.log(value);
     this.setState({
       formControls: {
         ...this.state.formControls,
@@ -399,14 +413,14 @@ class Producto_crear extends Component {
       }
     }, this.calcular);
   }
-  handleCloseDialog(event){
-    this.setState({openDialog:false});
+  handleCloseDialog(event) {
+    this.setState({ openDialog: false });
   }
   handleChange(event) {
     const name = event.target.name;
     const value = event.target.value;
-    console.log(this.state);
-    // console.log(value);
+    // console.log(this.state);
+    // // console.log(value);
     this.setState({
       formControls: {
         ...this.state.formControls,
@@ -462,27 +476,27 @@ class Producto_crear extends Component {
 
   render() {
     return (
-   
+
       <div style={{ maxWidth: '100%' }}>
-   <Dialog
-        open={this.state.openDialog}
-        onClose={this.handleCloseDialog.bind(this)}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">{"Creando producto"}</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-          El producto ha sido creado. Ahora se puede crear un nuevo producto o ir al menu para ver e listado
+        <Dialog
+          open={this.state.openDialog}
+          onClose={this.handleCloseDialog.bind(this)}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">{"Creando producto"}</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              El producto ha sido creado. Ahora se puede crear un nuevo producto o ir al menu para ver e listado
         </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={this.handleCloseDialog.bind(this)} color="primary"autoFocus>
-            OK
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.handleCloseDialog.bind(this)} color="primary" autoFocus>
+              OK
         </Button>
-          
-        </DialogActions>
-      </Dialog>
+
+          </DialogActions>
+        </Dialog>
 
         <Snackbar
           anchorOrigin={{
@@ -538,6 +552,14 @@ class Producto_crear extends Component {
             type="number"
             value={this.state.margen} onChange={this.handleChangeMargen.bind(this)}
             label="Margen"
+            fullWidth
+          />
+          <TextField
+            required="true"
+            name="iva"
+            type="number"
+            value={this.state.iva} onChange={this.handleChangeMargen.bind(this)}
+            label="IVA"
             fullWidth
           />
 
@@ -641,7 +663,7 @@ class Producto_crear extends Component {
             required="true"
             type="number"
             label="Unidades por mt2 o lineal"
-            value={this.state.unidades_por_caja} onChange={this.handleChange.bind(this)}
+            value={this.state.unidades_por_caja} onChange={this.handleChangeMargen.bind(this)}
             fullWidth
 
           />
@@ -682,10 +704,10 @@ class Producto_crear extends Component {
 
               <TextField
 
-                label="Material cantidad"
+                label="Cantidad por unidad"
                 required="true"
                 type='number'
-                defaultValue="Material cantidad"
+                defaultValue="Cantidad por unidad"
                 onChange={this.handleColorNameChangeMateriales(idx)}
                 value={Mater.cantidad}
 
@@ -751,7 +773,7 @@ class Producto_crear extends Component {
 
                   <em>None</em>
                 </MenuItem>
-                {console.log(this.state.colors)}
+          {/* console.log(this.state.colors)*/}
 
                 {
                   this.state.colors.map((id, index) =>
@@ -875,6 +897,20 @@ class Producto_crear extends Component {
               readOnly: true,
             }}
           />
+          <TextField
+
+            label="Precio mt2"
+            required="true"
+            defaultValue="Precio mt2"
+            fullWidth
+            value={
+              this.state.preciomt2
+            }
+            margin="normal"
+            InputProps={{
+              readOnly: true,
+            }}
+          />
           <hr>
 
           </hr>
@@ -914,14 +950,14 @@ function handleClose2() {
 function guardar(event) {
 
   event.preventDefault();
-  this.setState({openDialog:true});
+  this.setState({ openDialog: true });
   const data = new FormData()
   data.append('file', this.state.selectedFile);
 
   axios.post(process.env.REACT_APP_URL_LARAVEL + "/api/upload", data, { // receive two parameter endpoint url ,form data 
   })
     .then(res => { // then print response status
-      console.log(res)
+      // console.log(res)
       this.setState({
         imagen: this.state.selectedFile.name
       });
@@ -941,20 +977,21 @@ function guardar(event) {
         foto: this.state.selectedFile.name,
         unidades_por_caja: this.state.formControls.unidades_por_caja.value,
         unidades_por_mts: this.state.formControls.unidades_por_mts2.value,
+        iva: this.state.formControls.ivax.value,
 
       };
 
 
-      console.log(datoGuardar);
-      console.log(this.state);
+      // console.log(datoGuardar);
+      // console.log(this.state);
 
       axios.post(process.env.REACT_APP_URL_LARAVEL + `/api/producto`, (datoGuardar))
         .then(res => {
 
-          console.log(res);
-          console.log(res.data.id);
+          // console.log(res);
+          // console.log(res.data.id);
           idprod = res.data.id;
-          console.log(this.state);
+          // console.log(this.state);
           this.setState({ guardarcolor: [] });
           this.setState({ guardarmater: [] });
           var newcolo = this.state.color.map((value, index) => {
@@ -974,13 +1011,13 @@ function guardar(event) {
 
           axios.post(process.env.REACT_APP_URL_LARAVEL + `/api/producto_colores`, (this.state.guardarcolor))
             .then(res5 => {
-              console.log("Daniel 0");
+              // console.log("Daniel 0");
 
-              console.log(this.state);
+              // console.log(this.state);
               var newmat = this.state.Mater.map((value2, index2) => {
-                console.log(value2);
+                // console.log(value2);
                 var newMater = "dani";//this.state.guardarmater.concat({ productos_id: idprod, materiales_id: value2.id, porcentaje: value2.porcentaje })
-                console.log("Daniel 1");
+                // console.log("Daniel 1");
                 this.setState({
                   guardarmater: [...this.state.guardarmater, { productos_id: idprod, materiales_id: value2.id, cantidad: this.state.MaterialesAdicionales[index2].cantidad }],
                 });
@@ -992,18 +1029,18 @@ function guardar(event) {
 
 
 
-              console.log("Daniel 2");
-              console.log(this.state.guardarmater);
+              // console.log("Daniel 2");
+              // console.log(this.state.guardarmater);
 
               axios.post(process.env.REACT_APP_URL_LARAVEL + `/api/Producto_materiales`, (this.state.guardarmater))
                 .then(res6 => {
 
-                  console.log(res6);
-                  console.log(res6.data.id);
+                  // console.log(res6);
+                  // console.log(res6.data.id);
 
                   //this.componentDidMount();
 
-                  // console.log(this.state.datos);
+                  // // console.log(this.state.datos);
                   //this.setState({openDialog:true});
                   this.reset();
 
@@ -1015,21 +1052,21 @@ function guardar(event) {
                   if (error.response) {
                     // The request was made and the server responded with a status code
                     // that falls out of the range of 2xx
-                    console.log(error.response.data);
-                    console.log(error.response.status);
-                    console.log(error.response.headers);
+                    // console.log(error.response.data);
+                    // console.log(error.response.status);
+                    // console.log(error.response.headers);
                   } else if (error.request) {
                     // The request was made but no response was received
                     // `error.request` is an instance of XMLHttpRequest in the 
                     // browser and an instance of
                     // http.ClientRequest in node.js
-                    console.log(error.request);
+                    // console.log(error.request);
                   } else {
                     // Something happened in setting up the request that triggered an Error
-                    console.log('Error', error.message);
+                    // console.log('Error', error.message);
                   }
                   this.setState({ Sopen: true });
-                  console.log(error.config);
+                  // console.log(error.config);
                 });
 
 
@@ -1041,13 +1078,13 @@ function guardar(event) {
 
 
 
-              console.log(res5);
-              console.log(res5.data.id);
+              // console.log(res5);
+              // console.log(res5.data.id);
 
 
               //       this.componentDidMount();
 
-              // console.log(this.state.datos);
+              // // console.log(this.state.datos);
             })
             .catch((error) => {
 
@@ -1056,21 +1093,21 @@ function guardar(event) {
               if (error.response) {
                 // The request was made and the server responded with a status code
                 // that falls out of the range of 2xx
-                console.log(error.response.data);
-                console.log(error.response.status);
-                console.log(error.response.headers);
+                // console.log(error.response.data);
+                // console.log(error.response.status);
+                // console.log(error.response.headers);
               } else if (error.request) {
                 // The request was made but no response was received
                 // `error.request` is an instance of XMLHttpRequest in the 
                 // browser and an instance of
                 // http.ClientRequest in node.js
-                console.log(error.request);
+                // console.log(error.request);
               } else {
                 // Something happened in setting up the request that triggered an Error
-                console.log('Error', error.message);
+                // console.log('Error', error.message);
               }
               this.setState({ Sopen: true });
-              console.log(error.config);
+              // console.log(error.config);
             });
 
 
@@ -1088,21 +1125,21 @@ function guardar(event) {
           if (error.response) {
             // The request was made and the server responded with a status code
             // that falls out of the range of 2xx
-            console.log(error.response.data);
-            console.log(error.response.status);
-            console.log(error.response.headers);
+            // console.log(error.response.data);
+            // console.log(error.response.status);
+            // console.log(error.response.headers);
           } else if (error.request) {
             // The request was made but no response was received
             // `error.request` is an instance of XMLHttpRequest in the 
             // browser and an instance of
             // http.ClientRequest in node.js
-            console.log(error.request);
+            // console.log(error.request);
           } else {
             // Something happened in setting up the request that triggered an Error
-            console.log('Error', error.message);
+            // console.log('Error', error.message);
           }
           this.setState({ Sopen: true });
-          console.log(error.config);
+          // console.log(error.config);
         });
 
 
@@ -1129,21 +1166,21 @@ function guardar(event) {
       if (error.response) {
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx
-        console.log(error.response.data);
-        console.log(error.response.status);
-        console.log(error.response.headers);
+        // console.log(error.response.data);
+        // console.log(error.response.status);
+        // console.log(error.response.headers);
       } else if (error.request) {
         // The request was made but no response was received
         // `error.request` is an instance of XMLHttpRequest in the 
         // browser and an instance of
         // http.ClientRequest in node.js
-        console.log(error.request);
+        // console.log(error.request);
       } else {
         // Something happened in setting up the request that triggered an Error
-        console.log('Error', error.message);
+        // console.log('Error', error.message);
       }
       this.setState({ Sopen: true });
-      console.log(error.config);
+      // console.log(error.config);
     });
 
 }
