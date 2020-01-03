@@ -155,11 +155,11 @@ class Producto_crear extends Component {
 
   calcular = () => {
 
-   // // console.log(this.state);
+   // console.log(this.state);
     var costocolor = isNaN(Object.values(this.state.Colores).reduce((t, { total }) => t + total, 0)) ? 0 : Object.values(this.state.Colores).reduce((t, { total }) => t + total, 0);
     var costomaterial = isNaN(Object.values(this.state.MaterialesAdicionales).reduce((t, { total }) => t + total, 0)) ? 0 : Object.values(this.state.MaterialesAdicionales).reduce((t, { total }) => t + total, 0);
     var costooperario = isNaN(parseFloat(this.state.valor_operario)) ? 0 : parseFloat(this.state.valor_operario);
-   // // console.log(costooperario);
+   // console.log(costooperario);
     var costo = costocolor + costomaterial;
     costo = costo + costooperario;
     this.setState({ Costo_estimado: costo });
@@ -175,7 +175,7 @@ class Producto_crear extends Component {
 
     // var total = subtotal + iva;
     // this.setState({ total: total })
-    // // console.log(this.state);
+    // console.log(this.state);
   }
   // handleColorNameChangeMateriales = idx => evt => {
   //   const newMateriales = this.state.MaterialesAdicionales.map((Mate, sidx) => {
@@ -193,7 +193,7 @@ class Producto_crear extends Component {
 
   // };
   handleColorNameChangeMateriales = idx => evt => {
-   // // console.log(evt.target.value);
+   // console.log(evt.target.value);
     const newMateriales = this.state.MaterialesAdicionales.map((Mate, sidx) => {
       var valorunitario = isNaN(parseFloat(this.state.Mater[idx].valor)) ? 0 : parseFloat(this.state.Mater[idx].valor);
       var cantidad = isNaN(parseFloat(evt.target.value)) ? 0 : parseFloat(evt.target.value);
@@ -220,7 +220,7 @@ class Producto_crear extends Component {
     });
 
     this.setState({ Colores: newColores }, this.calcular);
-    // // console.log(this.state);
+    console.log(this.state);
 
 
   };
@@ -230,13 +230,13 @@ class Producto_crear extends Component {
 
     const newMateriales = this.state.Mater.map((Mate, sidx) => {
       if (idx !== sidx) return Mate;
-     // // console.log(evt);
-     // // // console.log()
+     console.log(evt);
+     console.log()
       // const val = evt.target.value - 1;
       var materiaprimaval = (this.state.materia_primas.find(valores => valores.id === evt.target.value));
       var total_valor = materiaprimaval.valor * this.state.MaterialesAdicionales[sidx].cantidad;
 
-      // console.log(materiaprimaval);
+      console.log(materiaprimaval);
       if (evt.target.value === "") return { ...Mate, id: evt.target.value, valor: "" };
       return { ...Mate, id: evt.target.value, valor: materiaprimaval.valor, cantidad: this.state.MaterialesAdicionales[sidx].cantidad, total: total_valor };
     });
@@ -255,14 +255,14 @@ class Producto_crear extends Component {
     // var costocolor = isNaN(Object.values(this.state.color).reduce((t, { valor }) => t + valor, 0)) ? 0 : Object.values(this.state.color).reduce((t, { valor }) => t + valor, 0);
     // var costomaterial = isNaN(Object.values(this.state.Mater).reduce((t, { total }) => t + total, 0)) ? 0 : Object.values(this.state.Mater).reduce((t, { total }) => t + total, 0);
     // var costooperario = isNaN(parseFloat(this.state.valor_operario.value)) ? 0 : parseFloat(this.state.valor_operario.value);
-    // // console.log(costooperario);
+    // console.log(costooperario);
     // var costo = costocolor + costomaterial;
     // costo = costo + costooperario;
     // this.setState({ Costo_estimado: costo });
     // var precio = ((parseFloat(this.state.formControls.margen.value) / 100) * costo) + costo;
     // this.setState({ precio_estimado: precio });
-    // // console.log(this.state);
-    // // console.log(evt);
+    // console.log(this.state);
+    // console.log(evt);
     // //  this.setState({rgblist:[...this.state.rgblist,this.state.colors[evt.target.value -1].rgb]});
     //// console.log(this.state);
   };
@@ -276,11 +276,11 @@ class Producto_crear extends Component {
         const resultado3 = res3.data;
 
         this.setState({ colorvalor: resultado3 });
-        // console.log(this.state.colorvalor);
+        console.log(this.state.colorvalor);
 
         var valtotal = Object.values(resultado3).reduce((t, { valor }) => t + valor, 0);//* (this.state.Colores[idx].porcentaje / 100);
         this.setState({ valtotalcolor: valtotal });
-        // console.log(valtotal);
+        console.log(valtotal);
         //// console.log(this.state.Colores[idx].porcentaje);
         const newColores2 = this.state.Colores.map((Color, sidx) => {
           if (idx !== sidx) return Color;
@@ -294,7 +294,7 @@ class Producto_crear extends Component {
         this.setState({ Colores: newColores2 }, this.calcular);
         const newColores = this.state.color.map((Color, sidx) => {
           if (idx !== sidx) return Color;
-          // console.log(evt);
+          console.log(evt);
           var coloresval = (this.state.colors.find(valores => valores.id === evt.target.value));
           const val = evt.target.value - 1;
           if (evt.target.value === "") return { ...Color, id: evt.target.value, rgblist: '#FFF' };
@@ -312,9 +312,9 @@ class Producto_crear extends Component {
         // this.setState({ Costo_estimado: costo });
         // var precio = ((parseFloat(this.state.formControls.margen.value) / 100) * costo) + costo;
         // this.setState({ precio_estimado: precio });
-        // // console.log(this.state);
+        // console.log(this.state);
       })
-    // console.log(evt);
+    console.log(evt);
     //  this.setState({rgblist:[...this.state.rgblist,this.state.colors[evt.target.value -1].rgb]});
     //// console.log(this.state);
 
@@ -345,14 +345,14 @@ class Producto_crear extends Component {
       Mater: this.state.Mater.concat([{ nombre: "", id: "", valor: "", cantidad: "", total: "" }]),
       MaterialesAdicionales: this.state.MaterialesAdicionales.concat([{ cantidad: "" }])
     });
-    // console.log(this.state);
+    console.log(this.state);
   };
   handleAddColor = () => {
     this.setState({
       Colores: this.state.Colores.concat([{ porcentaje: "" }]),
       color: this.state.color.concat([{ nombre: "" }])
     });
-    // console.log(this.state);
+    console.log(this.state);
   };
 
   handleRemoveColor = idx => () => {
@@ -371,10 +371,10 @@ class Producto_crear extends Component {
 
   handleSalario(event) {
     var valor_oper = 0;
-    // // console.log(event);
+    // console.log(event);
     var tiempoop = isNaN(parseFloat(this.state.tiempo_operario)) ? 0 : parseFloat(this.state.tiempo_operario);
     var salario_operario = isNaN(parseFloat(event.target.value)) ? 0 : parseFloat(event.target.value);
-    // console.log(tiempoop);
+    console.log(tiempoop);
     if (tiempoop !== 0) {
       valor_oper = (salario_operario / 200) * tiempoop;
     } else {
@@ -386,7 +386,7 @@ class Producto_crear extends Component {
   };
   handleProducto(event) {
 
-    // // console.log(event);
+    // console.log(event);
     var prodxdia = isNaN(parseFloat(event.target.value)) ? 0 : parseFloat(event.target.value);
     var tiempoop = 8 / prodxdia;
     var salario_operario = isNaN(parseFloat(this.state.salario_operario)) ? 0 : parseFloat(this.state.salario_operario);
@@ -401,8 +401,8 @@ class Producto_crear extends Component {
   handleChangeMargen(event) {
     const name = event.target.name;
     const value = event.target.value;
-    // console.log(this.state);
-    // // console.log(value);
+    console.log(this.state);
+    // console.log(value);
     this.setState({
       formControls: {
         ...this.state.formControls,
@@ -419,8 +419,8 @@ class Producto_crear extends Component {
   handleChange(event) {
     const name = event.target.name;
     const value = event.target.value;
-    // console.log(this.state);
-    // // console.log(value);
+    console.log(this.state);
+    // console.log(value);
     this.setState({
       formControls: {
         ...this.state.formControls,
@@ -948,8 +948,8 @@ function handleClose2() {
 
 
 function guardar(event) {
-
   event.preventDefault();
+  console.log(this.state);
   this.setState({ openDialog: true });
   const data = new FormData()
   data.append('file', this.state.selectedFile);
@@ -957,13 +957,12 @@ function guardar(event) {
   axios.post(process.env.REACT_APP_URL_LARAVEL + "/api/upload", data, { // receive two parameter endpoint url ,form data 
   })
     .then(res => { // then print response status
-      // console.log(res)
+     // console.log(res)
       this.setState({
         imagen: this.state.selectedFile.name
       });
-
-
-      event.preventDefault();
+console.log('danie');
+      
       var idprod = '';
       const datoGuardar = {
         tiempo_operario: this.state.tiempo_operario,
@@ -977,21 +976,21 @@ function guardar(event) {
         foto: this.state.selectedFile.name,
         unidades_por_caja: this.state.formControls.unidades_por_caja.value,
         unidades_por_mts: this.state.formControls.unidades_por_mts2.value,
-        iva: this.state.formControls.ivax.value,
+        iva: this.state.formControls.iva.value,
 
       };
 
 
-      // console.log(datoGuardar);
-      // console.log(this.state);
+      console.log(datoGuardar);
+      console.log(this.state);
 
       axios.post(process.env.REACT_APP_URL_LARAVEL + `/api/producto`, (datoGuardar))
         .then(res => {
 
-          // console.log(res);
-          // console.log(res.data.id);
+          console.log(res);
+          console.log(res.data.id);
           idprod = res.data.id;
-          // console.log(this.state);
+          console.log(this.state);
           this.setState({ guardarcolor: [] });
           this.setState({ guardarmater: [] });
           var newcolo = this.state.color.map((value, index) => {
@@ -1011,13 +1010,13 @@ function guardar(event) {
 
           axios.post(process.env.REACT_APP_URL_LARAVEL + `/api/producto_colores`, (this.state.guardarcolor))
             .then(res5 => {
-              // console.log("Daniel 0");
+              console.log("Daniel 0");
 
-              // console.log(this.state);
+              console.log(this.state);
               var newmat = this.state.Mater.map((value2, index2) => {
-                // console.log(value2);
+                console.log(value2);
                 var newMater = "dani";//this.state.guardarmater.concat({ productos_id: idprod, materiales_id: value2.id, porcentaje: value2.porcentaje })
-                // console.log("Daniel 1");
+                console.log("Daniel 1");
                 this.setState({
                   guardarmater: [...this.state.guardarmater, { productos_id: idprod, materiales_id: value2.id, cantidad: this.state.MaterialesAdicionales[index2].cantidad }],
                 });
@@ -1029,18 +1028,18 @@ function guardar(event) {
 
 
 
-              // console.log("Daniel 2");
-              // console.log(this.state.guardarmater);
+              console.log("Daniel 2");
+              console.log(this.state.guardarmater);
 
               axios.post(process.env.REACT_APP_URL_LARAVEL + `/api/Producto_materiales`, (this.state.guardarmater))
                 .then(res6 => {
 
-                  // console.log(res6);
-                  // console.log(res6.data.id);
+                  console.log(res6);
+                  console.log(res6.data.id);
 
                   //this.componentDidMount();
 
-                  // // console.log(this.state.datos);
+                  // console.log(this.state.datos);
                   //this.setState({openDialog:true});
                   this.reset();
 
@@ -1052,21 +1051,21 @@ function guardar(event) {
                   if (error.response) {
                     // The request was made and the server responded with a status code
                     // that falls out of the range of 2xx
-                    // console.log(error.response.data);
-                    // console.log(error.response.status);
-                    // console.log(error.response.headers);
+                    console.log(error.response.data);
+                    console.log(error.response.status);
+                    console.log(error.response.headers);
                   } else if (error.request) {
                     // The request was made but no response was received
                     // `error.request` is an instance of XMLHttpRequest in the 
                     // browser and an instance of
                     // http.ClientRequest in node.js
-                    // console.log(error.request);
+                    console.log(error.request);
                   } else {
                     // Something happened in setting up the request that triggered an Error
-                    // console.log('Error', error.message);
+                    console.log('Error', error.message);
                   }
                   this.setState({ Sopen: true });
-                  // console.log(error.config);
+                  console.log(error.config);
                 });
 
 
@@ -1078,13 +1077,13 @@ function guardar(event) {
 
 
 
-              // console.log(res5);
-              // console.log(res5.data.id);
+              console.log(res5);
+              console.log(res5.data.id);
 
 
               //       this.componentDidMount();
 
-              // // console.log(this.state.datos);
+              // console.log(this.state.datos);
             })
             .catch((error) => {
 
@@ -1093,21 +1092,21 @@ function guardar(event) {
               if (error.response) {
                 // The request was made and the server responded with a status code
                 // that falls out of the range of 2xx
-                // console.log(error.response.data);
-                // console.log(error.response.status);
-                // console.log(error.response.headers);
+                console.log(error.response.data);
+                console.log(error.response.status);
+                console.log(error.response.headers);
               } else if (error.request) {
                 // The request was made but no response was received
                 // `error.request` is an instance of XMLHttpRequest in the 
                 // browser and an instance of
                 // http.ClientRequest in node.js
-                // console.log(error.request);
+                console.log(error.request);
               } else {
                 // Something happened in setting up the request that triggered an Error
-                // console.log('Error', error.message);
+                console.log('Error', error.message);
               }
               this.setState({ Sopen: true });
-              // console.log(error.config);
+              console.log(error.config);
             });
 
 
@@ -1125,21 +1124,21 @@ function guardar(event) {
           if (error.response) {
             // The request was made and the server responded with a status code
             // that falls out of the range of 2xx
-            // console.log(error.response.data);
-            // console.log(error.response.status);
-            // console.log(error.response.headers);
+            console.log(error.response.data);
+            console.log(error.response.status);
+            console.log(error.response.headers);
           } else if (error.request) {
             // The request was made but no response was received
             // `error.request` is an instance of XMLHttpRequest in the 
             // browser and an instance of
             // http.ClientRequest in node.js
-            // console.log(error.request);
+            console.log(error.request);
           } else {
             // Something happened in setting up the request that triggered an Error
-            // console.log('Error', error.message);
+            console.log('Error', error.message);
           }
           this.setState({ Sopen: true });
-          // console.log(error.config);
+          console.log(error.config);
         });
 
 
@@ -1166,21 +1165,21 @@ function guardar(event) {
       if (error.response) {
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx
-        // console.log(error.response.data);
-        // console.log(error.response.status);
-        // console.log(error.response.headers);
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
       } else if (error.request) {
         // The request was made but no response was received
         // `error.request` is an instance of XMLHttpRequest in the 
         // browser and an instance of
         // http.ClientRequest in node.js
-        // console.log(error.request);
+        console.log(error.request);
       } else {
         // Something happened in setting up the request that triggered an Error
-        // console.log('Error', error.message);
+        console.log('Error', error.message);
       }
       this.setState({ Sopen: true });
-      // console.log(error.config);
+      console.log(error.config);
     });
 
 }
