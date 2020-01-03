@@ -662,10 +662,10 @@ function guardar(event) {
             idprod = res.data.id;
             var newprod = this.state.Mater.map((value, index) => {
 
-                var newProductos = this.state.guardarprod.concat({ cotizacion_id: idprod, referencia: value.referencia, descripcion: value.nombre, cantidad_m2: this.state.MaterialesAdicionales[index].cantidad, cantidad_ml: 0, unidades: this.state.MaterialesAdicionales[index].unidades, valor_m: value.valor, iva: 19, total: this.state.MaterialesAdicionales[index].total })
+                var newProductos = this.state.guardarprod.concat({ cotizacion_id: idprod, referencia: value.referencia, descripcion: value.nombre, cantidad_m2: this.state.MaterialesAdicionales[index].cantidad, cantidad_ml: 0, unidades: this.state.MaterialesAdicionales[index].unidades, valor_m: value.valor, iva:this.state.MaterialesAdicionales[index].valoriva , total: this.state.MaterialesAdicionales[index].total })
 
                 this.setState({
-                    guardarprod: [...this.state.guardarprod, { cotizacion_id: idprod, referencia: value.referencia, descripcion: value.nombre, cantidad_m2: this.state.MaterialesAdicionales[index].cantidad, cantidad_ml: 0, unidades: this.state.MaterialesAdicionales[index].unidades, valor_m: value.valor, iva: 19, total: this.state.MaterialesAdicionales[index].total }],
+                    guardarprod: [...this.state.guardarprod, { cotizacion_id: idprod, referencia: value.referencia, descripcion: value.nombre, cantidad_m2: this.state.MaterialesAdicionales[index].cantidad, cantidad_ml: 0, unidades: this.state.MaterialesAdicionales[index].unidades, valor_m: value.valor, iva: this.state.MaterialesAdicionales[index].valoriva, total: this.state.MaterialesAdicionales[index].total }],
                 })
 
 
