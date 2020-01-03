@@ -899,9 +899,9 @@ class Producto_crear extends Component {
           />
           <TextField
 
-            label="Precio mt2"
+            label="Precio MT2"
             required="true"
-            defaultValue="Precio mt2"
+            defaultValue="Precio MT2"
             fullWidth
             value={
               this.state.preciomt2
