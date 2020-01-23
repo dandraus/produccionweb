@@ -118,6 +118,9 @@ class Colores extends Component {
 
 
                 <MaterialTable
+                   options={{
+                    pageSize: 20
+                }}
                     columns={[
                         // {
                         //     title: 'Color',
@@ -145,7 +148,7 @@ class Colores extends Component {
 
                     ]}
                     data={this.state.datos}
-                    title="Colores"
+                    title="Clasificación"
                     editable={{
                         onRowAdd: console.log('agrege row'),
                         onRowUpdate: (newData, oldData) =>

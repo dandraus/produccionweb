@@ -85,6 +85,9 @@ class Tipo_operario extends Component {
                
 
                 <MaterialTable
+                   options={{
+                    pageSize: 20
+                }}
                     columns={[
                         { title: 'id', field: 'id', editable: 'never' },
                         { title: 'Tipo', field: 'tipo' },

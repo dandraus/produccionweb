@@ -140,11 +140,14 @@ class Materiales_colores extends Component {
 
 
                 <MaterialTable
+                   options={{
+                    pageSize: 20
+                }}
                     columns={[
                         { title: 'id', field: 'id', editable: 'never' },
                         { title: 'Materia Prima', field: 'materia_prima.nombre' },
                         { title: 'Cantidad', field: 'cantidad' },
-                        { title: 'Color', field: 'color.nombre' ,
+                        { title: 'Clasificación', field: 'color.nombre' ,
                         render: rowData => (
                                 
                             <p1 style ={{backgroundColor: rowData.color.rgb}}>    {rowData.color.nombre}   </p1>
@@ -157,7 +160,7 @@ class Materiales_colores extends Component {
 
                     ]}
                     data={this.state.datos}
-                    title="Materiales colores"
+                    title="Materiales clasificación"
                     editable={{
                         onRowAdd: console.log('agrege row'),
                         onRowUpdate: (newData, oldData) =>
@@ -232,7 +235,7 @@ class Materiales_colores extends Component {
 
                           
                         </Select>
-                        <InputLabel htmlFor="age-simple">Color</InputLabel>
+                        <InputLabel htmlFor="age-simple">Clasificación</InputLabel>
                         <Select
                             fullWidth
                             id="color"

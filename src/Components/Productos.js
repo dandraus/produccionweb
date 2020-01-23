@@ -53,6 +53,9 @@ class Productos extends Component {
     return (
       <div style={{ maxWidth: '100%' }}>
         <MaterialTable
+         options={{
+          pageSize: 20
+      }}
           columns={[
             {
               title: 'Foto',
@@ -77,6 +80,10 @@ class Productos extends Component {
               title: 'Precio', field: 'precio_estimado', type: 'currency',
               currencySetting: { minimumFractionDigits: 0, maximumFractionDigits: 0 },
             },
+            {
+              title: 'Margen', field: 'margen_estimado',
+             
+            },
 
 
             { title: 'Creado', field: 'created_at' },
@@ -87,7 +94,7 @@ class Productos extends Component {
           title="Productos"
           detailPanel={[
             {
-              tooltip: 'Colores',
+              tooltip: 'Clasificación',
               render: rowData => {
                 return (
                   <div
@@ -97,7 +104,12 @@ class Productos extends Component {
                       //  color: 'white',
                       //  backgroundColor: '#43A047',
                     }}
-                  >
+                  > Precio Mt    $
+                    {  (rowData.unidades_por_mts*rowData.precio_estimado).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}
+                    <br></br>
+                    Valor operario  por Mt $
+                    {(rowData.unidades_por_mts*rowData.valor_operario).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}
+                    <br></br>
                     {rowData.colores.map((color, index) =>
                       <div
                         style={{

@@ -95,7 +95,7 @@ class Producto_crear extends Component {
       openDialog: false,
       materia_primas: [],
       colors: [],
-      operarios: [],
+     // operarios: [],
       open: false,
       Sopen: false,
       colorvalor: [{ valor: "", porcentaje: "" }],
@@ -231,7 +231,7 @@ class Producto_crear extends Component {
     const newMateriales = this.state.Mater.map((Mate, sidx) => {
       if (idx !== sidx) return Mate;
      console.log(evt);
-     console.log()
+     console.log(this.state);
       // const val = evt.target.value - 1;
       var materiaprimaval = (this.state.materia_primas.find(valores => valores.id === evt.target.value));
       var total_valor = materiaprimaval.valor * this.state.MaterialesAdicionales[sidx].cantidad;
@@ -277,7 +277,7 @@ class Producto_crear extends Component {
 
         this.setState({ colorvalor: resultado3 });
         console.log(this.state.colorvalor);
-
+        console.log(this.state);
         var valtotal = Object.values(resultado3).reduce((t, { valor }) => t + valor, 0);//* (this.state.Colores[idx].porcentaje / 100);
         this.setState({ valtotalcolor: valtotal });
         console.log(valtotal);
@@ -359,11 +359,17 @@ class Producto_crear extends Component {
     this.setState({
       Colores: this.state.Colores.filter((s, sidx) => idx !== sidx)
     }, this.calcular);
+    this.setState({
+      color: this.state.color.filter((s, sidx) => idx !== sidx)
+    }, this.calcular);
   };
 
   handleRemoveMate = idx => () => {
     this.setState({
       MaterialesAdicionales: this.state.MaterialesAdicionales.filter((s, sidx) => idx !== sidx)
+    }, this.calcular);
+    this.setState({
+      Mater: this.state.Mater.filter((s, sidx) => idx !== sidx)
     }, this.calcular);
   };
 

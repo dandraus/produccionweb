@@ -53,6 +53,9 @@ class CotizacionListado extends Component {
     return (
       <div style={{ maxWidth: '100%' }}>
         <MaterialTable
+           options={{
+            pageSize: 20
+        }}
           columns={[
             
             {
@@ -107,7 +110,7 @@ class CotizacionListado extends Component {
                       >
 
 
-                        {"Referencia   " +items.referencia} { " Descripcion  " + items.descripcion + "   Cantidad "+ items.cantidad_m2 + "   Total " + items.total}
+                        {"Referencia   " +items.referencia} <br></br>{ " Descripcion    " + items.descripcion + "   Cantidad   "+ items.cantidad_m2 + "     Total     $" + items.total.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}
                         <br></br>
                         
                         

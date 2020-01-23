@@ -291,13 +291,13 @@ export default function PersistentDrawerLeft() {
                     <ListItemIcon>
                       <StarBorder />
                     </ListItemIcon>
-                    <ListItemText primary="Colores" onClick={() => menu("Colores", 1)} />
+                    <ListItemText primary="Clasificación" onClick={() => menu("Colores", 1)} />
                   </ListItem>
                   <ListItem button className={classes.nested}>
                     <ListItemIcon>
                       <StarBorder />
                     </ListItemIcon>
-                    <ListItemText primary="Materiales colores" onClick={() => menu("Materiales colores", 1)} />
+                    <ListItemText primary="Materiales Clasificación" onClick={() => menu("Materiales colores", 1)} />
                   </ListItem>
 
                 </List>
