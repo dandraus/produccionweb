@@ -49,7 +49,30 @@ class Productos extends Component {
       })
 
   }
+  
   render() {
+     function recargar(){
+      axios.get(process.env.REACT_APP_URL_LARAVEL+`/api/producto`)
+      .then(res => {
+        const productos = res.data;
+
+        this.setState({ datos: productos });
+        console.log(this.state.datos);
+        // setPersonsState(PersonState=persona);
+        //this.componentDidMount();
+
+      })  
+     };
+    function actualizar(nuevodato) {
+
+      axios.put(process.env.REACT_APP_URL_LARAVEL+`/api/producto/${nuevodato.id}`, nuevodato)
+          .then(res => {
+            window.location.reload(false);
+              console.log(res.data.id);
+           
+          })
+  
+  }
     return (
       <div style={{ maxWidth: '100%' }}>
         <MaterialTable
@@ -69,9 +92,9 @@ class Productos extends Component {
               ),
             },
 
-            { title: 'id', field: 'id' },
-            { title: 'Nombre', field: 'nombre' },
-            { title: 'Referencia', field: 'referencia' },
+            { title: 'id', field: 'id', editable: 'never'},
+            { title: 'Nombre', field: 'nombre' , editable: 'never'},
+            { title: 'Referencia', field: 'referencia' , editable: 'never'},
             {
               title: 'Costo', field: 'costo_estimado', type: 'currency',
               currencySetting: { minimumFractionDigits: 0, maximumFractionDigits: 0 }
@@ -84,6 +107,18 @@ class Productos extends Component {
               title: 'Margen', field: 'margen_estimado',
              
             },
+            {
+              title: 'Operario', field: 'valor_operario',type: 'currency',
+              currencySetting: { minimumFractionDigits: 0, maximumFractionDigits: 0 },
+              editComponent: props => (
+                <input
+                  type="numeric"
+                  value={props.value}
+                  onChange={e => props.onChange(e.target.value)}
+                />
+              )
+             
+            },
 
 
             { title: 'Creado', field: 'created_at' },
@@ -92,6 +127,26 @@ class Productos extends Component {
           ]}
           data={this.state.datos}
           title="Productos"
+          editable={{
+            onRowUpdate: (newData, oldData) =>
+           
+            new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    // eslint-disable-next-line no-lone-blocks
+                    {
+                        actualizar(newData);
+                        //let data = this.state.datos;
+                        //const index = data.indexOf(oldData);
+                       // data[index] = newData;
+                       // this.componentDidMount();
+                       // recargar.bind(this, () =>resolve());
+                        //this.setState({ data }, () => resolve());
+
+                    }
+                    resolve()
+                }, 1000)
+            }),
+          }}
           detailPanel={[
             {
               tooltip: 'Clasificación',

@@ -262,7 +262,7 @@ class Materiales_colores extends Component {
    
                         <TextField
                             value={this.state.cantidad} onChange={this.handleChange.bind(this)}
-
+                            type='number'
                             margin="dense"
                             id="cantidad"
                             label="cantidad"

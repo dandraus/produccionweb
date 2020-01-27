@@ -222,7 +222,7 @@ class Materia_prima extends Component {
                         />
                         <TextField
                             value={this.state.valor} onChange={this.handleChange.bind(this)}
-
+                            type='number'
                             margin="dense"
                             id="valor"
                             label="Valor"
