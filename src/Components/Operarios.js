@@ -218,11 +218,17 @@ class Operarios extends Component {
                         <DialogContentText>
                             Caracterizar a los operarios por habilidad
           </DialogContentText>
-        
+          <form
+          id="form-inside-input"
+          className="form-inside-input"
+          onSubmit={guardar.bind(this)}
+          
+        >
 
                         <TextField
                             value={this.state.nombre} onChange={this.handleChange.bind(this)}
                             autoFocus
+                            required="true"
                             margin="dense"
                             id="nombre"
                             label="Nombre"
@@ -231,7 +237,7 @@ class Operarios extends Component {
                         />
                         <TextField
                             value={this.state.apellido} onChange={this.handleChange.bind(this)}
-
+                            required="true"
                             margin="dense"
                             id="apellido"
                             label="Apeliido"
@@ -240,7 +246,7 @@ class Operarios extends Component {
                         />
                                  <TextField
                             value={this.state.identificacion} onChange={this.handleChange.bind(this)}
-
+                            required="true"
                             margin="dense"
                             id="identificacion"
                             label="Identificación"
@@ -249,7 +255,7 @@ class Operarios extends Component {
                         />
                                 <TextField
                             value={this.state.eps} onChange={this.handleChange.bind(this)}
-
+                            required="true"
                             margin="dense"
                             id="eps"
                             label="EPS"
@@ -258,7 +264,7 @@ class Operarios extends Component {
                         />
                                 <TextField
                             value={this.state.arl} onChange={this.handleChange.bind(this)}
-
+                            required="true"
                             margin="dense"
                             id="arl"
                             label="ARL"
@@ -272,6 +278,7 @@ class Operarios extends Component {
                             id="telefono"
                             label="Telefono"
                             name="telefono"
+                            required="true"
                             fullWidth
                         />
                            <TextField
@@ -282,6 +289,7 @@ class Operarios extends Component {
                             label="Cumpleaños"
                             name="cumple"
                             fullWidth
+                            required="true"
                         />
                           <TextField
                             value={this.state.fecha_inicio} onChange={this.handleChange.bind(this)}
@@ -290,6 +298,7 @@ class Operarios extends Component {
                             id="fecha_inicio"
                             label="Fecha inicio"
                             name="fecha_inicio"
+                            required="true"
                             fullWidth
                         />
                               {/* <TextField
@@ -307,6 +316,7 @@ class Operarios extends Component {
                             fullWidth
                             id="tipo_operario"
                             name="tipo_operario"
+                            required="true"
                             value={Number(this.state.tipo_operario)}
                             onChange={this.handleChangecombo.bind(this)}
                             input={<Input id="age-simple" />}
@@ -324,18 +334,23 @@ class Operarios extends Component {
 
 
                         </Select>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={handleClose.bind(this)} variant="primary">
+                        <div style={{display: 'flex', justifyContent: 'right'}}>
+                        <Button onClick={handleClose.bind(this)} variant="primary"  >
                             Cancelar
           </Button>
-                        <Button onClick={guardar.bind(this)} color="primary">
+                        <Button type='submit' color="primary"  >
                             Guardar
           </Button>
+          </div>
+          </form>
+
+                    </DialogContent>
+                    <DialogActions>
+                       
                     </DialogActions>
+                    
                 </Dialog>
-
-
+              
             </div>
 
 
@@ -394,7 +409,7 @@ function guardar(event) {
         cumple:this.state.formControls.cumple.value,
         fecha_inicio:this.state.formControls.fecha_inicio.value,
         //fecha_fin:this.state.formControls.fecha_fin.value,
-        fecha_fin:null,
+        fecha_fin:"",
         identificacion:this.state.formControls.identificacion.value,
         eps:this.state.formControls.eps.value,
         arl:this.state.formControls.arl.value,
