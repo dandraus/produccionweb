@@ -35,7 +35,9 @@ import Producto_crear from './Components/Productos/Producto_crear'
 import Cotizacion from './Components/Cotizacion'
 import CotizacionListado from './Components/CotizacionListado';
 import Operarios from './Components/Operarios'
-
+import Proveedor from './Components/Proveedor'
+import Compras from './Components/Compras'
+import Inventario from './Components/Inventario'
 const drawerWidth = 240;
 
 const useStyles = makeStyles(theme => ({
@@ -246,7 +248,7 @@ export default function PersistentDrawerLeft() {
 
                  
 
-              {[ 'Operario','Inventario',  'Pedidos'].map((text, index) => (
+              {[ 'Operario','Proveedor','Inventario', 'Compras','Pedidos'].map((text, index) => (
                 <ListItem button key={text} >
                   <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
                   <ListItemText primary={text} onClick={() => menu(text, index)} />
@@ -328,6 +330,9 @@ export default function PersistentDrawerLeft() {
                   case "Crear cotizacion": return <Cotizacion />;
                   case "Listado cotizacion": return <CotizacionListado />;
                   case "Operario": return <Operarios />;
+                  case "Proveedor": return <Proveedor />;
+                  case "Compras": return <Compras />;
+                  case "Inventario": return <Inventario />;
                   default: return 'Bienvenidos al software';
                 }
               })()}
