@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import ChartistGraph from 'react-chartist';
+ 
 
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
@@ -38,6 +40,17 @@ import Operarios from './Components/Operarios'
 import Proveedor from './Components/Proveedor'
 import Compras from './Components/Compras'
 import Inventario from './Components/Inventario'
+import Procesos from './Components/Procesos';
+import Maquina from './Maquina';
+import Pedido from './Components/Pedido';
+import Produccion from  './Components/Produccion';
+import Ingreso_diario from  './Components/Ingreso_diario';
+import Gastomateriales from './Components/Gastomateriales';
+
+import "./assets/css/material-dashboard-react.css?v=1.9.0";
+import Ingreso_desperfectos from './Components/Ingreso_desperfectos';
+
+import Dashboard from './Components/Dashboard';
 const drawerWidth = 240;
 
 const useStyles = makeStyles(theme => ({
@@ -100,12 +113,23 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function PersistentDrawerLeft() {
+  const simpleLineChartData = {
+    labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+    series: [
+      [12, 9, 7, 8, 5],
+      [2, 1, 3.5, 7, 3],
+      [1, 3, 4, 5, 6]
+    ]
+}
+
+
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const [openP, setOpenP] = React.useState(false);
   const [openP2, setOpenP2] = React.useState(false);
   const [openP3, setOpenP3] = React.useState(false);
+  const [openP4, setOpenP4] = React.useState(false);
   //const [otherState,setOtherState]=useState('some other value');
   const [lateral, setLateral] = useState([]);
 
@@ -124,6 +148,10 @@ export default function PersistentDrawerLeft() {
   const handleClick3 = () => {
     setOpenP3(!openP3);
     console.log(openP3);
+  };
+  const handleClick4 = () => {
+    setOpenP4(!openP4);
+    console.log(openP4);
   };
 
   function handleDrawerOpen() {
@@ -167,6 +195,7 @@ export default function PersistentDrawerLeft() {
           <Typography variant="h6" noWrap>
             Dashroute
           </Typography>
+        
         </Toolbar>
       </AppBar>
       <Drawer
@@ -244,11 +273,49 @@ export default function PersistentDrawerLeft() {
 
                   </Collapse>
 
+                  <ListItem button onClick={handleClick4}>
+                <ListItemIcon>
+                  <InboxIcon />
+                </ListItemIcon>
+                <ListItemText primary="Producción" />
+                {openP4 ? <ExpandLess /> : <ExpandMore />}
+              </ListItem>
+              <Collapse in={openP4} timeout="auto" unmountOnExit>
+                <List component="div" disablePadding>
+                  <ListItem button className={classes.nested}>
+                    <ListItemIcon>
+                      <StarBorder />
+                    </ListItemIcon>
+                    <ListItemText primary="Inventario pedidos" onClick={() => menu("Producción", 1)} />
+                  </ListItem>
+                  <ListItem button className={classes.nested}>
+                    <ListItemIcon>
+                      <StarBorder />
+                    </ListItemIcon>
+                    <ListItemText primary="Ingreso diario" onClick={() => menu("Ingreso diario", 1)} />
+                  </ListItem>
+                  <ListItem button className={classes.nested}>
+                    <ListItemIcon>
+                      <StarBorder />
+                    </ListItemIcon>
+                    <ListItemText primary="Gasto materiales" onClick={() => menu("Gasto materiales", 1)} />
+                  </ListItem>
+                  <ListItem button className={classes.nested}>
+                    <ListItemIcon>
+                      <StarBorder />
+                    </ListItemIcon>
+                    <ListItemText primary="Ingreso Desperfectos" onClick={() => menu("Ingreso desperfectos", 1)} />
+                  </ListItem>
+                  
+                  </List>
 
+            
+
+                  </Collapse>
 
                  
 
-              {[ 'Operario','Proveedor','Inventario', 'Compras','Pedidos'].map((text, index) => (
+              {[ 'Operario','Proveedor','Inventario', 'Compras','Pedidos','Procesos','Maquina'].map((text, index) => (
                 <ListItem button key={text} >
                   <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
                   <ListItemText primary={text} onClick={() => menu(text, index)} />
@@ -333,7 +400,14 @@ export default function PersistentDrawerLeft() {
                   case "Proveedor": return <Proveedor />;
                   case "Compras": return <Compras />;
                   case "Inventario": return <Inventario />;
-                  default: return 'Bienvenidos al software';
+                  case "Procesos": return <Procesos />;
+                  case "Pedidos": return <Pedido />;
+                  case "Maquina": return <Maquina />;
+                  case "Producción": return <Produccion />;
+                  case "Ingreso diario": return <Ingreso_diario />;
+                  case "Gasto materiales": return <Gastomateriales />;
+                  case "Ingreso desperfectos": return<Ingreso_desperfectos/>
+                  default: return <Dashboard/>;
                 }
               })()}
 
