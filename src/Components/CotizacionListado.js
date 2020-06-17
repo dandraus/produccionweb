@@ -63,7 +63,7 @@ class CotizacionListado extends Component {
                 field: 'id',
                 render: rowData => (
                 <h6>{rowData.id }
-                <a href={"http://ec2-18-144-28-190.us-west-1.compute.amazonaws.com:8080/jasperserver/rest_v2/reports/reports/cotizacion2.pdf?Cotizacionid="+rowData.id} target="_blank">   PDF</a>
+                <a href={"http://ec2-54-151-71-25.us-west-1.compute.amazonaws.com:8080/jasperserver/rest_v2/reports/reports/cotizacion2.pdf?Cotizacionid="+rowData.id} target="_blank">   PDF</a>
                 </h6>
                 ),
               },
