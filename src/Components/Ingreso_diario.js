@@ -23,6 +23,8 @@ import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import SaveIcon from '@material-ui/icons/Save';
 import CurrencyTextField from '@unicef/material-ui-currency-textfield';
+import DatePicker from 'react-datepicker'
+import "react-datepicker/dist/react-datepicker.css";
 
 
 
@@ -38,12 +40,13 @@ const useStyles = makeStyles(theme => ({
 
 class Ingreso_diario extends Component {
     state = {
-
+        fecha:new Date(),
         productos: [],
         open: false,
         Sopen: false,
         maquinas:[],
         operarios:[],
+        operarios_id:"",
         pedido:[{pedido_item_id:'',pedido_id:'',unidades:0}],
 
         fechaactual: "2019-12-24",
@@ -95,14 +98,14 @@ class Ingreso_diario extends Component {
     reset(){
         document.getElementById("form-inside-input").reset();
         this.setState({   
-
+            fecha:new Date(),
             maquina:'',
             operario:'',
             productos: [],
             open: false,
             Sopen: false,
-            maquinas:[],
-            operarios:[],
+           // maquinas:[],
+            //operarios:[],
             pedido:[{pedido_item_id:'',pedido_id:'',unidades:0}],
     
             fechaactual: "2019-12-24",
@@ -185,18 +188,30 @@ class Ingreso_diario extends Component {
           }
         }, this.calcular);
     }
+     handlechangefecha_ini(event){
+         this.reset();
+        if (event===undefined){}
+        else{
+        console.log(event);
+           this.setState({fecha:event});
+          }}
+
     handleChangecombo_maquina (event)   {
         console.log(event);
         this.setState({maquina:event.target.value})
         console.log(this.state);
 
-        
-            axios.get(process.env.REACT_APP_URL_LARAVEL+`/api/Maquina_asignacion/pedido/`+event.target.value)
+        var fecha = this.state.fecha.getFullYear()+   "-" + ( this.state.fecha.getMonth() + 1) + "-" + this.state.fecha.getDate();
+            axios.get(process.env.REACT_APP_URL_LARAVEL+`/api/Maquina_asignacion/pedido/`+event.target.value+'/'+fecha)
             .then(res => {
               const ms = res.data;
+              if (ms.length ===0){alert("No hay produccion");
+              this.reset();
+
+              }else{
               this.setState({pedido:ms[0]});
                 console.log(ms);
-             
+              }
             
         
            
@@ -322,7 +337,6 @@ class Ingreso_diario extends Component {
     componentDidUpdate() {
 
 
-
     }
     componentDidMount() {
         
@@ -364,7 +378,8 @@ today (){
         mm = '0' + mm
     }
     today = yyyy + '-' + mm + '-' + dd;
-    this.setState({fecha_vencimiento:today})
+    this.setState({fecha_vencimiento:today});
+    //this.setState({fecha:today});
 }
     render() {
         
@@ -377,7 +392,12 @@ today (){
             onSubmit={guardar.bind(this)}
             
           >
-  
+        <br/>
+                          <br/>
+  <InputLabel htmlFor="age-simple">Escoge fecha real de fabricación</InputLabel>
+  <DatePicker selected={this.state.fecha} onChange={this.handlechangefecha_ini.bind(this)}  />
+  <br/>
+                          <br/>
   <InputLabel htmlFor="age-simple">Máquina</InputLabel>
                           <Select
                               fullWidth
@@ -506,8 +526,7 @@ today (){
                               name="cantidad_fabricada"
                               fullWidth
                           />
-  
-  
+                    
                                    {/* <TextField
                               value={this.state.cantidad} onChange={this.handleValor.bind(this)}
                               type="number"
@@ -610,11 +629,13 @@ function guardar(event) {
     };
 
     const datoGuardarmov = {
+        
         pedido_items_id: this.state.pedido.id,
         total: this.state.formControls.cantidad_fabricada.value,
         tipo:'Primera' ,
         maquina_id: this.state.maquina,
         operarios_id:this.state.operario,
+        fecha: this.state.fecha.getFullYear()+   "-" + ( this.state.fecha.getMonth() + 1) + "-" + this.state.fecha.getDate(),
         
         
     };

@@ -207,7 +207,7 @@ class Produccion extends Component {
                         { title: '# Primera', field: 'primera' },
                         { title: '# Segunda', field: 'segunda' },
                         { title: '# Tercera', field: 'tercera' },
-                        { title: '# Desperdicio', field: 'desperdicio' },
+                        { title: '# Despachado', field: 'despachado' },
                        
                         { title: 'Creado', field: 'created_at', editable: 'never' },
                         { title: 'Actualizado', field: 'updated_at', editable: 'never' }

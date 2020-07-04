@@ -23,7 +23,8 @@ import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import SaveIcon from '@material-ui/icons/Save';
 import CurrencyTextField from '@unicef/material-ui-currency-textfield';
-
+import DatePicker from 'react-datepicker'
+import "react-datepicker/dist/react-datepicker.css";
 
 
 const useStyles = makeStyles(theme => ({
@@ -38,6 +39,7 @@ const useStyles = makeStyles(theme => ({
 
 class Gastomateriales extends Component {
     state = {
+        fecha:new Date(),
 
         productos: [],
         open: false,
@@ -102,8 +104,8 @@ class Gastomateriales extends Component {
             productos: [],
             open: false,
             Sopen: false,
-            maquinas:[],
-            operarios:[],
+           // maquinas:[],
+            //operarios:[],
             pedido:[{pedido_item_id:'',pedido_id:'',unidades:0}],
     
             fechaactual: "2019-12-24",
@@ -191,19 +193,30 @@ class Gastomateriales extends Component {
         this.setState({maquina:event.target.value})
         console.log(this.state);
 
-        
-            axios.get(process.env.REACT_APP_URL_LARAVEL+`/api/Maquina_asignacion/pedido/`+event.target.value)
+        var fecha = this.state.fecha.getFullYear()+   "-" + ( this.state.fecha.getMonth() + 1) + "-" + this.state.fecha.getDate();
+            axios.get(process.env.REACT_APP_URL_LARAVEL+`/api/Maquina_asignacion/pedido/`+event.target.value+'/'+fecha)
             .then(res => {
               const ms = res.data;
+              if (ms.length ===0){alert("No hay produccion");
+              this.reset();
+
+              }else{
               this.setState({pedido:ms[0]});
                 console.log(ms);
-             
+              }
             
         
            
           });
 
   };
+  handlechangefecha_ini(event){
+    this.reset();
+    if (event===undefined){}
+    else{
+    console.log(event);
+       this.setState({fecha:event});
+      }}
 
     handleColorNameChangeMateriales = idx => evt => {
         const newMateriales = this.state.MaterialesAdicionales.map((Mate, sidx) => {
@@ -387,6 +400,13 @@ today (){
             onSubmit={guardar.bind(this)}
             
           >
+                      <br/>
+                          <br/>
+               <InputLabel htmlFor="age-simple">Escoge fecha real de fabricación</InputLabel>
+  <DatePicker selected={this.state.fecha} onChange={this.handlechangefecha_ini.bind(this)}  />
+  
+  <br/>
+                          <br/>
   
   <InputLabel htmlFor="age-simple">Máquina</InputLabel>
                           <Select
@@ -540,8 +560,7 @@ today (){
                               name="cantidad_usada"
                               fullWidth
                           />
-  
-  
+                          
                                    {/* <TextField
                               value={this.state.cantidad} onChange={this.handleValor.bind(this)}
                               type="number"
@@ -644,7 +663,8 @@ function guardar(event) {
         maquina_id: this.state.maquina,
         pedido_items_id: this.state.pedido.id,
         operarios_id:this.state.operario,
-        cantidad: this.state.formControls.cantidad_usada.value
+        cantidad: this.state.formControls.cantidad_usada.value,
+        fecha: this.state.fecha.getFullYear()+   "-" + ( this.state.fecha.getMonth() + 1) + "-" + this.state.fecha.getDate(), 
    
         
         

@@ -121,16 +121,41 @@ handleRemoveMate = idx => () => {
 };
 
   HandleItems = (item) => {
+
+
+   
+
   
     console.log(item);
       if (item[0] !== undefined){
-  console.log(item[0].cotizacion_items);
-    this.setState({ items: item[0].cotizacion_items });
+        console.log(item[0].id);
+        axios.get(process.env.REACT_APP_URL_LARAVEL+`/api/Cotizacion_items/`+item[0].id)
+        .then(res => {
+          console.log(res);
+         // const productos = res.data;
+          
+          this.setState({ items: [res.data] });
+          
+          // setPersonsState(PersonState=persona);
+  
+        }
+        )
+        
+  
+  
+       console.log(item[0].cotizacion_items);
+   // this.setState({ items: item[0].cotizacion_items });
     this.setState({pedido_guardar:item[0]});
-    this.setState({select:false})}else{
+    this.setState({select:false})
+  }
+    
+    else{
+      console.log('prueba');
         this.setState({ items:[]})
        
     }
+    
+
 
   };
 
@@ -257,7 +282,18 @@ var newMaquinas=[{fecha_final: "", id: "", fecha_maquina: ""}];
     axios.get(process.env.REACT_APP_URL_LARAVEL+`/api/Maquina_asignacion/fecha/`+event.target.value)
     .then(res => {
       const ms = res.data;
-
+      if (ms.length ===0){
+        this.setState({ fecha_maquina:new Date() });
+        //console.log(this.state.fecha_maquina);
+        // setPersonsState(PersonState=persona);
+        var fecha_finales = new Date();
+        var dias_op = Math.ceil(this.state.dias_totales);
+        fecha_finales.setTime( new Date().getTime() + dias_op * 86400000 );
+    this.setState({fecha_final:fecha_finales});
+      //  alert("No hay produccion");
+      //this.reset();
+          console.log(this.state);
+      }else{
       this.setState({ fecha_maquina:new Date(ms[0].fecha_inicial) });
       console.log(this.state.fecha_maquina);
       // setPersonsState(PersonState=persona);
@@ -265,7 +301,7 @@ var newMaquinas=[{fecha_final: "", id: "", fecha_maquina: ""}];
       var dias_op = Math.ceil(this.state.dias_totales);
       fecha_finales.setTime( new Date(ms[0].fecha_inicial).getTime() + dias_op * 86400000 );
   this.setState({fecha_final:fecha_finales});
-  
+}
   console.log(fecha_finales);
    newMaquinas = this.state.Maqui.map((Maq, sidx) => {
     if (idx !== sidx) return Maq;
@@ -278,7 +314,7 @@ var newMaquinas=[{fecha_final: "", id: "", fecha_maquina: ""}];
     console.log(this.state);    
     
     
-
+      
    
   });
 
@@ -327,57 +363,7 @@ var newMaquinas=[{fecha_final: "", id: "", fecha_maquina: ""}];
 
           }}
           onSelectionChange={(rows) => this.HandleItems(rows)}
-          //  onSelectionChange={(rows) => console.log(rows)}
-        //  onSelectionChange={(rows) => alert('You selected ' + rows.length + ' rows')}
-        //   actions={[
-        //     {
-        //       tooltip: 'Remove All Selected Users',
-        //       icon: 'delete',
-        //       onClick: (evt, data) => alert('You want to delete ' + data.length + ' rows')
-        //     }
-        //   ]}
-        //   detailPanel={[
-        //     {
-        //       tooltip: 'Items',
-        //       render: rowData => {
-        //         return (
-        //           <div
-        //             style={{
-        //               fontSize: 20,
-        //               textAlign: 'center',
-        //               //  color: 'white',
-        //               //  backgroundColor: '#43A047',
-        //             }}
-        //           >
-        //             {rowData.cotizacion_items.map((items, index) =>
-        //               <div
-        //                 style={{
-        //                   fontSize: 20,
-        //                   textAlign: 'center',
-        //                  //  color: rowData.colores[index].colores.rgb,
-        //                   //  backgroundColor: '#43A047',
-        //                 }}
-        //               >
-
-
-        //                 {"Referencia   " +items.referencia} <br></br>{ " Descripcion    " + items.descripcion + "   Cantidad   "+ items.cantidad_m2 + "     Total     $" + items.total.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}
-        //                 <br></br>
-                        
-                        
-
-
-        //               </div>
-        //             )}
-
-
-
-        //           </div>
-        //         )
-        //       },
-        //     },
-       
-
-        //   ]}
+        
         />
 
 
@@ -395,6 +381,17 @@ var newMaquinas=[{fecha_final: "", id: "", fecha_maquina: ""}];
                 // <a href={"http://ec2-18-144-28-190.us-west-1.compute.amazonaws.com:8080/jasperserver/rest_v2/reports/reports/cotizacion2.pdf?Cotizacionid="+rowData.id} target="_blank">   PDF</a>
                 // </h6>
                 // ),
+              },
+              {
+                title: 'Foto',
+                field: 'foto',
+                render: rowData => (
+  
+                  <img
+                    style={{ height: 100, }}//borderRadius: '50%' }}
+                    src={process.env.REACT_APP_URL_LARAVEL +"uploads/"+ rowData.producto.foto}
+                  />
+                ),
               },
             // { title: 'id', field: 'id' },
             { title: 'Descripción', field: 'descripcion' },
@@ -468,9 +465,9 @@ var newMaquinas=[{fecha_final: "", id: "", fecha_maquina: ""}];
 
         //   ]}
         />
-            <Fab color="primary" aria-label="add" className={'daniel'} onClick={handleClickOpen.bind(this)}>
+            {/* <Fab color="primary" aria-label="add" className={'daniel'} onClick={handleClickOpen.bind(this)}>
                     <AddIcon />
-                </Fab>
+                </Fab> */}
 
 <Dialog open={this.state.open} onClose={handleClose.bind(this)} aria-labelledby="form-dialog-title">
                     <DialogTitle id="form-dialog-title">Orden de producción</DialogTitle>
