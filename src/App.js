@@ -68,8 +68,8 @@ function App() {
     if (!token) {
       return;
     }
-
-    axios.get(`http://dashroute.test/api/auth/user`,{
+   
+    axios.get(process.env.REACT_APP_URL_LARAVEL+`/api/auth/user`,{
       headers: {
         'Authorization': `Bearer ${token}`,
 
