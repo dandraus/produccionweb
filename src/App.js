@@ -97,8 +97,8 @@ function App() {
         <div>
           <div className="header">
 
-
-            Hola a todos
+Bienvenidos al software
+            
             {/* <NavLink activeClassName="active" to="/login">Login</NavLink><small>(Access without token only)</small>
             <NavLink activeClassName="active" to="/home">Dashboard</NavLink><small>(Access with token only)</small> */}
 
@@ -107,11 +107,7 @@ function App() {
           <div className="content">
             <Switch>
                <Route exact path="/" component={Login} /> 
-              
-              
-              
               <PublicRoute path="/login" component={Login} />
-              
               <PrivateRoute path="/home" component={Home} />
               <PrivateRoute path="/home2" component={Home2} />
             </Switch>
