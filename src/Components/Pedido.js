@@ -639,6 +639,9 @@ function guardar(event) {
   };
   
 
+
+
+
   axios.post(process.env.REACT_APP_URL_LARAVEL + `/api/Pedido/`, datoGuardar)
       .then(res => {
 
@@ -656,11 +659,30 @@ function guardar(event) {
             total:this.state.itemsped.total,
           });
 
+ 
+        
+
           axios.post(process.env.REACT_APP_URL_LARAVEL + `/api/Pedido_items`, (datoPedidoitem))
           .then(res6 => {
            //var reporteurl = "ec2-18-144-28-190.us-west-1.compute.amazonaws.com:8080/jasperserver/rest_v2/reports/reports/cotizacion2.pdf?Cotizacionid=" + idprod;
               console.log(res6);
               console.log(res6.data.id);
+              const datoGuardar_estado = {
+                ped_id: res6.data.id,
+                val: this.state.itemsped.unidades,
+                pri:0,
+                seg: 0,
+                ter:0,
+                des:0
+                
+            };
+            axios.post(process.env.REACT_APP_URL_LARAVEL+`/api/Pedido_inventario`, (datoGuardar_estado))
+            .then(res => {
+            
+                console.log(res);
+                console.log(res.data.id);})
+
+
 
               this.setState({ guardarMaq: [] });
              var newprod= this.state.Maqui.map((value, index) => {

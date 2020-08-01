@@ -103,6 +103,7 @@ class Gastomateriales extends Component {
             operario:'',
             productos: [],
             open: false,
+            items:[],
             Sopen: false,
            // maquinas:[],
             //operarios:[],
@@ -203,6 +204,20 @@ class Gastomateriales extends Component {
               }else{
               this.setState({pedido:ms[0]});
                 console.log(ms);
+
+
+                axios.get(process.env.REACT_APP_URL_LARAVEL+`/api/producto/foto/`+ms[0].referencia)
+                .then(res2 => {
+                  console.log(res2);
+                 // const productos = res.data;
+                  
+                  this.setState({ items: res2.data[0].foto });
+                  
+                  // setPersonsState(PersonState=persona);
+          
+                }
+                )
+               
               }
             
         
@@ -400,7 +415,20 @@ today (){
             onSubmit={guardar.bind(this)}
             
           >
-                      <br/>
+                     <br/>
+                          <br/>
+
+                          {this.state.items ?  <img
+                    style={{ height: 100, }}//borderRadius: '50%' }}
+                    src={process.env.REACT_APP_URL_LARAVEL +"uploads/"+ this.state.items}
+                  />
+        :"No hay foto"      }
+                         
+
+                         <br/>
+                          <br/>
+                          <InputLabel htmlFor="age-simple">Cliente {this.state.pedido.cliente}</InputLabel>
+                          <br/>
                           <br/>
                <InputLabel htmlFor="age-simple">Escoge fecha real de fabricación</InputLabel>
   <DatePicker selected={this.state.fecha} onChange={this.handlechangefecha_ini.bind(this)}  />

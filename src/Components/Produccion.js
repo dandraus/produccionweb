@@ -141,7 +141,7 @@ class Produccion extends Component {
 
     }
     componentDidMount() {
-        axios.get(process.env.REACT_APP_URL_LARAVEL+`/api/Pedido_inventario`)
+        axios.get(process.env.REACT_APP_URL_LARAVEL+`/api/Pedido_estado`)
         .then(res2 => {
             const resultado2 = res2.data;
 
@@ -201,12 +201,24 @@ class Produccion extends Component {
                     pageSize: 20
                 }}
                     columns={[
-                        { title: 'Pedido ', field: 'pedido_items.pedido_id'},
-                        { title: 'Referencia', field: 'pedido_items.referencia'},
+                        {
+                            title: 'Foto',
+                            field: 'foto',
+                            render: rowData => (
+              
+                              <img
+                                style={{ height: 100, }}//borderRadius: '50%' }}
+                                src={process.env.REACT_APP_URL_LARAVEL +"uploads/"+ rowData.foto}
+                              />
+                            ),
+                          },
+                        { title: 'Cliente ', field: 'cliente'},
+                        { title: 'Pedido ', field: 'pedido_items_id'},
+                        { title: 'Ref', field: 'referencia'},
                         { title: 'Total pedido', field: 'total' },
-                        { title: '# Primera', field: 'primera' },
-                        { title: '# Segunda', field: 'segunda' },
-                        { title: '# Tercera', field: 'tercera' },
+                        { title: '# 1a', field: 'primera' },
+                        { title: '# 2a', field: 'segunda' },
+                        { title: '# 3a', field: 'tercera' },
                         { title: '# Despachado', field: 'despachado' },
                        
                         { title: 'Creado', field: 'created_at', editable: 'never' },
@@ -214,228 +226,14 @@ class Produccion extends Component {
 
                     ]}
                     data={this.state.datos}
-                    title="Inventario pedidos"
+                    title="Estado pedidos"
                     
 
 
                 />
 
-                <Fab color="primary" aria-label="add" className={'daniel'} onClick={handleClickOpen.bind(this)}>
-                    <AddIcon />
-                </Fab>
-
-
-                <Dialog open={this.state.open} onClose={handleClose.bind(this)} aria-labelledby="form-dialog-title">
-                    <DialogTitle id="form-dialog-title">Ingreso de producción</DialogTitle>
-                    <DialogContent>
-
-               
-                     
-               
-          <form
-          id="form-inside-input"
-          className="form-inside-input"
-          onSubmit={guardar.bind(this)}
           
-        >
 
-<InputLabel htmlFor="age-simple">Máquina</InputLabel>
-                        <Select
-                            fullWidth
-                            id="maquina"
-                            name="maquina"
-                            value={Number(this.state.maquina)}
-                           onChange={this.handleChangecombo_maquina.bind(this)}
-                            input={<Input id="age-simple" />}
-                        >
-
-                            <MenuItem value="">
-
-                                <em>None</em>
-                            </MenuItem>
-                           
-                            
-                            {
-                                this.state.maquinas.map((id, index) =>
-                                
-                                <MenuItem key={id.id} value={id.id}>{id.nombre}</MenuItem>
-                            )}
-
-                          
-                        </Select>
-
-
-
-
-
-                        <InputLabel htmlFor="age-simple">Operario</InputLabel>
-                        <Select
-                            fullWidth
-                            id="operario"
-                            name="operario"
-                            value={Number(this.state.operario)}
-                            onChange={this.handleChangecombo.bind(this)}
-                            input={<Input id="age-simple" />}
-                        >
-
-                            <MenuItem value="">
-
-                                <em>None</em>
-                            </MenuItem>
-                            
-                            
-                            {
-                                this.state.operarios.map((id, index) =>
-                                
-                                <MenuItem key={id.id} value={id.id}>{id.nombre} {id.apellido}</MenuItem>
-                            )}
-
-                          
-                        </Select>
-                        <TextField
-                            value={this.state.pedido.pedido_id} onChange={this.handleChange.bind(this)}
-                            
-                            required="true"
-                            margin="normal"
-                            defaultValue="Pedido  id"
-                            id="pedido__id"
-                            label="Pedido"
-                            
-                            name="valor_unitario"
-                            InputProps={{
-                                readOnly: true,
-                            }}
-                            fullWidth
-                        />
-
-                        <TextField
-                            value={this.state.pedido.pedido_item_id} onChange={this.handleChange.bind(this)}
-                            
-                            required="true"
-                            margin="normal"
-                            defaultValue="Pedido item id"
-                            id="pedido_item_id"
-                            label="Pedido item"
-                            
-                            name="valor_unitario"
-                            InputProps={{
-                                readOnly: true,
-                            }}
-                            fullWidth
-                        />
-                     
-                                          <TextField
-                            value={this.state.pedido.referencia} onChange={this.handleChange.bind(this)}
-                            
-                            required="true"
-                            margin="normal"
-                            defaultValue="Pedido referencia"
-                            id="pedido_referencia"
-                            label="Referencia"
-                            
-                            name="pedido_referencia"
-                            InputProps={{
-                                readOnly: true,
-                            }}
-                            fullWidth
-                        />
-
-<TextField
-                            value={this.state.pedido.unidades} onChange={this.handleChange.bind(this)}
-                            
-                            required="true"
-                            margin="normal"
-                            defaultValue="Unidades a fabricar"
-                            id="unidades"
-                            label="Unidades a fabricar"
-                            
-                            name="unidades"
-                            InputProps={{
-                                readOnly: true,
-                            }}
-                            fullWidth
-                        />
-
-                        <TextField
-                            value={this.state.cantidad_fabricada} onChange={this.handleChange.bind(this)}
-                            type="number"
-                            required="true"
-                            margin="dense"
-                            
-                            id="cantidad_fabricada"
-                            label="Cantidad fabricada"
-                            name="cantidad_fabricada"
-                            fullWidth
-                        />
-
-
-                                 {/* <TextField
-                            value={this.state.cantidad} onChange={this.handleValor.bind(this)}
-                            type="number"
-                            required="true"
-                            margin="dense"
-                            
-                            id="cantidad"
-                            label="Cantidad"
-                            name="cantidad"
-                            fullWidth
-                        />
-
-
-
-
-
-
-                            <TextField
-                            value={this.state.valor} onChange={this.handleValor.bind(this)}
-                            type="number"
-                            required="true"
-                            margin="dense"
-                            id="valor"
-                            label="Valor"
-                            name="valor"
-                            fullWidth
-                        /> */}
-
-{/* 
-                        <TextField
-                            value={this.state.valor_unitario} onChange={this.handleChange.bind(this)}
-                            
-                            required="true"
-                            margin="normal"
-                            defaultValue="Valor Unitario"
-                            id="valor_unitario"
-                            label="Valor unitario"
-                            
-                            name="valor_unitario"
-                            InputProps={{
-                                readOnly: true,
-                            }}
-                            fullWidth
-                        />
- */}
-
-                                
-                   
-                        <div style={{display: 'flex', justifyContent: 'right'}}>
-                        <Button onClick={handleClose.bind(this)} variant="primary"  >
-                            Cancelar
-          </Button>
-                        <Button type='submit' color="primary"  >
-                            Guardar
-          </Button>
-          </div>
-          </form>
-                       
-
-
-
-
-                    </DialogContent>
-                    <DialogActions>
-                       
-                    </DialogActions>
-                </Dialog>
 
 
             </div>

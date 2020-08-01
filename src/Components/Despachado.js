@@ -27,7 +27,6 @@ import DatePicker from 'react-datepicker'
 import "react-datepicker/dist/react-datepicker.css";
 
 
-
 const useStyles = makeStyles(theme => ({
     fab: {
         margin: theme.spacing(1),
@@ -38,16 +37,15 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-class Ingreso_diario extends Component {
+class Despachado extends Component {
     state = {
         fecha:new Date(),
         productos: [],
         open: false,
         Sopen: false,
-        maquinas:[],
         items:[],
+        maquinas:[],
         operarios:[],
-        operarios_id:"",
         pedido:[{pedido_item_id:'',pedido_id:'',unidades:0}],
 
         fechaactual: "2019-12-24",
@@ -99,15 +97,14 @@ class Ingreso_diario extends Component {
     reset(){
         document.getElementById("form-inside-input").reset();
         this.setState({   
-            fecha:new Date(),
+
             maquina:'',
             operario:'',
             productos: [],
             open: false,
             Sopen: false,
-            items:'',
            // maquinas:[],
-            //operarios:[],
+           // operarios:[],
             pedido:[{pedido_item_id:'',pedido_id:'',unidades:0}],
     
             fechaactual: "2019-12-24",
@@ -175,6 +172,13 @@ class Ingreso_diario extends Component {
     handleChangecombo(event) {
         this.setState({ ...this.state, [event.target.name]: Number(event.target.value) || '' });
     };
+    handlechangefecha_ini(event){
+        this.reset();
+        if (event===undefined){}
+        else{
+        console.log(event);
+           this.setState({fecha:event});
+          }}
     handleDescuento(event){
         const name = event.target.name;
         const value = event.target.value;
@@ -190,14 +194,6 @@ class Ingreso_diario extends Component {
           }
         }, this.calcular);
     }
-     handlechangefecha_ini(event){
-         this.reset();
-        if (event===undefined){}
-        else{
-        console.log(event);
-           this.setState({fecha:event});
-          }}
-
     handleChangecombo_maquina (event)   {
         console.log(event);
         this.setState({maquina:event.target.value})
@@ -212,21 +208,21 @@ class Ingreso_diario extends Component {
 
               }else{
               this.setState({pedido:ms[0]});
-              axios.get(process.env.REACT_APP_URL_LARAVEL+`/api/producto/foto/`+ms[0].referencia)
-              .then(res2 => {
-                console.log(res2);
-               // const productos = res.data;
-                
-                this.setState({ items: res2.data[0].foto });
-                
-                // setPersonsState(PersonState=persona);
-        
-              }
-              )
-              
-
                 console.log(ms);
-              }
+             
+                axios.get(process.env.REACT_APP_URL_LARAVEL+`/api/producto/foto/`+ms[0].referencia)
+                .then(res2 => {
+                  console.log(res2);
+                 // const productos = res.data;
+                  
+                  this.setState({ items: res2.data[0].foto });
+                  
+                  // setPersonsState(PersonState=persona);
+          
+                })
+
+
+            }
             
         
            
@@ -352,6 +348,7 @@ class Ingreso_diario extends Component {
     componentDidUpdate() {
 
 
+
     }
     componentDidMount() {
         
@@ -393,8 +390,7 @@ today (){
         mm = '0' + mm
     }
     today = yyyy + '-' + mm + '-' + dd;
-    this.setState({fecha_vencimiento:today});
-    //this.setState({fecha:today});
+    this.setState({fecha_vencimiento:today})
 }
     render() {
         
@@ -407,7 +403,9 @@ today (){
             onSubmit={guardar.bind(this)}
             
           >
-        <br/>
+  <br/>
+  <br/>
+  <br/>
                           <br/>
 
                           {this.state.items ?  <img
@@ -423,10 +421,9 @@ today (){
                           <br/>
                           <br/>
   <InputLabel htmlFor="age-simple">Escoge fecha real de fabricación</InputLabel>
-
   <DatePicker selected={this.state.fecha} onChange={this.handlechangefecha_ini.bind(this)}  />
-  <br/>
-                          <br/>
+  <br/><br/>
+  
   <InputLabel htmlFor="age-simple">Máquina</InputLabel>
                           <Select
                               fullWidth
@@ -528,7 +525,7 @@ today (){
                               fullWidth
                           />
   
-  <TextField
+  {/* <TextField
                               value={this.state.pedido.unidades} onChange={this.handleChange.bind(this)}
                               
                               required="true"
@@ -542,20 +539,56 @@ today (){
                                   readOnly: true,
                               }}
                               fullWidth
-                          />
+                          /> */}
   
-                          <TextField
-                              value={this.state.cantidad_fabricada} onChange={this.handleChange.bind(this)}
+                          {/* <TextField
+                              value={this.state.cantidad_segunda} onChange={this.handleChange.bind(this)}
                               type="number"
                               required="true"
                               margin="dense"
                               
-                              id="cantidad_fabricada"
-                              label="Cantidad fabricada"
-                              name="cantidad_fabricada"
+                              id="cantidad_segunda"
+                              label="Cantidad segunda"
+                              name="cantidad_segunda"
                               fullWidth
                           />
-                    
+                           <TextField
+                              value={this.state.cantidad_tercera} onChange={this.handleChange.bind(this)}
+                              type="number"
+                              required="true"
+                              margin="dense"
+                              
+                              id="cantidad_tercera"
+                              label="Cantidad tercera"
+                              name="cantidad_tercera"
+                              fullWidth
+                          /> */}
+                          <TextField
+                              value={this.state.cantidad_despachada} onChange={this.handleChange.bind(this)}
+                              type="number"
+                              required="true"
+                              margin="dense"
+                              
+                              id="cantidad_despachada"
+                              label="Cantidad despachada"
+                              name="cantidad_despachada"
+                              fullWidth
+                          />
+
+{/* <TextField
+                              value={this.state.cantidad_resta} onChange={this.handleChange.bind(this)}
+                              type="number"
+                              required="true"
+                              margin="dense"
+                              
+                              id="cantidad_resta"
+                              label="Cantidad resta a primera"
+                              name="cantidad_resta"
+                              fullWidth
+                          /> */}
+
+
+  
                                    {/* <TextField
                               value={this.state.cantidad} onChange={this.handleValor.bind(this)}
                               type="number"
@@ -650,21 +683,20 @@ function guardar(event) {
     const datoGuardar = {
         ped_id: this.state.pedido.id,
         val: this.state.pedido.unidades,
-        pri: this.state.formControls.cantidad_fabricada.value,
+        pri:0,
         seg: 0,
         ter:0,
-        des:0
+        des:this.state.formControls.cantidad_despachada.value
         
     };
 
     const datoGuardarmov = {
-        
         pedido_items_id: this.state.pedido.id,
-        total: this.state.formControls.cantidad_fabricada.value,
-        tipo:'Primera' ,
+        total:parseFloat(this.state.formControls.cantidad_despachada.value),
+        tipo:'Despachado' ,
         maquina_id: this.state.maquina,
         operarios_id:this.state.operario,
-        fecha: this.state.fecha.getFullYear()+   "-" + ( this.state.fecha.getMonth() + 1) + "-" + this.state.fecha.getDate(),
+        fecha: this.state.fecha.getFullYear()+   "-" + ( this.state.fecha.getMonth() + 1) + "-" + this.state.fecha.getDate(), 
         
         
     };
@@ -749,5 +781,5 @@ axios.post(process.env.REACT_APP_URL_LARAVEL+`/api/Pedido_inventario_mov`, (dato
 
 
 
-export default Ingreso_diario;
+export default Despachado;
 

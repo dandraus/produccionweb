@@ -713,6 +713,7 @@ class Producto_crear extends Component {
                 label="Cantidad por unidad"
                 required="true"
                 type='number'
+                step={0.0001}
                 defaultValue="Cantidad por unidad"
                 onChange={this.handleColorNameChangeMateriales(idx)}
                 value={Mater.cantidad}
@@ -723,7 +724,7 @@ class Producto_crear extends Component {
                 required="true"
                 label="Valor total"
                 defaultValue="Valor total"
-
+                  
                 value={this.state.MaterialesAdicionales[idx].total}
 
                 InputProps={{
@@ -799,6 +800,7 @@ class Producto_crear extends Component {
                 required="true"
                 defaultValue="Color Porcentaje"
                 type="number"
+                step={0.0001}
                 onChange={this.handleColorNameChange(idx)}
                 value={Color.name}
               />

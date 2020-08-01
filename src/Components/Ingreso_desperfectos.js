@@ -43,6 +43,7 @@ class Ingreso_desperfectos extends Component {
         productos: [],
         open: false,
         Sopen: false,
+        items:[],
         maquinas:[],
         operarios:[],
         pedido:[{pedido_item_id:'',pedido_id:'',unidades:0}],
@@ -208,7 +209,21 @@ class Ingreso_desperfectos extends Component {
               }else{
               this.setState({pedido:ms[0]});
                 console.log(ms);
-              }
+             
+                axios.get(process.env.REACT_APP_URL_LARAVEL+`/api/producto/foto/`+ms[0].referencia)
+                .then(res2 => {
+                  console.log(res2);
+                 // const productos = res.data;
+                  
+                  this.setState({ items: res2.data[0].foto });
+                  this.setState({ id_producto: res2.data[0].id });
+                  
+                  // setPersonsState(PersonState=persona);
+          
+                })
+
+
+            }
             
         
            
@@ -391,6 +406,21 @@ today (){
           >
   <br/>
   <br/>
+  <br/>
+                          <br/>
+
+                          {this.state.items ?  <img
+                    style={{ height: 100, }}//borderRadius: '50%' }}
+                    src={process.env.REACT_APP_URL_LARAVEL +"uploads/"+ this.state.items}
+                  />
+        :"No hay foto"      }
+                         
+
+                         <br/>
+                          <br/>
+                          <InputLabel htmlFor="age-simple">Cliente {this.state.pedido.cliente}</InputLabel>
+                          <br/>
+                          <br/>
   <InputLabel htmlFor="age-simple">Escoge fecha real de fabricación</InputLabel>
   <DatePicker selected={this.state.fecha} onChange={this.handlechangefecha_ini.bind(this)}  />
   <br/><br/>
@@ -524,17 +554,17 @@ today (){
                               fullWidth
                           />
                            <TextField
-                              value={this.state.cantidad_tercera} onChange={this.handleChange.bind(this)}
+                              value={this.state.valor} onChange={this.handleChange.bind(this)}
                               type="number"
                               required="true"
                               margin="dense"
                               
-                              id="cantidad_tercera"
-                              label="Cantidad tercera"
-                              name="cantidad_tercera"
+                              id="valor"
+                              label="Valor mts"
+                              name="valor"
                               fullWidth
                           />
-                          <TextField
+                          {/* <TextField
                               value={this.state.cantidad_despachada} onChange={this.handleChange.bind(this)}
                               type="number"
                               required="true"
@@ -544,7 +574,7 @@ today (){
                               label="Cantidad despachada"
                               name="cantidad_despachada"
                               fullWidth
-                          />
+                          /> */}
 
 {/* <TextField
                               value={this.state.cantidad_resta} onChange={this.handleChange.bind(this)}
@@ -654,16 +684,16 @@ function guardar(event) {
     const datoGuardar = {
         ped_id: this.state.pedido.id,
         val: this.state.pedido.unidades,
-        pri:-this.state.formControls.cantidad_segunda.value-this.state.formControls.cantidad_tercera.value,
+        pri:-this.state.formControls.cantidad_segunda.value,
         seg: this.state.formControls.cantidad_segunda.value,
-        ter:this.state.formControls.cantidad_tercera.value,
-        des:this.state.formControls.cantidad_despachada.value
+        ter:0,
+        des:0
         
     };
 
     const datoGuardarmov = {
         pedido_items_id: this.state.pedido.id,
-        total:parseFloat(this.state.formControls.cantidad_segunda.value)+parseFloat(this.state.formControls.cantidad_tercera.value)+parseFloat(this.state.formControls.cantidad_despachada.value),
+        total:parseFloat(this.state.formControls.cantidad_segunda.value),
         tipo:'No primera' ,
         maquina_id: this.state.maquina,
         operarios_id:this.state.operario,
@@ -671,9 +701,34 @@ function guardar(event) {
         
         
     };
+    const datoGuardarinv = {
+        productos_id: this.state.id_producto,
+        cantidad_mov:parseFloat(this.state.formControls.cantidad_segunda.value),
+        valor:parseFloat(this.state.formControls.valor.value),
+        foto: this.state.items,
+        observaciones:"Ingreso de segunda",
+        
+        
+        
+    };
     console.log(datoGuardar);
     console.log(this.state);
 
+    axios.post(process.env.REACT_APP_URL_LARAVEL+`/api/Inventario_seg`, (datoGuardarinv))
+        .then(res => {
+                
+            console.log(res);
+            console.log(res.data.id);
+            //this.reset();
+
+            //this.componentDidMount();
+
+            
+        })
+        .catch((error) => {
+            console.log(error);
+        })
+        
     axios.post(process.env.REACT_APP_URL_LARAVEL+`/api/Pedido_inventario`, (datoGuardar))
         .then(res => {
 
