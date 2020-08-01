@@ -98,7 +98,7 @@ function App() {
           <div className="header">
 
 
-            
+            Hola a todos
             {/* <NavLink activeClassName="active" to="/login">Login</NavLink><small>(Access without token only)</small>
             <NavLink activeClassName="active" to="/home">Dashboard</NavLink><small>(Access with token only)</small> */}
 
