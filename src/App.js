@@ -106,7 +106,7 @@ Bienvenidos al software
           </div>
           <div className="content">
             <Switch>
-               <Route exact path="/" component={Login} /> 
+             
               <PublicRoute path="/login" component={Login} />
               <PrivateRoute path="/home" component={Home} />
               <PrivateRoute path="/home2" component={Home2} />
