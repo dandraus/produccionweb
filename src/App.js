@@ -106,9 +106,12 @@ function App() {
           </div>
           <div className="content">
             <Switch>
-              {/* <Route exact path="/" component={Home} /> */}
+               <Route exact path="/" component={Login} /> 
+              
+              
+              
               <PublicRoute path="/login" component={Login} />
-              <PublicRoute path="/" component={Login} />
+              
               <PrivateRoute path="/home" component={Home} />
               <PrivateRoute path="/home2" component={Home2} />
             </Switch>
