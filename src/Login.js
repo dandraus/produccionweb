@@ -67,7 +67,7 @@ function Login(props) {
       console.log(response.data);
 
       setUserSession(response.data.access_token,  username.value);
-      if (username.value === "daniel@vanana.com"){
+      if (username.name === "supervisor"){
         props.history.push('/home2');
       }else{
       props.history.push('/home');}
