@@ -77,7 +77,12 @@ function Login(props) {
       if (error.response.status === 401) {setError(error.response.data.message);
      alert ("Usuario o contraseña incorrecta")
     }else
-{alert("Campos mal diligenciados")}
+{alert("Campos mal diligenciados");
+console.log("daniel");
+console.log(error);
+
+
+}
 
       setError(error.response);
     });
