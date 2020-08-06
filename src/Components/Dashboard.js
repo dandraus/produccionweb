@@ -54,6 +54,8 @@ export default function Dashboard() {
   const [fecha_ini, setfecha_ini] = useState(new Date());
   const [fecha_fin, setfecha_fin] = useState(new Date());
   const [maqdata,setmaqdata] = useState([]);
+  const [despachados,setdespachados] = useState([]);
+  const [pedidosmes,setdpedidosmes] = useState([]);
   const classes = useStyles();
   const divStyle = {
     margin: '10px',
@@ -89,11 +91,15 @@ export default function Dashboard() {
           series: []
         };
         productos.map((value, index) =>{
+          // data={
+          //   labels:[...data.labels,value.maquina] ,
+          //   series: [...data.series[0],value.cantidad]
+          // };
           if (index===0){
             
             data={
               labels:[value.maquina] ,
-              series: [value.cantidad]
+              series: [[value.cantidad]]
             };
             
           //   data={
@@ -104,22 +110,119 @@ export default function Dashboard() {
         }else{
       data={
             labels:[...data.labels,value.maquina] ,
-            series: [[...data.series,value.cantidad]]
+            series: [[...data.series[0],value.cantidad]]
           };
          // setmaqdata(maqdata => [...maqdata, data])
         }
-        console.log(value.cantidad);
-        console.log(data);
-        console.log(dailySalesChart.data);
+       console.log(value.cantidad);
+       
         }
         
       )
+      console.log(data);
+      console.log(dailySalesChart.data);
       setmaqdata(data);
       console.log(maqdata);
         // setPersonsState(PersonState=persona);
 
       })
       
+
+      axios.get(process.env.REACT_APP_URL_LARAVEL+`/api/despachados/`)
+      .then(res => {
+        const productos = res.data;
+        console.log(productos);
+       var data = {
+          labels: [],
+          series: []
+        };
+        productos.map((value, index) =>{
+          // data={
+          //   labels:[...data.labels,value.maquina] ,
+          //   series: [...data.series[0],value.cantidad]
+          // };
+          if (index===0){
+            
+            data={
+              labels:[value.fecha] ,
+              series: [[value.despachados]]
+            };
+            
+          //   data={
+            
+          //   labels:[value.maquina] ,
+          //   series: [[value.cantidad]]
+          // };
+        }else{
+      data={
+            labels:[...data.labels,value.fecha] ,
+            series: [[...data.series[0],value.total]]
+          };
+         // setmaqdata(maqdata => [...maqdata, data])
+        }
+       console.log(value.cantidad);
+       
+        }
+        
+      )
+      console.log(data);
+      console.log(dailySalesChart.data);
+      setdespachados(data);
+      console.log(despachados);
+        // setPersonsState(PersonState=persona);
+
+      })
+      
+
+
+      axios.get(process.env.REACT_APP_URL_LARAVEL+`/api/pedidosmes/`)
+      .then(res => {
+        const productos = res.data;
+        console.log(productos);
+       var data = {
+          labels: [],
+          series: []
+        };
+        productos.map((value, index) =>{
+          // data={
+          //   labels:[...data.labels,value.maquina] ,
+          //   series: [...data.series[0],value.cantidad]
+          // };
+          if (index===0){
+            
+            data={
+              labels:[value.fecha] ,
+              series: [[value.total]]
+            };
+            
+          //   data={
+            
+          //   labels:[value.maquina] ,
+          //   series: [[value.cantidad]]
+          // };
+        }else{
+      data={
+            labels:[...data.labels,value.fecha] ,
+            series: [[...data.series[0],value.total]]
+          };
+         // setmaqdata(maqdata => [...maqdata, data])
+        }
+       console.log(value.cantidad);
+       
+        }
+        
+      )
+      console.log(data);
+      console.log(dailySalesChart.data);
+      setdpedidosmes(data);
+     // console.log(despachados);
+        // setPersonsState(PersonState=persona);
+
+      })
+      
+
+
+
       
       }
     
@@ -213,20 +316,19 @@ export default function Dashboard() {
             <CardHeader color="warning">
               <ChartistGraph
                 className="ct-chart"
-                data={emailsSubscriptionChart.data}
+                data={despachados}
                 type="Bar"
-                options={emailsSubscriptionChart.options}
-                responsiveOptions={emailsSubscriptionChart.responsiveOptions}
-                listener={emailsSubscriptionChart.animation}
+                options={dailySalesChart.options}
+                listener={dailySalesChart.animation}
               />
             </CardHeader>
             <CardBody>
-              <h4 className={classes.cardTitle}>Email Subscriptions</h4>
-              <p className={classes.cardCategory}>Last Campaign Performance</p>
+              <h4 className={classes.cardTitle}>Baldosas despachadas  por mes</h4>
+              <p className={classes.cardCategory}>12 Meses</p>
             </CardBody>
             <CardFooter chart>
               <div className={classes.stats}>
-                <AccessTime /> campaign sent 2 days ago
+        
               </div>
             </CardFooter>
           </Card>
@@ -236,19 +338,19 @@ export default function Dashboard() {
             <CardHeader color="danger">
               <ChartistGraph
                 className="ct-chart"
-                data={completedTasksChart.data}
-                type="Line"
-                options={completedTasksChart.options}
-                listener={completedTasksChart.animation}
+                data={pedidosmes}
+                type="Bar"
+                options={dailySalesChart.options}
+                listener={dailySalesChart.animation}
               />
             </CardHeader>
             <CardBody>
-              <h4 className={classes.cardTitle}>Completed Tasks</h4>
-              <p className={classes.cardCategory}>Last Campaign Performance</p>
+              <h4 className={classes.cardTitle}>Pedidos mes</h4>
+              <p className={classes.cardCategory}>Ventas en Millones</p>
             </CardBody>
             <CardFooter chart>
               <div className={classes.stats}>
-                <AccessTime /> campaign sent 2 days ago
+                <AccessTime /> 12 meses
               </div>
             </CardFooter>
           </Card>
