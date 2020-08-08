@@ -133,19 +133,20 @@ handleRemoveMate = idx => () => {
         .then(res => {
           console.log(res);
          // const productos = res.data;
-          
-          this.setState({ items: [res.data] });
-          
+          if (res.data===""){console.log("no hay nada")}else{
+          this.setState({ items:res.data });
+          }
           // setPersonsState(PersonState=persona);
   
         }
         )
         
-  
+ 
   
        console.log(item[0].cotizacion_items);
    // this.setState({ items: item[0].cotizacion_items });
     this.setState({pedido_guardar:item[0]});
+    console.log(this.state);
     this.setState({select:false})
   }
     
@@ -154,6 +155,8 @@ handleRemoveMate = idx => () => {
         this.setState({ items:[]})
        
     }
+
+    console.log(this.state);
     
 
 
@@ -382,7 +385,7 @@ var newMaquinas=[{fecha_final: "", id: "", fecha_maquina: ""}];
                 // </h6>
                 // ),
               },
-              {
+           {
                 title: 'Foto',
                 field: 'foto',
                 render: rowData => (
@@ -484,6 +487,7 @@ var newMaquinas=[{fecha_final: "", id: "", fecha_maquina: ""}];
           
 
           <InputLabel htmlFor="age-simple">Unidades por dia operario {this.state.unidades_dia} </InputLabel>
+          <InputLabel htmlFor="age-simple">#ID cotizacion item {this.state.itemsped.id} </InputLabel>
           <InputLabel htmlFor="age-simple">Unidades a fabricar {this.state.unidades_fabricar} </InputLabel>
           <InputLabel htmlFor="age-simple"># Maquinas  {this.state.Nummaquina} </InputLabel>
            <InputLabel htmlFor="age-simple">Dias máquina  {this.state.dias_operario} </InputLabel>
@@ -659,7 +663,13 @@ function guardar(event) {
             total:this.state.itemsped.total,
           });
 
- 
+          axios.post(process.env.REACT_APP_URL_LARAVEL +'/api/Cotizacionestado/'+this.state.itemsped.id )
+          .then(res6 => {
+           //var reporteurl = "ec2-18-144-28-190.us-west-1.compute.amazonaws.com:8080/jasperserver/rest_v2/reports/reports/cotizacion2.pdf?Cotizacionid=" + idprod;
+              console.log(res6);
+              console.log(res6.data.id);
+              
+          });
         
 
           axios.post(process.env.REACT_APP_URL_LARAVEL + `/api/Pedido_items`, (datoPedidoitem))
@@ -676,6 +686,10 @@ function guardar(event) {
                 des:0
                 
             };
+
+
+
+
             axios.post(process.env.REACT_APP_URL_LARAVEL+`/api/Pedido_inventario`, (datoGuardar_estado))
             .then(res => {
             
@@ -812,8 +826,10 @@ function guardar(event) {
 
 
   this.setState({
-      open: false
+      open: false,
+      items:[]
   });
+
 }
 
 function handleClose() {
