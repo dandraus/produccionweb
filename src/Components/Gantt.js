@@ -376,7 +376,7 @@ var data =
       data=[...data,[
         value.pedido_item_id,
         value.descripcion,
-        'pedido completo',
+        value.fecha_incial + ' --  ' +value.fecha_final,
         new Date(value.fecha_incial),
         new Date(value.fecha_final),
         null,

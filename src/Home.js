@@ -55,7 +55,7 @@ import AddBoxIcon from '@material-ui/icons/AddBox';
 import GetAppIcon from '@material-ui/icons/GetApp';
 import AccountTreeIcon from '@material-ui/icons/AccountTree';
 import BuildIcon from '@material-ui/icons/Build';
-
+import Despacho from './Components/Despacho';
 
 
 
@@ -378,6 +378,20 @@ export default function PersistentDrawerLeft() {
                     </ListItemIcon>
                     <ListItemText primary="Producto terminado" onClick={() => menu("Despachado", 1)} />
                   </ListItem>
+
+
+                  <ListItem button className={classes.nested}>
+                    <ListItemIcon>
+                    <SvgIcon >
+                  
+                    <path class="cls-1" d="M4.57,3.57h5.64V1a1,1,0,0,0-1-1H1A1,1,0,0,0,0,1V9.21a1,1,0,0,0,1,1H3.57V4.57A1,1,0,0,1,4.57,3.57Z"/><path class="cls-1" d="M9.17,8.17h5.64V5.6a1,1,0,0,0-1-1H5.6a1,1,0,0,0-1,1v8.21a1,1,0,0,0,1,1H8.17V9.17A1,1,0,0,1,9.17,8.17Z"/><path class="cls-1" d="M13.77,12.77H19.4V10.19a1,1,0,0,0-1-1H10.19a1,1,0,0,0-1,1V18.4a1,1,0,0,0,1,1h2.58V13.77A1,1,0,0,1,13.77,12.77Z"/><rect class="cls-1" x="13.79" y="13.79" width="10.21" height="10.21" rx="1.02"/>
+            
+            
+            
+                </SvgIcon>
+                    </ListItemIcon>
+                    <ListItemText primary="Realizar despacho" onClick={() => menu("Realizar despacho", 1)} />
+                  </ListItem>
                   
                   </List>
 
@@ -582,6 +596,7 @@ export default function PersistentDrawerLeft() {
                   case "Gantt": return<Gantt/> 
                   case "Despachado": return<Despachado/> 
                   case "Listado segunda": return<Salida_segunda/> 
+                  case "Realizar despacho": return<Despacho/> 
                   default: return <Dashboard/>;
                 }
               })()}

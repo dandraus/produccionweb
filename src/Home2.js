@@ -55,7 +55,7 @@ import AddBoxIcon from '@material-ui/icons/AddBox';
 import GetAppIcon from '@material-ui/icons/GetApp';
 import AccountTreeIcon from '@material-ui/icons/AccountTree';
 import BuildIcon from '@material-ui/icons/Build';
-
+import Despacho from './Components/Despacho'
 
 
 
@@ -368,6 +368,7 @@ export default function PersistentDrawerLeft() {
                   case "Gantt": return<Gantt/> 
                   case "Despachado": return<Despachado/> 
                   case "Listado segunda": return<Salida_segunda/> 
+                  case "Realizar despacho": return<Despacho/> 
                   default: return <Dashboard/>;
                 }
               })()}

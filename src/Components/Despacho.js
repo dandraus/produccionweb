@@ -34,7 +34,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-class Pedido extends Component {
+class Despacho extends Component {
   state = {
     Maquinasadicionales: [{ fecha_final: "", id: "", fecha_maquina: ""}],
     Maqui:[{fecha_final: "", id: "", fecha_maquina: ""}],
@@ -360,7 +360,7 @@ var newMaquinas=[{fecha_final: "", id: "", fecha_maquina: ""}];
 
           ]}
           data={this.state.datos}
-          title="Pedidos"
+          title="Cotizaciones"
           options={{
             selection: this.state.select,
 
@@ -841,5 +841,5 @@ function Nuevoboton(e) {
   e.preventDefault();
   console.log('The link was clicked.');
 }
-export default Pedido;
+export default Despacho;
 
