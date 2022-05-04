@@ -42,7 +42,7 @@ class Cotizacion extends Component {
         productos: [],
         open: false,
         Sopen: false,
-
+        cliente:'',
         fechaactual: "2019-12-24",
         Colores: [{ porcentaje: "", rgblist: "#FFFF" }],
         MaterialesAdicionales: [{ cantidad: "", id: "", unidades: "",valoriva:"" }],
@@ -95,6 +95,13 @@ class Cotizacion extends Component {
             productos: [],
         open: false,
         Sopen: false,
+        cliente:'',
+        direccion:'',
+        ciudad:'',
+        telefono:'',
+        subtotal:'',
+        iva:'',
+        total:'',
 
         fechaactual: "",
         Colores: [{ porcentaje: "", rgblist: "#FFFF" }],
@@ -173,6 +180,106 @@ class Cotizacion extends Component {
         }, this.calcular);
     }
 
+    handleChangeCliente(event){
+        console.log(event.target.value);
+        this.setState({
+            cliente:event.target.value
+        })
+        
+    }
+
+    handleChangeDireccion(event){
+        this.setState({
+            direccion:event.target.value
+        })
+        
+    }
+    handleChangeCiudad(event){
+        this.setState({
+            ciudad:event.target.value
+        })
+        
+    }
+    handleChangeTelefono(event){
+        this.setState({
+            telefono:event.target.value
+        })
+        
+    }
+    handleChangeNit(event){
+        
+        /*this.setState({
+            nit:event.value
+        })
+        */
+    }
+
+
+
+    handlebuscar(event){
+     console.log(this.state);
+        axios.get(process.env.REACT_APP_URL_LARAVEL+`/api/Pedidobuscar/`+this.state.formControls.nit.value+'/')
+        .then(res => {
+          const ms = res.data;
+          if (ms.length ===0){alert("Cliente no encontrado");
+         // this.reset();
+
+          }else{
+              console.log(ms[0].cliente);
+              var value = ms[0].ciudad;
+this.setState({cliente:ms[0].cliente, direccion:ms[0].direccion,ciudad:ms[0].ciudad,telefono:ms[0].telefono},);
+
+              /*this.setState({
+                formControls: {
+                    cliente: {
+                        value: ms[0].cliente
+                    },
+                    nit: {
+                        value: ms[0].nit
+                    },
+        
+                    direccion: {
+                        value: ms[0].direccion
+                    },
+        
+                    ciudad: {
+                        value: ms[0].ciudad
+                    },
+                    telefono: {
+                        value: ms[0].telefono
+                    },
+              }}); */
+            /*  this.setState({
+                formControls: {
+                  ...this.state.formControls,
+                  ['ciudad']: {
+                    ...this.state.formControls['value'],
+                     value
+                  }
+                }
+              });*/
+
+             /* this.setState({formControls.cliente.value :ms.cliente});
+              ;
+              
+               this.state.formControls.direccion.value =ms.direccion;
+              this.state.formControls.ciudad.value = ms.ciudad;
+              this.state.formControls.telefono.value = ms.telefono;
+              
+      */
+          //this.setState({pedido:ms[0]});
+       
+          
+
+            console.log(this.state);
+          }
+        
+    
+       
+      });
+    }
+
+
     handleColorNameChangeMateriales = idx => evt => {
         const newMateriales = this.state.MaterialesAdicionales.map((Mate, sidx) => {
             //const val = evt.target.value - 1;
@@ -197,13 +304,14 @@ class Cotizacion extends Component {
             //console.log(this.state.productos[val].precio_estimado);
             var productofind =(this.state.productos.find(valores => valores.id === evt.target.value));
             console.log(productofind);
+            if(productofind){
             console.log(this.state.MaterialesAdicionales[sidx].cantidad);
             var valor_metros = Math.round(productofind.precio_estimado * productofind.unidades_por_mts);
             var unidades = productofind.unidades_por_mts;
             var total_valor = Math.round(valor_metros * this.state.MaterialesAdicionales[sidx].cantidad);
             if (evt.target.value === "") return { ...Mate, id: evt.target.value, valor: "" };
             return { ...Mate, unidades: unidades, referencia: productofind.referencia, id: evt.target.value, valor: valor_metros, cantidad: this.state.MaterialesAdicionales[sidx].cantidad, total: total_valor, nombre: productofind.nombre,valoriva:productofind.iva };
-        });
+        }});
 
         this.setState({ Mater: newMateriales });
 
@@ -358,30 +466,42 @@ today (){
                     className="form-inside-input"
                     onSubmit={guardar.bind(this)}
                 >
-                    <TextField
-                        required="true"
-                        name="cliente"
-                        value={this.state.cliente} onChange={this.handleChange.bind(this)}
-                        label="Cliente"
-                        fullWidth
-
-                    />
-
-                    <TextField
+                        <TextField
                         required="true"
                         name="nit"
                         value={this.state.nit} onChange={this.handleChange.bind(this)}
                         label="Nit"
                         fullWidth
+                        
 
                     />
+                                  <Button
+                                color="primary"
+                                size="large"
+                                variant="contained"
+                                onClick={this.handlebuscar.bind(this)}
+                                className={useStyles}
 
+                            >
+                                BUSCAR
+        </Button>
+
+                    <TextField
+                        required="true"
+                        name="cliente"
+                        value={this.state.cliente} onChange={this.handleChangeCliente.bind(this)}
+                        label="Cliente"
+                        fullWidth
+
+                    />
+           
+                
 
                     <TextField
                         name="direccion"
                         required="true"
 
-                        value={this.state.direccion} onChange={this.handleChange.bind(this)}
+                        value={this.state.direccion} onChange={this.handleChangeDireccion.bind(this)}
                         label="Direccion"
                         fullWidth
                     />
@@ -393,7 +513,7 @@ today (){
                         name="ciudad"
                         //type="number"
                         label="Ciudad"
-                        value={this.state.ciudad} onChange={this.handleChange.bind(this)}
+                        value={this.state.ciudad} onChange={this.handleChangeCiudad.bind(this)}
                         fullWidth
 
                     />
@@ -405,7 +525,7 @@ today (){
                         name="telefono"
                         //   type="number"
                         label="Telefono"
-                        value={this.state.telefono} onChange={this.handleChange.bind(this)}
+                        value={this.state.telefono} onChange={this.handleChangeTelefono.bind(this)}
                         fullWidth
 
                     />
@@ -444,10 +564,10 @@ today (){
                                 input={<Input id="producto" />}
                             >
 
-                                <MenuItem value="">
+                              {/*  <MenuItem value="">
 
                                     <em>None</em>
-                                </MenuItem>
+                                </MenuItem>*/}
 
                                 {console.log(this.state)}
                                 {
@@ -637,11 +757,11 @@ function guardar(event) {
     var idprod = '';
     const datoGuardar = {
         fecha_vencimiento: this.state.formControls.fecha_vencimiento.value,
-        cliente: this.state.formControls.cliente.value,
+        cliente: this.state.cliente,
         nit: this.state.formControls.nit.value,
-        direccion: this.state.formControls.direccion.value,
-        ciudad: this.state.formControls.ciudad.value,
-        telefono: this.state.formControls.telefono.value,
+        direccion: this.state.direccion,
+        ciudad: this.state.ciudad,
+        telefono: this.state.telefono,
         observaciones: this.state.formControls.observaciones.value,
         subtotal: this.state.subtotal,
         iva: this.state.iva,

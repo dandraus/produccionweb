@@ -44,6 +44,7 @@ import Maquina from './Maquina';
 import Pedido from './Components/Pedido';
 import Produccion from  './Components/Produccion';
 import Ingreso_diario from  './Components/Ingreso_diario';
+import Ingreso_pedido from  './Components/Ingreso_pedido';
 import Gastomateriales from './Components/Gastomateriales';
 import { ReactComponent as Iconot } from './Components/iconot.svg';
 import "./assets/css/material-dashboard-react.css?v=1.9.0";
@@ -56,6 +57,7 @@ import GetAppIcon from '@material-ui/icons/GetApp';
 import AccountTreeIcon from '@material-ui/icons/AccountTree';
 import BuildIcon from '@material-ui/icons/Build';
 import Despacho from './Components/Despacho'
+import Pedido_gantt from  './Components/Pedido_gantt'
 
 
 
@@ -69,6 +71,7 @@ import Despacho from './Components/Despacho'
 import Dashboard from './Components/Dashboard';
 import Despachado from './Components/Despachado';
 import Salida_segunda from './Components/Salida_segunda';
+
 
 const drawerWidth = 240;
 
@@ -289,8 +292,18 @@ export default function PersistentDrawerLeft() {
                   <path class="cls-1" d="M0,2V22a2,2,0,0,0,2,2H22a2,2,0,0,0,2-2V2a2,2,0,0,0-2-2H2A2,2,0,0,0,0,2ZM14.67,19l-2.83,2.83L5.58,15.58l2.83-2.83,3.43,3.43,8-8L22.68,11l-8,8Z"/>
     </SvgIcon>
                     </ListItemIcon>
+                    <ListItemText primary="Ingreso produccion por pedido" onClick={() => menu("Ingreso pedido", 1)} />
+                  </ListItem>
+                  <ListItem button className={classes.nested}>
+                    <ListItemIcon>
+                    <SvgIcon >
+                  {/* <path class="cls-2" d="M13.47,21.77h7.34A2.19,2.19,0,0,0,23,19.58V14.43C20.52,18.8,16.93,19.7,13.47,21.77Z"/><rect class="cls-3" x="9.5" y="2.36" width="13.5" height="19.64" rx="2.46"/><path d="M20.54,22.5H12a3,3,0,0,1-3-3V4.82a3,3,0,0,1,3-3h8.58a3,3,0,0,1,3,3V19.54A3,3,0,0,1,20.54,22.5ZM12,2.86a2,2,0,0,0-2,2V19.54a2,2,0,0,0,2,2h8.58a2,2,0,0,0,2-2V4.82a2,2,0,0,0-2-2Z"/><rect class="cls-4" x="11.83" y="6.55" width="8.84" height="4.42" rx="0.65"/><path class="cls-1" d="M6.21,9.4,3.67,12.5,1.13,9.4a.57.57,0,0,1,.44-.94h.69V2.33H5.08V8.46h.68A.58.58,0,0,1,6.21,9.4Z"/><polygon class="cls-5" points="5.82 9.08 3.67 11.71 1.52 9.08 1.57 8.96 2.76 8.96 2.76 1.83 4.58 1.83 4.58 8.96 5.76 8.96 5.82 9.08"/><line class="cls-1" x1="2.26" y1="1.33" x2="2.26" y2="0.33"/><path class="cls-6" d="M5.66,13.33.9,21.1a1.58,1.58,0,0,0,1.35,2.4H16.42a1.58,1.58,0,0,0,1.35-2.4L13,13.33A4.31,4.31,0,0,0,5.66,13.33Z"/><path class="cls-7" d="M17.36,22.45a1,1,0,0,0,0-1.09l-1.24-2c-2.92,2.08-12.85,3.49-14,3.65l.13,0H16.42A1.06,1.06,0,0,0,17.36,22.45Z"/> */}
+                  <path class="cls-1" d="M0,2V22a2,2,0,0,0,2,2H22a2,2,0,0,0,2-2V2a2,2,0,0,0-2-2H2A2,2,0,0,0,0,2ZM14.67,19l-2.83,2.83L5.58,15.58l2.83-2.83,3.43,3.43,8-8L22.68,11l-8,8Z"/>
+    </SvgIcon>
+                    </ListItemIcon>
                     <ListItemText primary="Ingreso produccion diaria" onClick={() => menu("Ingreso diario", 1)} />
                   </ListItem>
+
                   <ListItem button className={classes.nested}>
                     <ListItemIcon>
                     <SvgIcon >
@@ -359,9 +372,11 @@ export default function PersistentDrawerLeft() {
                   case "Inventario": return <Inventario />;
                   case "Procesos": return <Procesos />;
                   case "Pedidos": return <Pedido />;
+                  case "Pedidos gantt": return <Pedido_gantt />;
                   case "Maquina": return <Maquina />;
                   case "Producción": return <Produccion />;
                   case "Ingreso diario": return <Ingreso_diario />;
+                  case "Ingreso pedido": return <Ingreso_pedido />;
                   case "Gasto materiales": return <Gastomateriales />;
                   case "Ingreso desperfectos": return<Ingreso_desperfectos/>
                   case "Dashboard": return<Dashboard/>

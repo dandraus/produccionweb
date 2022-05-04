@@ -45,8 +45,13 @@ class Ingreso_diario extends Component {
         open: false,
         Sopen: false,
         maquinas:[],
+        maquina:'',
+        operario:'',
         items:[],
         operarios:[],
+        Cliente_es:[],
+        clientesnuevos:[],
+        pedidos_items:[],
         operarios_id:"",
         pedido:[{pedido_item_id:'',pedido_id:'',unidades:0}],
 
@@ -102,10 +107,14 @@ class Ingreso_diario extends Component {
             fecha:new Date(),
             maquina:'',
             operario:'',
+            
             productos: [],
             open: false,
             Sopen: false,
             items:'',
+            Cliente_es:[],
+        clientesnuevos:[],
+        
            // maquinas:[],
             //operarios:[],
             pedido:[{pedido_item_id:'',pedido_id:'',unidades:0}],
@@ -172,48 +181,6 @@ class Ingreso_diario extends Component {
         this.setState({ total: total })
         console.log(this.state);
     }
-
-    handleChangecombo_cliente (event)   {
-        console.log(event.target.value);
-        this.setState({Cliente_es:event.target.value});
-        //this.setState({ pedido[0].pedido_id:event.target.value});
-        console.log(this.state);
-    
-    
-    
-        axios.get(process.env.REACT_APP_URL_LARAVEL+`/api/Maquina_asignacion/pedido_sin/`+event.target.value)
-        .then(res => {
-          const ms = res.data;
-          if (ms.length ===0){alert("No hay produccion");
-          this.reset();
-    
-          }else{
-          this.setState({pedido:ms[0]});
-          axios.get(process.env.REACT_APP_URL_LARAVEL+`/api/producto/foto/`+ms[0].referencia)
-          .then(res2 => {
-            console.log(res2);
-           // const productos = res.data;
-            
-            this.setState({ items: res2.data[0].foto });
-            
-            // setPersonsState(PersonState=persona);
-    
-          }
-          )
-          
-    
-            console.log(ms);
-          }
-        
-    
-       
-      });
-    
-    
-  
-        
-    
-    };
     handleChangecombo(event) {
         this.setState({ ...this.state, [event.target.name]: Number(event.target.value) || '' });
     };
@@ -245,7 +212,7 @@ class Ingreso_diario extends Component {
         this.setState({maquina:event.target.value})
         console.log(this.state);
 
-        var fecha = this.state.fecha.getFullYear()+   "-" + ( this.state.fecha.getMonth() + 1) + "-" + this.state.fecha.getDate();
+        /*var fecha = this.state.fecha.getFullYear()+   "-" + ( this.state.fecha.getMonth() + 1) + "-" + this.state.fecha.getDate();
             axios.get(process.env.REACT_APP_URL_LARAVEL+`/api/Maquina_asignacion/pedido/`+event.target.value+'/'+fecha)
             .then(res => {
               const ms = res.data;
@@ -273,8 +240,80 @@ class Ingreso_diario extends Component {
         
            
           });
-
+*/
   };
+
+
+  handleChangecombo_cliente (event)   {
+    console.log(event.target.value);
+    this.setState({Cliente_es:event.target.value});
+    //this.setState({ pedido[0].pedido_id:event.target.value});
+    console.log(this.state);
+
+
+
+    axios.get(process.env.REACT_APP_URL_LARAVEL+`/api/Maquina_asignacion/pedido_sin/`+event.target.value)
+    .then(res => {
+      const ms = res.data;
+      if (ms.length ===0){alert("No hay produccion");
+      this.reset();
+
+      }else{
+      this.setState({pedido:ms[0]});
+      axios.get(process.env.REACT_APP_URL_LARAVEL+`/api/producto/foto/`+ms[0].referencia)
+      .then(res2 => {
+        console.log(res2);
+       // const productos = res.data;
+        
+        this.setState({ items: res2.data[0].foto });
+        
+        // setPersonsState(PersonState=persona);
+
+      }
+      )
+      
+
+        console.log(ms);
+      }
+    
+
+   
+  });
+
+
+   /* var fecha = this.state.fecha.getFullYear()+   "-" + ( this.state.fecha.getMonth() + 1) + "-" + this.state.fecha.getDate();
+        axios.get(process.env.REACT_APP_URL_LARAVEL+`/api/Maquina_asignacion/pedido/`+event.target.value+'/'+fecha)
+        .then(res => {
+          const ms = res.data;
+          if (ms.length ===0){alert("No hay produccion");
+          this.reset();
+
+          }else{
+          this.setState({pedido:ms[0]});
+          axios.get(process.env.REACT_APP_URL_LARAVEL+`/api/producto/foto/`+ms[0].referencia)
+          .then(res2 => {
+            console.log(res2);
+           // const productos = res.data;
+            
+            this.setState({ items: res2.data[0].foto });
+            
+            // setPersonsState(PersonState=persona);
+    
+          }
+          )
+          
+
+            console.log(ms);
+          }
+        
+    
+       
+      });
+      */
+
+};
+
+
 
     handleColorNameChangeMateriales = idx => evt => {
         const newMateriales = this.state.MaterialesAdicionales.map((Mate, sidx) => {
@@ -291,6 +330,8 @@ class Ingreso_diario extends Component {
         this.setState({ MaterialesAdicionales: newMateriales }, this.calcular);
 
     };
+
+
     handleChangecomboprod = idx => evt => {
 
         const newMateriales = this.state.Mater.map((Mate, sidx) => {
@@ -410,14 +451,12 @@ class Ingreso_diario extends Component {
         axios.get(process.env.REACT_APP_URL_LARAVEL+`/api/Operarios`)
         .then(res4 => {
             const resultado4 = res4.data;
-
+            console.log(resultado4);
             this.setState({ operarios: resultado4 });
             //   console.log(this.state.datos);
             // setPersonsState(PersonState=persona);
 
         })
-
-       
 
         axios.get(process.env.REACT_APP_URL_LARAVEL+`/api/Clientes`)
         .then(res5 => {
@@ -473,9 +512,35 @@ today (){
 
                          <br/>
                           <br/>
-                          <InputLabel htmlFor="age-simple">Cliente {this.state.pedido.cliente}</InputLabel>
-                          <br/>
-                          <br/>
+
+                          <InputLabel htmlFor="age-simple">Escoge cliente</InputLabel>
+                          <Select
+                              fullWidth
+                              id="Cliente_es"
+                              name="Cliente_es"
+                              value={this.state.Cliente_es}
+                              required="true"
+
+                             onChange={this.handleChangecombo_cliente.bind(this)}
+                              input={<Input id="age-simple" />}
+                          >
+  
+                              <MenuItem value="">
+  
+                                  <em>None</em>
+                              </MenuItem>
+                             
+                              
+                              {
+                                  this.state.clientesnuevos.map((index) =>
+                                  
+                                  <MenuItem value={index.pedidonumero}>{index.cliente} - Pedido {index.pedidonumero} - Cotizacion {index.cotizacion_id} </MenuItem>
+                              )}
+  
+                            
+                          </Select>
+  
+                        
   <InputLabel htmlFor="age-simple">Escoge fecha real de fabricación</InputLabel>
 
   <DatePicker selected={this.state.fecha} onChange={this.handlechangefecha_ini.bind(this)}  />
@@ -485,6 +550,8 @@ today (){
                           <Select
                               fullWidth
                               id="maquina"
+                              required="true"
+
                               name="maquina"
                               value={Number(this.state.maquina)}
                              onChange={this.handleChangecombo_maquina.bind(this)}
@@ -515,6 +582,8 @@ today (){
                               fullWidth
                               id="operario"
                               name="operario"
+                              required="true"
+
                               value={Number(this.state.operario)}
                               onChange={this.handleChangecombo.bind(this)}
                               input={<Input id="age-simple" />}
@@ -699,10 +768,11 @@ function handleClose() {
 }
 
 function guardar(event) {
-    if (this.state.maquina ==''|| this.state.operario =='' || this.state.Cliente_es =='' ){
-        alert("No se ha escogido cliente, maquina u operario");
-        event.preventDefault();
-    }else{
+    console.log(this.state);
+if (this.state.maquina ==''|| this.state.operario =='' || this.state.Cliente_es =='' ){
+    alert("No se ha escogido cliente, maquina u operario");
+    event.preventDefault();
+}else{
 
     event.preventDefault();
     const datoGuardar = {
@@ -802,7 +872,9 @@ axios.post(process.env.REACT_APP_URL_LARAVEL+`/api/Pedido_inventario_mov`, (dato
     this.setState({
         open: false
     });
-}}
+}
+    
+}
 
 
 
