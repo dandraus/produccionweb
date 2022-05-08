@@ -46,11 +46,6 @@ class Gastomateriales extends Component {
         Sopen: false,
         maquinas:[],
         operarios:[],
-        Cliente_es:[],
-        maquina:'',
-        operario:'',
-        materia_prima:'',
-        clientesnuevos:[],
         materia_primas: [],
         pedido:[{pedido_item_id:'',pedido_id:'',unidades:0}],
 
@@ -107,7 +102,6 @@ class Gastomateriales extends Component {
             maquina:'',
             operario:'',
             productos: [],
-     
             open: false,
             items:[],
             Sopen: false,
@@ -195,83 +189,12 @@ class Gastomateriales extends Component {
           }
         }, this.calcular);
     }
-
-    handleChangecombo_cliente (event)   {
-        console.log(event.target.value);
-        this.setState({Cliente_es:event.target.value});
-        //this.setState({ pedido[0].pedido_id:event.target.value});
-        console.log(this.state);
-    
-    
-    
-        axios.get(process.env.REACT_APP_URL_LARAVEL+`/api/Maquina_asignacion/pedido_sin/`+event.target.value)
-        .then(res => {
-          const ms = res.data;
-          if (ms.length ===0){alert("No hay produccion");
-          this.reset();
-    
-          }else{
-          this.setState({pedido:ms[0]});
-          axios.get(process.env.REACT_APP_URL_LARAVEL+`/api/producto/foto/`+ms[0].referencia)
-          .then(res2 => {
-            console.log(res2);
-           // const productos = res.data;
-            
-            this.setState({ items: res2.data[0].foto });
-            
-            // setPersonsState(PersonState=persona);
-    
-          }
-          )
-          
-    
-            console.log(ms);
-          }
-        
-    
-       
-      });
-    
-    
-       /* var fecha = this.state.fecha.getFullYear()+   "-" + ( this.state.fecha.getMonth() + 1) + "-" + this.state.fecha.getDate();
-            axios.get(process.env.REACT_APP_URL_LARAVEL+`/api/Maquina_asignacion/pedido/`+event.target.value+'/'+fecha)
-            .then(res => {
-              const ms = res.data;
-              if (ms.length ===0){alert("No hay produccion");
-              this.reset();
-    
-              }else{
-              this.setState({pedido:ms[0]});
-              axios.get(process.env.REACT_APP_URL_LARAVEL+`/api/producto/foto/`+ms[0].referencia)
-              .then(res2 => {
-                console.log(res2);
-               // const productos = res.data;
-                
-                this.setState({ items: res2.data[0].foto });
-                
-                // setPersonsState(PersonState=persona);
-        
-              }
-              )
-              
-    
-                console.log(ms);
-              }
-            
-        
-           
-          });
-          */
-    
-    };
-    
-    
     handleChangecombo_maquina (event)   {
         console.log(event);
         this.setState({maquina:event.target.value})
         console.log(this.state);
 
-        /*var fecha = this.state.fecha.getFullYear()+   "-" + ( this.state.fecha.getMonth() + 1) + "-" + this.state.fecha.getDate();
+        var fecha = this.state.fecha.getFullYear()+   "-" + ( this.state.fecha.getMonth() + 1) + "-" + this.state.fecha.getDate();
             axios.get(process.env.REACT_APP_URL_LARAVEL+`/api/Maquina_asignacion/pedido/`+event.target.value+'/'+fecha)
             .then(res => {
               const ms = res.data;
@@ -299,7 +222,7 @@ class Gastomateriales extends Component {
             
         
            
-          }); */
+          });
 
   };
   handlechangefecha_ini(event){
@@ -462,15 +385,6 @@ class Gastomateriales extends Component {
         })
 
 
-        axios.get(process.env.REACT_APP_URL_LARAVEL+`/api/Clientes`)
-        .then(res5 => {
-            const resultado5 = res5.data;
-            console.log(resultado5);
-          this.setState({ clientesnuevos: resultado5 });
-           //   console.log(this.state.datos);
-            // setPersonsState(PersonState=persona);
-
-        })
 
 
 
@@ -513,29 +427,7 @@ today (){
 
                          <br/>
                           <br/>
-                          <InputLabel htmlFor="age-simple">Escoge cliente</InputLabel>
-                          <Select
-                              fullWidth
-                              id="Cliente_es"
-                              name="Cliente_es"
-                              value={this.state.Cliente_es}
-                              required="true"
-
-                             onChange={this.handleChangecombo_cliente.bind(this)}
-                              input={<Input id="age-simple" />}
-                          >
-  
-                       
-                             
-                              
-                              {
-                                  this.state.clientesnuevos.map((index) =>
-                                  
-                                  <MenuItem value={index.pedidonumero}>{index.cliente} - Pedido {index.pedidonumero} - Cotizacion {index.cotizacion_id} </MenuItem>
-                              )}
-  
-                            
-                          </Select>
+                          <InputLabel htmlFor="age-simple">Cliente {this.state.pedido.cliente}</InputLabel>
                           <br/>
                           <br/>
                <InputLabel htmlFor="age-simple">Escoge fecha real de fabricación</InputLabel>
@@ -600,7 +492,6 @@ today (){
                           <InputLabel htmlFor="age-simple">Materia prima</InputLabel>
                           <Select
                               fullWidth
-                              required="true"
                               id="materia_prima"
                               name="materia_prima"
                               value={Number(this.state.materia_prima)}
@@ -788,13 +679,6 @@ function handleClose() {
 
 function guardar(event) {
     console.log(this.state);
-    if (this.state.maquina ==''|| this.state.operario =='' || this.state.materia_prima =='' ){
-        
-            alert("No se ha escogido materia prima, maquina u operario");
-            event.preventDefault();
-        }else{
-
-    console.log(this.state);
     event.preventDefault();
     // const datoGuardar = {
     //     mat_prim: this.state.materia_prima,
@@ -816,9 +700,6 @@ function guardar(event) {
     };
     //console.log(datoGuardar);
     console.log(this.state);
-
-
-
     axios.post(process.env.REACT_APP_URL_LARAVEL+`/api/Pedido_materiales`, (datoGuardarmov))
         .then(res => {
                 
@@ -829,7 +710,6 @@ function guardar(event) {
             this.componentDidMount();
 
             console.log(this.state.datos);
-            alert("Guardado id " + res.data.id);
         })
         .catch((error) => {
 
@@ -841,18 +721,15 @@ function guardar(event) {
                 console.log(error.response.data);
                 console.log(error.response.status);
                 console.log(error.response.headers);
-                alert (error.response.data);
             } else if (error.request) {
                 // The request was made but no response was received
                 // `error.request` is an instance of XMLHttpRequest in the 
                 // browser and an instance of
                 // http.ClientRequest in node.js
                 console.log(error.request);
-                alert (error.request);
             } else {
                 // Something happened in setting up the request that triggered an Error
                 console.log('Error', error.message);
-                alert (error.message);
             }
             this.setState({ Sopen: true });
             console.log(error.config);
@@ -899,7 +776,7 @@ function guardar(event) {
         open: false
     });
 }
-}
+
 
 
 

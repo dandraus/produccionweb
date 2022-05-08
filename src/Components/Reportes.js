@@ -94,7 +94,9 @@ export default function Reportes() {
        
   };
       function handle_actualizar(){
-
+        setinfo(['']);
+        setinfoexcel(['']);
+      
 
         var fec_inicial = fecha_ini.getFullYear()+   "-" + ( fecha_ini.getMonth() + 1) + "-" + fecha_ini.getDate();
         var fec_final = fecha_fin.getFullYear()+   "-" + ( fecha_fin.getMonth() + 1) + "-" + fecha_fin.getDate();
