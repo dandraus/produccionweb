@@ -162,7 +162,7 @@ class Operarios extends Component {
                         { title: 'Identificacion', field: 'identificacion' },
                         { title: 'EPS', field: 'eps' },
                         { title: 'ARL', field: 'arl' },
-                        { title: 'Cumple', field: 'cumple' },
+                       // { title: 'Cumple', field: 'cumple' },
                         { title: 'Fecha Inicio', field: 'fecha_inicio' },
                         { title: 'Fecha Fin', field: 'fecha_fin' },
 
@@ -281,6 +281,7 @@ class Operarios extends Component {
                             required="true"
                             fullWidth
                         />
+                        {/*
                            <TextField
                             value={this.state.cumple} onChange={this.handleChange.bind(this)}
                             type='date'
@@ -291,6 +292,7 @@ class Operarios extends Component {
                             fullWidth
                             required="true"
                         />
+                */}
                           <TextField
                             value={this.state.fecha_inicio} onChange={this.handleChange.bind(this)}
                             type='date'
@@ -406,7 +408,7 @@ function guardar(event) {
         apellido: this.state.formControls.apellido.value,
         tipo_operario_id: this.state.tipo_operario,
         telefono:this.state.formControls.telefono.value,
-        cumple:this.state.formControls.cumple.value,
+        cumple:'1900-01-01',
         fecha_inicio:this.state.formControls.fecha_inicio.value,
         //fecha_fin:this.state.formControls.fecha_fin.value,
         fecha_fin:"",

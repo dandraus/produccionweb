@@ -153,6 +153,26 @@ class Producto_crear extends Component {
   }
 
 
+
+  calcular2 = () => {
+
+    
+     var precio =isNaN(parseFloat(this.state.precio_estimado)) ? 0 : parseFloat(this.state.precio_estimado);
+     var costo = isNaN(parseFloat(this.state.Costo_estimado)) ? 0 : parseFloat(this.state.Costo_estimado); 
+     var unidades_mts = isNaN(parseFloat(this.state.formControls.unidades_por_mts2.value)) ? 0 : parseFloat(this.state.formControls.unidades_por_mts2.value);
+     var valormts = parseFloat(unidades_mts * precio);
+     console.log(unidades_mts);
+     console.log(precio);
+     console.log(valormts);
+     this.setState({preciomt2:valormts});
+    var margen = (-100*(costo-precio)/costo);
+    var value= '' + margen;
+    console.log(margen);
+this.setState({margen:value});
+
+    console.log(this.state)
+   }
+
   calcular = () => {
 
    // console.log(this.state);
@@ -419,6 +439,32 @@ class Producto_crear extends Component {
       }
     }, this.calcular);
   }
+
+  handleChangeMar(event) {
+    const name = event.target.name;
+    const value = event.target.value;
+    console.log(this.state);
+    // console.log(value);
+    this.setState({
+      margen:value
+      }
+    , this.calcular);
+  }
+
+
+
+  handleChangePrecio(event) {
+
+    this.setState({precio_estimado:event.target.value}, this.calcular2);
+    const name = event.target.name;
+    const value = event.target.value;
+    console.log(this.state);
+    // console.log(value);
+  
+  }
+
+
+
   handleCloseDialog(event) {
     this.setState({ openDialog: false });
   }
@@ -556,7 +602,7 @@ class Producto_crear extends Component {
             required="true"
             name="margen"
             type="number"
-            value={this.state.margen} onChange={this.handleChangeMargen.bind(this)}
+            value={this.state.margen} onChange={this.handleChangeMar.bind(this)}
             label="Margen"
             fullWidth
           />
@@ -801,7 +847,7 @@ class Producto_crear extends Component {
                 defaultValue="Color Porcentaje"
                 type="number"
                 step={0.0001}
-                onChange={this.handleColorNameChange(idx)}
+               onChange={this.handleColorNameChange(idx)}
                 value={Color.name}
               />
               <TextField
@@ -901,10 +947,11 @@ class Producto_crear extends Component {
               this.state.precio_estimado
             }
             margin="normal"
-            InputProps={{
-              readOnly: true,
-            }}
+           onChange={this.handleChangePrecio.bind(this)}
+
+        
           />
+
           <TextField
 
             label="Precio MT2"
