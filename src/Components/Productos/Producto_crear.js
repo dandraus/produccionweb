@@ -183,7 +183,7 @@ this.setState({margen:value});
     var costo = costocolor + costomaterial;
     costo = costo + costooperario;
     this.setState({ Costo_estimado: costo });
-    var precio = ((parseFloat(this.state.formControls.margen.value) / 100) * costo) + costo;
+    var precio = ((parseFloat(this.state.margen) / 100) * costo) + costo;
     this.setState({ precio_estimado: precio });
     var unidades_mts = isNaN(parseFloat(this.state.formControls.unidades_por_mts2.value)) ? 0 : parseFloat(this.state.formControls.unidades_por_mts2.value);
     var valormts = unidades_mts * precio;
