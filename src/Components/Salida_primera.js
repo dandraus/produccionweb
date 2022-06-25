@@ -87,6 +87,64 @@ clientesnuevos:[],
 
   }}
 
+  reset() {
+    document.getElementById("form-inside-input").reset();
+    this.setState({
+      fecha:new Date(),
+    maquina:'',
+    operario:'',
+    
+    productos: [],
+    open: false,
+    Sopen: false,
+    items:'',
+    Cliente_es:[],
+clientesnuevos:[],
+
+   // maquinas:[],
+    //operarios:[],
+    pedido:[{pedido_item_id:'',pedido_id:'',unidades:0}],
+
+    datos: [],
+    valores:[],
+    maquinas:[],
+    pedido_guardar:[],
+    guardarMaq:[],
+    Nummaquina:1,
+    fecha_final:'',
+    fecha_maquina:new Date(),
+    startDate:new Date(),
+    dias_totales:0,
+   
+    itemsped:[],
+    select:true,
+    tipo: '',
+    operarios:[],
+    fecha_min:"",
+ 
+    unidades_dia:'',
+    unidades_fabricar:'',
+    dias_operario:'',
+
+    formControls: {
+        nombre: {
+            value: ''
+        },
+        apellido: {
+            value: ''
+        },
+        operario: {
+            value: ''
+      
+
+    }
+
+  }
+    }
+    )
+  }
+
+
 
   handleChangecombo_maquina (event)   {
     console.log(event);
@@ -719,6 +777,7 @@ axios.post(process.env.REACT_APP_URL_LARAVEL+`/api/Pedido_inventario_mov`, (dato
     this.setState({
         open: false
     });
+    
 }
 
 function handleClose() {

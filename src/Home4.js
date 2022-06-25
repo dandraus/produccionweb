@@ -59,8 +59,6 @@ import Despacho from './Components/Despacho';
 import Ingreso_pedido from './Components/Ingreso_pedido';
 import Gantt_pedido from './Components/Gantt_pedido';
 import Reportes from './Components/Reportes';
-import Reportes_pedido from './Components/Reportes_pedido';
-import Modificar_cotizaacion from './Components/Modificar_cotizacion';
 
 
 
@@ -207,10 +205,6 @@ export default function PersistentDrawerLeft() {
 
 
   }
-  function logout() {
-    localStorage.clear();
-    window.location.href = '/';
-}
 
   function handleDrawerClose() {
     setOpen(false);
@@ -242,13 +236,10 @@ export default function PersistentDrawerLeft() {
           >
             <MenuIcon />
           </IconButton>
-          <div style={{witdh:'100%',display: 'flex',  flexDirection: 'row',justifyContent:'space-between'}}>
           <Typography variant="h6" noWrap onClick={() => menu("Dashboard", 1)}>
-            Dashroute                          
+            Dashroute
           </Typography>
         
-         
-          </div>
         </Toolbar>
       </AppBar>
       <Drawer
@@ -447,15 +438,7 @@ export default function PersistentDrawerLeft() {
               </ListItem>
               <Collapse in={openP3} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding>
-                  <ListItem button className={classes.nested}>
-                    <ListItemIcon>
-                    <div>
-   <AddBoxIcon />
- </div>
-                    
-                    </ListItemIcon>
-                    <ListItemText primary="Crear" onClick={() => menu("Crear cotizacion", 1)} />
-                  </ListItem>
+                 
                   <ListItem button className={classes.nested}>
                     <ListItemIcon>
                       <PlaylistAddCheckIcon />
@@ -463,16 +446,9 @@ export default function PersistentDrawerLeft() {
                     <ListItemText primary="Listado" onClick={() => menu("Listado cotizacion", 1)} />
                   </ListItem>
                   
-                  <ListItem button className={classes.nested}>
-                    <ListItemIcon>
-                      <PlaylistAddCheckIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Modificar" onClick={() => menu("Modificar cotizacion", 1)} />
-                  </ListItem>
-                  
                   </List>
 
-                  
+            
 
                   </Collapse>
 
@@ -523,7 +499,7 @@ export default function PersistentDrawerLeft() {
                 {/*  {[ 'Pedidos x maquina','Asignar pedido','Gantt x maquina','Gantt pedidos','Reportes'].map((text, index) => ( */}
 
 
-              {[ 'Asignar pedido','Gantt pedidos','Reportes','Reportes pedido','Salir'].map((text, index) => (
+              {[ 'Gantt pedidos','Reportes'].map((text, index) => (
                 <ListItem button key={text} >
                   <ListItemIcon>{index % 2 === 0 ? <SvgIcon >
                     <path class="cls-1" d="M22,0H7.12V4.71A2.41,2.41,0,0,1,4.71,7.12H0V22a2,2,0,0,0,2,2H22a2,2,0,0,0,2-2V2A2,2,0,0,0,22,0Zm0,21.06a.94.94,0,0,1-.94.94H9.94A.94.94,0,0,1,9,21.06V9.94A.94.94,0,0,1,9.94,9H21.06a.94.94,0,0,1,.94.94Z"/><path class="cls-1" d="M15,21H13.89A3.9,3.9,0,0,0,10,17.11V16A5,5,0,0,1,15,21Z"/><path class="cls-1" d="M16.06,14.94A6.2,6.2,0,0,0,10,10v1.38a4.81,4.81,0,0,1,4.81,4.81A4.82,4.82,0,0,1,19.63,21H21A6.2,6.2,0,0,0,16.06,14.94Z"/>
@@ -630,7 +606,6 @@ export default function PersistentDrawerLeft() {
                   case "Colores": return <Colores />;
                   case "Crear producto": return <Producto_crear />;
                   case "Crear cotizacion": return <Cotizacion />;
-                  case "Modificar cotizacion": return <Modificar_cotizaacion />;
                   case "Listado cotizacion": return <CotizacionListado />;
                   case "Operario": return <Operarios />;
                   case "Proveedor": return <Proveedor />;
@@ -654,8 +629,7 @@ export default function PersistentDrawerLeft() {
                   case "Asignar pedido": return<Pedido_gantt/>
                   case "Gantt pedidos" :return <Gantt_pedido/>
                   case "Reportes" :return <Reportes/>
-                  case "Reportes pedido" :return <Reportes_pedido/>
-                  case  "Salir" :return logout();
+                  
 
                   
                   default: return <Dashboard/>;

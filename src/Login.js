@@ -67,10 +67,26 @@ function Login(props) {
       console.log(response.data);
 
       setUserSession(response.data.access_token,  username.value);
-      if (username.value === "supervisor@neca.com"){
+
+       switch (username.value) {
+          case 'supervisor@neca.com':
+            return    props.history.push('/home2');
+          case 'produccion@neca.com':
+        return    props.history.push('/home2');
+          case 'auxiliar@neca.com':
+            return props.history.push('/home3');
+          case 'inventario@neca.com':
+            return props.history.push('/home4');
+            case 'nestor@neca.com':
+              return props.history.push('/home');
+              case 'dandraus@gmail.com':
+                return  props.history.push('/home');
+        }
+      /*if (username.value === "supervisor@neca.com"){
         props.history.push('/home2');
       }else{
       props.history.push('/home');}
+      */
     }).catch(error => {
       //  alert(error);
       setLoading(false);

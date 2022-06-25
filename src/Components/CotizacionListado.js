@@ -86,6 +86,15 @@ class CotizacionListado extends Component {
           ]}
           data={this.state.datos}
           title="Cotizaciones"
+          // actions={[
+          //   {
+          //     icon: 'edit',
+          //     tooltip: 'Cambiar Fecha',
+          //     onClick:  (event, rowData) => console.log(rowData)
+          //    // onClick:  (event, rowData) => this.HandleItemscot(rowData)
+          //   }
+         
+         // ]}
           detailPanel={[
             {
               tooltip: 'Items',

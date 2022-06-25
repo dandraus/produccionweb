@@ -92,7 +92,7 @@ class Cotizacion extends Component {
     reset(){
         document.getElementById("form-inside-input").reset();
         this.setState({
-            productos: [],
+           // productos: [],
         open: false,
         Sopen: false,
         cliente:'',

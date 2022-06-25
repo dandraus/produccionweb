@@ -5,6 +5,8 @@ import axios from 'axios';
 import Login from './Login';
 import Home from './Home';
 import Home2 from './Home2';
+import Home3 from './Home3';
+import Home4 from './Home4';
 
 import PrivateRoute from './Utils/PrivateRoute';
 import PublicRoute from './Utils/PublicRoute';
@@ -110,6 +112,8 @@ Bienvenidos al software
               <PublicRoute path="/login" component={Login} />
               <PrivateRoute path="/home" component={Home} />
               <PrivateRoute path="/home2" component={Home2} />
+              <PrivateRoute path="/home3" component={Home3} />
+              <PrivateRoute path="/home4" component={Home4} />
             </Switch>
           </div>
         </div>

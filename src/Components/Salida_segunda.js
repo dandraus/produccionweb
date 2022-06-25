@@ -299,7 +299,7 @@ axios.post(process.env.REACT_APP_URL_LARAVEL+`/api/Inventario_seg`, (datoGuardar
     console.log(res.data.id);
     //this.reset();
 
-    //this.componentDidMount();
+    this.componentDidMount();
 
     
 })
