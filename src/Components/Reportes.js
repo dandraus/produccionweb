@@ -97,129 +97,80 @@ export default function Reportes() {
         setinfo(['']);
         setinfoexcel(['']);
       
+          var mesini =  fecha_ini.getMonth() + 1;
+          if (mesini < 10) {
+            mesini = "0"+mesini
+          }
 
-        var fec_inicial = fecha_ini.getFullYear()+   "-" + ( fecha_ini.getMonth() + 1) + "-" + fecha_ini.getDate();
-        var fec_final = fecha_fin.getFullYear()+   "-" + ( fecha_fin.getMonth() + 1) + "-" + fecha_fin.getDate();
+          var diaini =  fecha_ini.getDate();
+          if (diaini < 10) {
+            diaini = "0"+diaini
+          }
+
+          var mesfin =  fecha_fin.getMonth() + 1;
+          if (mesfin < 10) {
+            mesfin = "0"+mesfin          }
+
+          var diafin =  fecha_fin.getDate();
+          if (diafin < 10) {
+            diafin = "0"+diafin
+          }
+
+
+       //  var fec_inicial = fecha_ini.getFullYear()+   "-" + ( fecha_ini.getMonth() + 1) + "-" + fecha_ini.getDate();
+       var fec_inicial = fecha_ini.getFullYear()+   "-" + mesini + "-" + diaini;
+
+       
+//        var fec_final = fecha_fin.getFullYear()+   "-" + ( fecha_fin.getMonth() + 1) + "-" + fecha_fin.getDate();
+        var fec_final = fecha_fin.getFullYear()+   "-" + mesfin + "-" + diafin;
 
      
 
+        const  BACKEND_URL ='https://proyectos-6addd-default-rtdb.firebaseio.com';
+        const  BACKEND_URL2 ='http://produccionplastico.ddns.net:1337/'; 
+        const  BACKEND_URL3 ='http://produccionplastico.ddns.net:1337/api/referencias'; 
+        
+        const token ="03cebb70b0058c438dfd565adb2a174e86455d68438c4a31b5f94ec2d16686dbe74c1bc4229ec966a3b7d8bdcb7e7617735dd02eefc7309a40b4012592f6784697fdf1bc1fbab2af89e51692a63a1712bd315b09b6b2b398ed8f7995b1144a9d0fe2de5a4a3031ae5e7d28ade474816e012c01f44141198f0e44187bd64aeb1e"
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        };
 
-        axios.get(process.env.REACT_APP_URL_LARAVEL+'/api/Reporte/'+reporte+'/'+fec_inicial+'/'+fec_final)
+//http://produccionplastico.ddns.net:1337/api/produccions?filters[createdAt][$between]=2024-05-23T22:59:01.593Z&filters[createdAt][$between]=2024-05-25T22:59:01.593Z
+// filters[createdAt][$between]=2024-05-23T22:59:01.593Z&filters[createdAt][$between]=2024-05-25T22:59:01.593Z
+        axios.get(BACKEND_URL2+'api/'+reporte+'?filters[createdAt][$between]='+fec_inicial+'&filters[createdAt][$between]='+fec_final,config)
       .then(res => {
-        const productos = res.data;
+        const productos = res.data.data;
         console.log(productos);
         console.log(productos.length);
         if (productos.length === 0){
           alert('No hay datos');
        
         }else{
-          setinfo(productos);
-          setinfoexcel(productos);
-          console.log(infoexcel);
+          const expenses =[];
+
+          for (const key in res.data.data){
+
+
+          
+            expenses.push( res.data.data[key].attributes);
+
+         }
+            //setinfo(productos);
+            setinfo(expenses);
+            //setinfoexcel(productos);
+            setinfoexcel(expenses);
+          console.log(expenses);
           
         }
-
       })
       
 
-      axios.get(process.env.REACT_APP_URL_LARAVEL+`/api/despachados/`)
-      .then(res => {
-        const productos = res.data;
-        console.log(productos);
-       var data = {
-          labels: [],
-          series: []
-        };
-        productos.map((value, index) =>{
-          // data={
-          //   labels:[...data.labels,value.maquina] ,
-          //   series: [...data.series[0],value.cantidad]
-          // };
-          if (index===0){
-            
-            data={
-              labels:[value.fecha] ,
-              series: [[value.despachados]]
-            };
-            
-          //   data={
-            
-          //   labels:[value.maquina] ,
-          //   series: [[value.cantidad]]
-          // };
-        }else{
-      data={
-            labels:[...data.labels,value.fecha] ,
-            series: [[...data.series[0],value.total]]
-          };
-         // setmaqdata(maqdata => [...maqdata, data])
-        }
-       console.log(value.cantidad);
-       
-        }
-        
-      )
-      console.log(data);
-      console.log(dailySalesChart.data);
-      setdespachados(data);
-      console.log(despachados);
-        // setPersonsState(PersonState=persona);
-
-      })
-      
+     
 
 
-      axios.get(process.env.REACT_APP_URL_LARAVEL+`/api/pedidosmes/`)
-      .then(res => {
-        const productos = res.data;
-        console.log(productos);
-       var data = {
-          labels: [],
-          series: []
-        };
-        productos.map((value, index) =>{
-          // data={
-          //   labels:[...data.labels,value.maquina] ,
-          //   series: [...data.series[0],value.cantidad]
-          // };
-          if (index===0){
-            
-            data={
-              labels:[value.fecha] ,
-              series: [[value.total]]
-            };
-            
-          //   data={
-            
-          //   labels:[value.maquina] ,
-          //   series: [[value.cantidad]]
-          // };
-        }else{
-      data={
-            labels:[...data.labels,value.fecha] ,
-            series: [[...data.series[0],value.total]]
-          };
-         // setmaqdata(maqdata => [...maqdata, data])
-        }
-       console.log(value.cantidad);
-       
-        }
-        
-      )
-      console.log(data);
-      console.log(dailySalesChart.data);
-      setdpedidosmes(data);
-     // console.log(despachados);
-        // setPersonsState(PersonState=persona);
-
-      })
-      
-
-
-
-      
-      }
-    
+     }
 
   function handlechangefecha_fin(event){
     if (event===undefined){}
@@ -258,12 +209,9 @@ export default function Reportes() {
                                   <em>None</em>
                               </MenuItem>
                              
-                              <MenuItem value={'maquina'}>Producido por maquina</MenuItem>
-                              <MenuItem value={'materiales'}>Materiales por proyecto</MenuItem>
-                              <MenuItem value={"pedido_estado"}>Estado de pedidos</MenuItem>
-                              <MenuItem value={"ingreso_prod"}>Baldosas por operario y puesto</MenuItem>
-                              
-                            
+                              <MenuItem value={'produccions'}>Producción </MenuItem>
+                              <MenuItem value={'inventario-movs'}>Movimientos de inventario</MenuItem>
+                         
                           </Select>
   
   </div>

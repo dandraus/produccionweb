@@ -48,6 +48,17 @@ const useStyles = makeStyles(styles);
 
 
 
+const  BACKEND_URL ='https://proyectos-6addd-default-rtdb.firebaseio.com';
+const  BACKEND_URL2 ='http://produccionplastico.ddns.net:1337/'; 
+const  BACKEND_URL3 ='http://produccionplastico.ddns.net:1337/api/referencias'; 
+
+const token ="03cebb70b0058c438dfd565adb2a174e86455d68438c4a31b5f94ec2d16686dbe74c1bc4229ec966a3b7d8bdcb7e7617735dd02eefc7309a40b4012592f6784697fdf1bc1fbab2af89e51692a63a1712bd315b09b6b2b398ed8f7995b1144a9d0fe2de5a4a3031ae5e7d28ade474816e012c01f44141198f0e44187bd64aeb1e"
+const config = {
+  headers: {
+    Authorization: `Bearer ${token}`
+  }
+};
+
 
 
 export default function Dashboard() {
